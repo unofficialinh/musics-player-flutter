@@ -29,6 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
   audioplayers: ^0.18.3
+  page_transition: "^1.1.7+6"
   provider:
 
 dev_dependencies:

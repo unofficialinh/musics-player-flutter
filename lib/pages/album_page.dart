@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/json/songs_json.dart';
+import 'package:music_player/pages/music_detail_page.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../color.dart';
 
@@ -119,7 +121,20 @@ class _AlbumPageState extends State<AlbumPage> {
                   padding:
                       const EdgeInsets.only(left: 30, right: 30, bottom: 10),
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              alignment: Alignment.bottomCenter,
+                              child: MusicDetailPage(
+                                title: widget.song['title'],
+                                description: widget.song['description'],
+                                artist: widget.song['artist'],
+                                img: widget.song['img'],
+                                songUrl: widget.song['song_url'],
+                              ),
+                              type: PageTransitionType.scale));
+                    },
                     child: Row(
                       children: [
                         Container(
@@ -144,22 +159,18 @@ class _AlbumPageState extends State<AlbumPage> {
                                   Text(
                                     songAlbums[index]['title'],
                                     style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black
-                                    ),
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ],
                               ),
-
                               Row(
                                 children: [
                                   Text(
                                     songAlbums[index]['duration'],
                                     style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.grey
-                                    ),
+                                        fontSize: 17, color: Colors.grey),
                                   ),
                                 ],
                               ),

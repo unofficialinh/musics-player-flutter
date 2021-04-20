@@ -1,5 +1,20 @@
 import 'package:flutter/material.dart';
 
+const List artist = [
+  {
+    "name": "Ariana Grande",
+    "img": "assets/images/img_7.jpg",
+    "songs": [
+      {"title": "Imagination", "duration": "1:21"},
+      {"title": "Home_", "duration": "2:17"},
+      {"title": "Do I Wanna Know?", "duration": "1:31"},
+      {"title": "Whiskey Sour", "duration": "1:42"},
+      {"title": "Decisions", "duration": "1:29"},
+      {"title": "Trees", "duration": "1:51"},
+      {"title": "Earth", "duration": "1:39"},
+    ],
+  }
+];
 const List songs = [
   {
     "img": "assets/images/img_3.jpg",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/bottom_navigation.dart';
 import 'package:music_player/color.dart';
 import 'package:music_player/json/songs_json.dart';
 import 'package:music_player/pages/album_page.dart';
@@ -14,20 +15,20 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(80.0), // here the desired height
-          child: getAppBar()
-      ),
+      appBar: getAppBar(),
       body: getBody(),
+      bottomNavigationBar: BottomNavigation(activeTab: 0,),
     );
   }
 
   Widget getAppBar() {
     return AppBar(
+        toolbarHeight: 100,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
         title: Padding(
-          padding: const EdgeInsets.only(left:10, top: 15),
+          padding: const EdgeInsets.only(left: 10, top: 15),
           child: Column(
             children: [
               Row(
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'Explore',
                     style: TextStyle(
-                      color: primaryColor,
+                      color: Colors.black,
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
                     ),
@@ -88,11 +89,11 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                                 context,
                                 PageTransition(
-                                  alignment: Alignment.bottomCenter,
+                                    alignment: Alignment.bottomCenter,
                                     child: AlbumPage(
                                       song: songs[index],
                                     ),
-                                    type: PageTransitionType.scale));
+                                    type: PageTransitionType.rightToLeft));
                           },
                           child: Column(
                             children: [
@@ -168,9 +169,9 @@ class _HomePageState extends State<HomePage> {
                                 PageTransition(
                                     alignment: Alignment.bottomCenter,
                                     child: AlbumPage(
-                                      song: songs[index+5],
+                                      song: songs[index + 5],
                                     ),
-                                    type: PageTransitionType.scale));
+                                    type: PageTransitionType.rightToLeft));
                           },
                           child: Column(
                             children: [

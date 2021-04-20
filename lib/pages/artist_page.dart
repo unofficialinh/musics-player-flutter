@@ -1,23 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/bottom_navigation.dart';
 import 'package:music_player/json/songs_json.dart';
-import 'package:music_player/pages/music_detail_page.dart';
-import 'package:music_player/pages/root_app.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../bottom_navigation.dart';
 import '../color.dart';
+import 'album_page.dart';
 
-class AlbumPage extends StatefulWidget {
-  final dynamic song;
+class ArtistPage extends StatefulWidget {
+  final dynamic artist;
 
-  const AlbumPage({Key key, this.song}) : super(key: key);
+  const ArtistPage({Key key, this.artist}) : super(key: key);
 
   @override
-  _AlbumPageState createState() => _AlbumPageState();
+  _ArtistPageState createState() => _ArtistPageState();
 }
 
-class _AlbumPageState extends State<AlbumPage> {
+class _ArtistPageState extends State<ArtistPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +27,8 @@ class _AlbumPageState extends State<AlbumPage> {
 
   Widget getBody() {
     var size = MediaQuery.of(context).size;
-    List songAlbums = widget.song['songs'];
+    List song = artist[0]['songs'];
+    List album = songs;
     return SingleChildScrollView(
       child: Stack(
         children: [
@@ -40,7 +39,7 @@ class _AlbumPageState extends State<AlbumPage> {
                 height: size.width,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(widget.song['img']), fit: BoxFit.cover),
+                      image: AssetImage(artist[0]["img"]), fit: BoxFit.cover),
                 ),
                 child: Container(
                   margin: EdgeInsets.only(top: size.width - 150),
@@ -65,7 +64,7 @@ class _AlbumPageState extends State<AlbumPage> {
                           child: Row(
                             children: [
                               Text(
-                                'ALBUM',
+                                'ARTIST',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -79,7 +78,7 @@ class _AlbumPageState extends State<AlbumPage> {
                           child: Row(
                             children: [
                               Text(
-                                widget.song['title'],
+                                widget.artist,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 32,
@@ -100,7 +99,7 @@ class _AlbumPageState extends State<AlbumPage> {
                   Padding(
                     padding: EdgeInsets.only(left: 25, top: 25, bottom: 25),
                     child: Text(
-                      'All songs',
+                      'Popular songs',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -110,24 +109,24 @@ class _AlbumPageState extends State<AlbumPage> {
                 ],
               ),
               Column(
-                children: List.generate(songAlbums.length, (index) {
+                children: List.generate(5, (index) {
                   return Padding(
                     padding:
-                        const EdgeInsets.only(left: 30, right: 30, bottom: 10),
+                    const EdgeInsets.only(left: 30, right: 30, bottom: 10),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                alignment: Alignment.bottomCenter,
-                                child: MusicDetailPage(
-                                  title: widget.song['title'],
-                                  description: widget.song['description'],
-                                  artist: widget.song['artist'],
-                                  img: widget.song['img'],
-                                  songUrl: widget.song['song_url'],
-                                ),
-                                type: PageTransitionType.scale));
+                        // Navigator.push(
+                        //     context,
+                        //     PageTransition(
+                        //         alignment: Alignment.bottomCenter,
+                        //         child: MusicDetailPage(
+                        //           title: widget.song['title'],
+                        //           description: widget.song['description'],
+                        //           artist: widget.song['artist'],
+                        //           img: widget.song['img'],
+                        //           songUrl: widget.song['song_url'],
+                        //         ),
+                        //         type: PageTransitionType.scale));
                       },
                       child: Row(
                         children: [
@@ -151,7 +150,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      songAlbums[index]['title'],
+                                      song[index]['title'],
                                       style: TextStyle(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold,
@@ -162,7 +161,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      songAlbums[index]['duration'],
+                                      song[index]['duration'],
                                       style: TextStyle(
                                           fontSize: 17, color: Colors.grey),
                                     ),
@@ -181,13 +180,86 @@ class _AlbumPageState extends State<AlbumPage> {
                     ),
                   );
                 }),
-              )
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 25, top: 25, bottom: 25),
+                    child: Text(
+                      'Albums',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Row(
+                    children: List.generate(songs.length - 5, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 30),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    alignment: Alignment.bottomCenter,
+                                    child: AlbumPage(
+                                      song: album[index],
+                                    ),
+                                    type: PageTransitionType.rightToLeft));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 180,
+                                height: 180,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image:
+                                        AssetImage(songs[index + 5]['img']),
+                                        fit: BoxFit.cover),
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                songs[index + 5]['title'],
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                songs[index + 5]['artist'],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ),
             ]),
             Container(
               height: 80,
               width: 80,
               margin:
-                  EdgeInsets.only(top: size.width - 47, left: size.width - 100),
+              EdgeInsets.only(top: size.width - 47, left: size.width - 100),
               child: Stack(children: [
                 IconButton(
                     iconSize: 80,
@@ -203,18 +275,18 @@ class _AlbumPageState extends State<AlbumPage> {
                       color: primaryColor,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              alignment: Alignment.bottomCenter,
-                              child: MusicDetailPage(
-                                title: widget.song['title'],
-                                description: widget.song['description'],
-                                artist: widget.song['artist'],
-                                img: widget.song['img'],
-                                songUrl: widget.song['song_url'],
-                              ),
-                              type: PageTransitionType.scale));
+                      // Navigator.push(
+                      //     context,
+                      //     PageTransition(
+                      //         alignment: Alignment.bottomCenter,
+                      //         child: MusicDetailPage(
+                      //           title: widget.song['title'],
+                      //           description: widget.song['description'],
+                      //           artist: widget.song['artist'],
+                      //           img: widget.song['img'],
+                      //           songUrl: widget.song['song_url'],
+                      //         ),
+                      //         type: PageTransitionType.scale));
                     }),
               ]),
             ),

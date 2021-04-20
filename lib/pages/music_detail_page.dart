@@ -1,7 +1,10 @@
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:marquee/marquee.dart';
+import 'package:music_player/pages/artist_page.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../color.dart';
 
@@ -27,6 +30,7 @@ class MusicDetailPage extends StatefulWidget {
 
 class _MusicDetailPageState extends State<MusicDetailPage> {
   double _currentSliderValue = 20;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,11 +66,8 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
   Widget getBody() {
     var size = MediaQuery.of(context).size;
     return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // SizedBox(
-          //   height: 5,
-          // ),
           Stack(
             children: [
               Center(
@@ -89,29 +90,38 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
               )
             ],
           ),
-          // SizedBox(
-          //   height: 20,
-          // ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: [
-                Text(
-                  widget.title,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  // controller: ,
                   child: Text(
-                    widget.artist,
+                    widget.title,
+                    maxLines: 1,
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageTransition(alignment: Alignment.bottomCenter,
+                        child: ArtistPage(
+                          artist: widget.artist,
+                        ),
+                        type: PageTransitionType.rightToLeft));
+                  },
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    // controller: ,
+                    child: Text(
+                      widget.artist,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: primaryColor,
+                      ),
                     ),
                   ),
                 ),

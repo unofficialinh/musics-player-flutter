@@ -37,8 +37,21 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
     return Container(
       height: 120,
+      color: Colors.grey.withOpacity(0.05),
       child: Column(
         children: [
+          Container(
+            height: 1,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  blurRadius: 2,
+                  offset: Offset(0, -2)
+                )
+              ]
+            ),
+          ),
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -51,7 +64,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                         description: "abc",
                         songUrl: "abc",
                       ),
-                      type: null));
+                      type: PageTransitionType.bottomToTop));
             },
             child: Container(
               margin: EdgeInsets.only(top: 5),
@@ -77,7 +90,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                           "Fellin' Good",
                           maxLines: 1,
                           style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                               color: Colors.black,
                               fontWeight: FontWeight.w500),
                         ),

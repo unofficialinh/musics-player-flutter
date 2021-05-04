@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:music_player/pages/artist_page.dart';
+import 'package:music_player/pages/playing_list_page.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../color.dart';
@@ -247,7 +248,13 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                       Icons.queue_music,
                       color: Colors.grey,
                     ),
-                    onPressed: null),
+                    onPressed: () {
+                      Navigator.push(context, PageTransition(
+                        alignment: Alignment.bottomCenter,
+                        child: PlayingList(),
+                        type: PageTransitionType.rightToLeft,
+                      ));
+                    }),
               ],
             ),
           ),

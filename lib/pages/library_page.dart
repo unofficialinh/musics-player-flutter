@@ -120,7 +120,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
-                                    fontSize: 22, color: Colors.black),
+                                    fontSize: 20, color: Colors.black),
                               ),
                             ],
                           ),
@@ -165,7 +165,7 @@ class _LibraryPageState extends State<LibraryPage> {
                   PageTransition(
                       alignment: Alignment.bottomCenter,
                       child: AlbumPage(
-                        song: song[index],
+                        album: song[index],
                       ),
                       type: PageTransitionType.rightToLeft));
             },
@@ -222,7 +222,7 @@ class _LibraryPageState extends State<LibraryPage> {
                   PageTransition(
                       alignment: Alignment.bottomCenter,
                       child: AlbumPage(
-                        song: song[index],
+                        album: song[index],
                       ),
                       type: PageTransitionType.rightToLeft));
             },
@@ -269,7 +269,7 @@ class _LibraryPageState extends State<LibraryPage> {
                   PageTransition(
                       alignment: Alignment.bottomCenter,
                       child: AlbumPage(
-                        song: song[index],
+                        album: song[index],
                       ),
                       type: PageTransitionType.rightToLeft));
             },
@@ -339,7 +339,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
-                                    fontSize: 22, color: Colors.black),
+                                    fontSize: 20, color: Colors.black),
                               ),
                             ],
                           ),

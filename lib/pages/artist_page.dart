@@ -211,7 +211,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                 PageTransition(
                                     alignment: Alignment.bottomCenter,
                                     child: AlbumPage(
-                                      song: album[index],
+                                      album: album[index],
                                     ),
                                     type: PageTransitionType.rightToLeft));
                           },

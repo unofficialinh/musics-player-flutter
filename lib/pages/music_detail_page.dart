@@ -14,7 +14,7 @@ class MusicDetailPage extends StatefulWidget {
   final String artist;
   final String description;
   final String img;
-  final String songUrl;
+  final String mp3;
 
   const MusicDetailPage(
       {Key key,
@@ -22,7 +22,7 @@ class MusicDetailPage extends StatefulWidget {
       this.artist,
       this.description,
       this.img,
-      this.songUrl})
+      this.mp3})
       : super(key: key);
 
   @override
@@ -60,7 +60,49 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
           style: TextStyle(color: Colors.grey, fontSize: 20),
         ),
       ),
-      actions: [IconButton(icon: Icon(Icons.more_horiz), onPressed: null)],
+      actions: [PopupMenuButton(
+        icon: Icon(
+          Icons.more_vert,
+          color: Colors.grey,
+        ),
+        offset: Offset(0, 15),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)),
+        itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+          PopupMenuItem(
+            child: ListTile(
+              title: Text('Play next'),
+              trailing: Icon(
+                Icons.playlist_add_rounded,
+                color: primaryColor,
+              ),
+              onTap: () {},
+            ),
+          ),
+          PopupMenuDivider(),
+          PopupMenuItem(
+            child: ListTile(
+              title: Text('Add to playlist'),
+              trailing: Icon(
+                Icons.add_rounded,
+                color: primaryColor,
+              ),
+              onTap: () {},
+            ),
+          ),
+          PopupMenuDivider(),
+          PopupMenuItem(
+            child: ListTile(
+              title: Text('Album'),
+              trailing: Icon(
+                Icons.library_music,
+                color: primaryColor,
+              ),
+              onTap: () {},
+            ),
+          ),
+        ],
+      ),],
     );
   }
 

@@ -62,7 +62,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                         title: "Feelin' Good",
                         img: "assets/images/img_3.jpg",
                         description: "abc",
-                        songUrl: "abc",
+                        mp3: "abc",
                       ),
                       type: PageTransitionType.bottomToTop));
             },

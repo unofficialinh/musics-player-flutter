@@ -37,7 +37,14 @@ class _PlayingListState extends State<PlayingList> {
           style: TextStyle(color: Colors.grey, fontSize: 22),
         ),
       ),
-      actions: [IconButton(icon: Icon(Icons.more_horiz), onPressed: null)],
+      actions: [
+        IconButton(
+            icon: Icon(
+              Icons.more_horiz,
+              color: Colors.white,
+            ),
+            onPressed: null)
+      ],
     );
   }
 
@@ -48,8 +55,7 @@ class _PlayingListState extends State<PlayingList> {
       child: Column(
         children: List.generate(next.length, (index) {
           return Padding(
-            padding:
-            const EdgeInsets.only(left: 30, right: 15, bottom: 15),
+            padding: const EdgeInsets.only(left: 30, right: 15, bottom: 15),
             child: GestureDetector(
               onTap: () {},
               child: Row(
@@ -78,9 +84,8 @@ class _PlayingListState extends State<PlayingList> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  color: Colors.black),
+                              style:
+                                  TextStyle(fontSize: 22, color: Colors.black),
                             ),
                           ],
                         ),
@@ -91,9 +96,8 @@ class _PlayingListState extends State<PlayingList> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey),
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.grey),
                             ),
                           ],
                         ),

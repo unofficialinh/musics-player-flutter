@@ -9,9 +9,9 @@ import '../bottom_navigation.dart';
 import '../color.dart';
 
 class AlbumPage extends StatefulWidget {
-  final dynamic song;
+  final dynamic album;
 
-  const AlbumPage({Key key, this.song}) : super(key: key);
+  const AlbumPage({Key key, this.album}) : super(key: key);
 
   @override
   _AlbumPageState createState() => _AlbumPageState();
@@ -29,7 +29,7 @@ class _AlbumPageState extends State<AlbumPage> {
 
   Widget getBody() {
     var size = MediaQuery.of(context).size;
-    List songAlbums = widget.song['songs'];
+    List songs = widget.album['songs'];
     return SingleChildScrollView(
       child: Stack(
         children: [
@@ -40,7 +40,7 @@ class _AlbumPageState extends State<AlbumPage> {
                 height: size.width,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(widget.song['img']), fit: BoxFit.cover),
+                      image: AssetImage(widget.album['img']), fit: BoxFit.cover),
                 ),
                 child: Container(
                   margin: EdgeInsets.only(top: size.width - 150),
@@ -79,7 +79,7 @@ class _AlbumPageState extends State<AlbumPage> {
                           child: Row(
                             children: [
                               Text(
-                                widget.song['title'],
+                                widget.album['title'],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 32,
@@ -110,7 +110,7 @@ class _AlbumPageState extends State<AlbumPage> {
                 ],
               ),
               Column(
-                children: List.generate(songAlbums.length, (index) {
+                children: List.generate(songs.length, (index) {
                   return Padding(
                     padding:
                         const EdgeInsets.only(left: 30, right: 30, bottom: 10),
@@ -121,11 +121,11 @@ class _AlbumPageState extends State<AlbumPage> {
                             PageTransition(
                                 alignment: Alignment.bottomCenter,
                                 child: MusicDetailPage(
-                                  title: widget.song['title'],
-                                  description: widget.song['description'],
-                                  artist: widget.song['artist'],
-                                  img: widget.song['img'],
-                                  songUrl: widget.song['song_url'],
+                                  title: songs[index]['title'],
+                                  description: songs[index]['description'],
+                                  artist: songs[index]['artist'],
+                                  img: songs[index]['img'],
+                                  mp3: songs[index]['mp3'],
                                 ),
                                 type: PageTransitionType.scale));
                       },
@@ -151,7 +151,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      songAlbums[index]['title'],
+                                      songs[index]['title'],
                                       style: TextStyle(
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold,
@@ -162,7 +162,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      songAlbums[index]['duration'],
+                                      songs[index]['duration'],
                                       style: TextStyle(
                                           fontSize: 17, color: Colors.grey),
                                     ),
@@ -174,7 +174,48 @@ class _AlbumPageState extends State<AlbumPage> {
                           Container(
                             width: (size.width - 60) * 0.1,
                             height: 50,
-                            child: Icon(Icons.more_vert),
+                            child: PopupMenuButton(
+                              icon: Icon(
+                                Icons.more_vert,
+                              ),
+                              offset: Offset(0, 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                                PopupMenuItem(
+                                  child: ListTile(
+                                    title: Text('Play next'),
+                                    trailing: Icon(
+                                      Icons.playlist_add_rounded,
+                                      color: primaryColor,
+                                    ),
+                                    onTap: () {},
+                                  ),
+                                ),
+                                PopupMenuDivider(),
+                                PopupMenuItem(
+                                  child: ListTile(
+                                    title: Text('Favorite'),
+                                    trailing: Icon(
+                                      Icons.favorite_border,
+                                      color: primaryColor,
+                                    ),
+                                    onTap: () {},
+                                  ),
+                                ),
+                                PopupMenuDivider(),
+                                PopupMenuItem(
+                                  child: ListTile(
+                                    title: Text('Add to playlist'),
+                                    trailing: Icon(
+                                      Icons.add_rounded,
+                                      color: primaryColor,
+                                    ),
+                                    onTap: () {},
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -208,11 +249,11 @@ class _AlbumPageState extends State<AlbumPage> {
                           PageTransition(
                               alignment: Alignment.bottomCenter,
                               child: MusicDetailPage(
-                                title: widget.song['title'],
-                                description: widget.song['description'],
-                                artist: widget.song['artist'],
-                                img: widget.song['img'],
-                                songUrl: widget.song['song_url'],
+                                title: songs[0]['title'],
+                                description: songs[0]['description'],
+                                artist: songs[0]['artist'],
+                                img: songs[0]['img'],
+                                mp3: songs[0]['mp3'],
                               ),
                               type: PageTransitionType.scale));
                     }),
@@ -246,14 +287,60 @@ class _AlbumPageState extends State<AlbumPage> {
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.1),
                       shape: BoxShape.circle),
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
+                  child: PopupMenuButton(
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                    ),
+                    offset: Offset(0, 7),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                      PopupMenuItem(
+                        child: ListTile(
+                          title: Text('Play next'),
+                          trailing: Icon(
+                            Icons.playlist_add_rounded,
+                            color: primaryColor,
+                          ),
+                          onTap: () {},
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
+                      PopupMenuDivider(),
+                      PopupMenuItem(
+                        child: ListTile(
+                          title: Text('Favorite'),
+                          trailing: Icon(
+                            Icons.favorite_border,
+                            color: primaryColor,
+                          ),
+                          onTap: () {},
+                        ),
+                      ),
+                      PopupMenuDivider(),
+                      PopupMenuItem(
+                        child: ListTile(
+                          title: Text('Add to playlist'),
+                          trailing: Icon(
+                            Icons.add_rounded,
+                            color: primaryColor,
+                          ),
+                          onTap: () {},
+                        ),
+                      ),
+                      PopupMenuDivider(),
+                      PopupMenuItem(
+                        child: ListTile(
+                          title: Text('Artist'),
+                          trailing: Icon(
+                            Icons.person,
+                            color: primaryColor,
+                          ),
+                          onTap: () {},
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

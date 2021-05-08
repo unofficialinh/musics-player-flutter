@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
-import 'package:music_player/json/songs_json.dart';
 import 'package:music_player/pages/artist_page.dart';
 import 'package:page_transition/page_transition.dart';
 

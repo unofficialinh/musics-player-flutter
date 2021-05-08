@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/color.dart';
+import 'package:music_player/controller/http.dart';
+import 'package:music_player/pages/artist_page.dart';
+import 'package:page_transition/page_transition.dart';
 import '../bottom_navigation.dart';
+import 'album_page.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -8,6 +12,19 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final _controller = TextEditingController();
+  String _search = '';
+  Future<List<dynamic>> _songs;
+  Future<List<dynamic>> _artists;
+  Future<List<dynamic>> _albums;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,27 +67,354 @@ class _SearchPageState extends State<SearchPage> {
   Widget getBody() {
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
-      child: Column(
-        children: [
-          Container(
-            height: 50,
-            decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(25)),
-            child: TextField(
-              cursorColor: primaryColor,
-              decoration: InputDecoration(
-                hintText: "Search for songs, albums, artist and more",
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: primaryColor,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 50,
+              decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(25)),
+              child: TextField(
+                controller: _controller,
+                cursorColor: primaryColor,
+                maxLines: 1,
+                decoration: InputDecoration(
+                  hintText: "Search for songs, albums, artist and more",
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: primaryColor,
+                  ),
+                  border: InputBorder.none,
                 ),
-                border: InputBorder.none,
+                onSubmitted: (String value) {
+                  setState(() {
+                    _search = _controller.text.toLowerCase();
+                  });
+                },
               ),
             ),
-          )
-        ],
+            getResult(),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget getResult() {
+    var size = MediaQuery.of(context).size;
+    if (_search != '') {
+      _songs = fetchSongs('song/by_name/' + _search);
+      _artists =
+          fetchArtists('artist/by_name/' + _search);
+      _albums = fetchAlbums('album/by_name/' + _search);
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Row(
+                children: [
+                  Text(
+                    'Songs',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            FutureBuilder(
+                future: _songs,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var songs = snapshot.data;
+                    print(songs);
+                    return Column(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceEvenly,
+                      children: List.generate(
+                          songs.length > 3 ? 3 : songs.length,
+                          (index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              songs[index]['img']),
+                                          fit: BoxFit.cover),
+                                      color: primaryColor,
+                                      borderRadius:
+                                          BorderRadius.circular(5)),
+                                ),
+                                Container(
+                                  width: (size.width - 60) * 0.65,
+                                  height: 60,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            songs[index]['title'],
+                                            maxLines: 1,
+                                            overflow: TextOverflow
+                                                .ellipsis,
+                                            textAlign:
+                                                TextAlign.left,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color:
+                                                    Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            songs[index]['artist'],
+                                            maxLines: 1,
+                                            overflow: TextOverflow
+                                                .ellipsis,
+                                            textAlign:
+                                                TextAlign.left,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  child: Icon(Icons.more_vert),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return Center(
+                      child: CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(primaryColor),
+                  ));
+                }),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Row(
+                children: [
+                  Text(
+                    'Albums',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            FutureBuilder(
+                future: _albums,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var albums = snapshot.data;
+                    return Column(
+                      children: List.generate(
+                          albums.length > 3 ? 3 : albums.length,
+                          (index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      alignment: Alignment.bottomCenter,
+                                      child: AlbumPage(
+                                        album_id: albums[index]['id'],
+                                      ),
+                                      type:
+                                      PageTransitionType.rightToLeft));
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              albums[index]['img']),
+                                          fit: BoxFit.cover),
+                                      color: primaryColor,
+                                      borderRadius:
+                                          BorderRadius.circular(5)),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(left: 15),
+                                  width: (size.width - 60) * 0.8,
+                                  height: 60,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            albums[index]['title'],
+                                            maxLines: 1,
+                                            overflow: TextOverflow
+                                                .ellipsis,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color:
+                                                    Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'artist',
+                                            // albums[index]['artist'],
+                                            maxLines: 1,
+                                            overflow: TextOverflow
+                                                .ellipsis,
+                                            textAlign:
+                                                TextAlign.left,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return Center(
+                      child: CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(primaryColor),
+                  ));
+                }),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Row(
+                children: [
+                  Text(
+                    'Artists',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            FutureBuilder(
+                future: _artists,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var artists = snapshot.data;
+                    return Column(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceEvenly,
+                      children: List.generate(
+                          artists.length > 3 ? 3 : artists.length,
+                          (index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      alignment: Alignment.bottomCenter,
+                                      child: ArtistPage(
+                                        artist_id: artists[index]['id'],
+                                      ),
+                                      type:
+                                      PageTransitionType.rightToLeft));
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              artists[index]
+                                                  ['img']),
+                                          fit: BoxFit.cover),
+                                      color: primaryColor,
+                                      shape: BoxShape.circle),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(left: 15),
+                                  width: (size.width - 60) * 0.7,
+                                  height: 60,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        artists[index]['name'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow
+                                            .ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color:
+                                                Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return Center(
+                      child: CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(primaryColor),
+                  ));
+                }),
+          ],
+        ),
+      );
+    }
+    else return Container();
   }
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/bottom_navigation.dart';
-import 'package:music_player/color.dart';
 import 'package:music_player/pages/home_page.dart';
 
 import 'home_page.dart';

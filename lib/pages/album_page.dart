@@ -97,6 +97,8 @@ class _AlbumPageState extends State<AlbumPage> {
                                     children: [
                                       Text(
                                         album['title'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 32,

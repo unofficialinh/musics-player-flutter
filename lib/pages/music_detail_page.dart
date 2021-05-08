@@ -1,10 +1,7 @@
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:music_player/controller/http.dart';
-import 'package:music_player/json/songs_json.dart';
 import 'package:music_player/pages/album_page.dart';
 import 'package:music_player/pages/artist_page.dart';
 import 'package:music_player/pages/playing_list_page.dart';

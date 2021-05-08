@@ -5,6 +5,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../color.dart';
 import 'album_page.dart';
+import 'music_detail_page.dart';
 
 class ArtistPage extends StatefulWidget {
   final dynamic artist_id;
@@ -192,7 +193,50 @@ class _ArtistPageState extends State<ArtistPage> {
                                   Container(
                                     width: (size.width - 60) * 0.1,
                                     height: 50,
-                                    child: Icon(Icons.more_vert),
+                                    child: PopupMenuButton(
+                                      icon: Icon(
+                                        Icons.more_vert,
+                                      ),
+                                      offset: Offset(0, 10),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(10)),
+                                      itemBuilder: (BuildContext context) =>
+                                      <PopupMenuEntry>[
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            title: Text('Play next'),
+                                            trailing: Icon(
+                                              Icons.playlist_add_rounded,
+                                              color: primaryColor,
+                                            ),
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                        PopupMenuDivider(),
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            title: Text('Favorite'),
+                                            trailing: Icon(
+                                              Icons.favorite_border,
+                                              color: primaryColor,
+                                            ),
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                        PopupMenuDivider(),
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            title: Text('Add to playlist'),
+                                            trailing: Icon(
+                                              Icons.add_rounded,
+                                              color: primaryColor,
+                                            ),
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -289,18 +333,14 @@ class _ArtistPageState extends State<ArtistPage> {
                               color: primaryColor,
                             ),
                             onPressed: () {
-                              // Navigator.push(
-                              //     context,
-                              //     PageTransition(
-                              //         alignment: Alignment.bottomCenter,
-                              //         child: MusicDetailPage(
-                              //           title: widget.song['title'],
-                              //           description: widget.song['description'],
-                              //           artist: widget.song['artist'],
-                              //           img: widget.song['img'],
-                              //           songUrl: widget.song['song_url'],
-                              //         ),
-                              //         type: PageTransitionType.scale));
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      alignment: Alignment.bottomCenter,
+                                      child: MusicDetailPage(
+                                        song_id: songs[0]['id'],
+                                      ),
+                                      type: PageTransitionType.scale));
                             }),
                       ]),
                     ),
@@ -332,14 +372,28 @@ class _ArtistPageState extends State<ArtistPage> {
                           decoration: BoxDecoration(
                               color: Colors.black.withOpacity(0.1),
                               shape: BoxShape.circle),
-                          child: IconButton(
-                              icon: Icon(
-                                Icons.more_vert,
-                                color: Colors.white,
+                          child: PopupMenuButton(
+                            icon: Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                            ),
+                            offset: Offset(0, 7),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry>[
+                              PopupMenuItem(
+                                child: ListTile(
+                                  title: Text('Favorite'),
+                                  trailing: Icon(
+                                    Icons.favorite_border,
+                                    color: primaryColor,
+                                  ),
+                                  onTap: () {},
+                                ),
                               ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              }),
+                            ],
+                          ),
                         ),
                       ],
                     ),

@@ -107,7 +107,41 @@ class _PlayingListState extends State<PlayingList> {
                   Container(
                     width: 50,
                     height: 50,
-                    child: Icon(Icons.more_vert),
+                    child: PopupMenuButton(
+                      icon: Icon(
+                        Icons.more_vert,
+                      ),
+                      offset: Offset(0, 10),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.circular(10)),
+                      itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry>[
+                        PopupMenuItem(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            title: Text('Remove'),
+                            trailing: Icon(
+                              Icons.remove_rounded,
+                              color: primaryColor,
+                            ),
+                            onTap: () {},
+                          ),
+                        ),
+                        PopupMenuDivider(),
+                        PopupMenuItem(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            title: Text('To first'),
+                            trailing: Icon(
+                              Icons.arrow_upward_rounded,
+                              color: primaryColor,
+                            ),
+                            onTap: () {},
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

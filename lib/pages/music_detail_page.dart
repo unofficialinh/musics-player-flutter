@@ -83,17 +83,6 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
             PopupMenuItem(
               child: ListTile(
-                title: Text('Play next'),
-                trailing: Icon(
-                  Icons.playlist_add_rounded,
-                  color: primaryColor,
-                ),
-                onTap: () {},
-              ),
-            ),
-            PopupMenuDivider(),
-            PopupMenuItem(
-              child: ListTile(
                 title: Text('Add to playlist'),
                 trailing: Icon(
                   Icons.add_rounded,

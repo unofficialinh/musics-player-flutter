@@ -199,7 +199,50 @@ class _SearchPageState extends State<SearchPage> {
                                 Container(
                                   width: 50,
                                   height: 50,
-                                  child: Icon(Icons.more_vert),
+                                  child: PopupMenuButton(
+                                    icon: Icon(
+                                      Icons.more_vert,
+                                    ),
+                                    offset: Offset(0, 10),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10)),
+                                    itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry>[
+                                      PopupMenuItem(
+                                        child: ListTile(
+                                          title: Text('Play next'),
+                                          trailing: Icon(
+                                            Icons.playlist_add_rounded,
+                                            color: primaryColor,
+                                          ),
+                                          onTap: () {},
+                                        ),
+                                      ),
+                                      PopupMenuDivider(),
+                                      PopupMenuItem(
+                                        child: ListTile(
+                                          title: Text('Favorite'),
+                                          trailing: Icon(
+                                            Icons.favorite_border,
+                                            color: primaryColor,
+                                          ),
+                                          onTap: () {},
+                                        ),
+                                      ),
+                                      PopupMenuDivider(),
+                                      PopupMenuItem(
+                                        child: ListTile(
+                                          title: Text('Add to playlist'),
+                                          trailing: Icon(
+                                            Icons.add_rounded,
+                                            color: primaryColor,
+                                          ),
+                                          onTap: () {},
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),

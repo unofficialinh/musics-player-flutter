@@ -1,14 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter_config/flutter_config.dart';
 
-// final String domain = FlutterConfig.get('API_URL');
-final String domain = '192.168.1.6:5000';
+final String API_URL = '10.0.2.2:5000';
 
 // return List<Album>
 Future<List<dynamic>> fetchAlbums(path) async {
-  final response = await http.get(Uri.http('192.168.1.6:5000', path));
+  final response = await http.get(Uri.http(API_URL, path));
   if (response.statusCode == 200) {
     return json.decode(response.body)['albums'];
   } else {
@@ -18,7 +16,7 @@ Future<List<dynamic>> fetchAlbums(path) async {
 
 // return Album
 Future<dynamic> fetchAlbum(path) async {
-  final response = await http.get(Uri.http('192.168.1.6:5000', path));
+  final response = await http.get(Uri.http(API_URL, path));
   if (response.statusCode == 200) {
     return json.decode(response.body);
   } else {
@@ -28,7 +26,7 @@ Future<dynamic> fetchAlbum(path) async {
 
 // return List<Song>
 Future<List<dynamic>> fetchSongs(path) async {
-  final response = await http.get(Uri.http('192.168.1.6:5000', path));
+  final response = await http.get(Uri.http(API_URL, path));
   if (response.statusCode == 200) {
     return json.decode(response.body)['songs'];
   } else {
@@ -38,7 +36,7 @@ Future<List<dynamic>> fetchSongs(path) async {
 
 // return Song
 Future<dynamic> fetchSong(path) async {
-  final response = await http.get(Uri.http('192.168.1.6:5000', path));
+  final response = await http.get(Uri.http(API_URL, path));
   if (response.statusCode == 200) {
     return json.decode(response.body);
   } else {
@@ -47,7 +45,7 @@ Future<dynamic> fetchSong(path) async {
 }
 
 Future<List<dynamic>> fetchArtists(path) async {
-  final response = await http.get(Uri.http('192.168.1.6:5000', path));
+  final response = await http.get(Uri.http(API_URL, path));
   if (response.statusCode == 200) {
     return json.decode(response.body)['artists'];
   } else {
@@ -57,7 +55,7 @@ Future<List<dynamic>> fetchArtists(path) async {
 
 // return Artist
 Future<dynamic> fetchArtist(path) async {
-  final response = await http.get(Uri.http('192.168.1.6:5000', path));
+  final response = await http.get(Uri.http(API_URL, path));
   if (response.statusCode == 200) {
     return json.decode(response.body);
   } else {

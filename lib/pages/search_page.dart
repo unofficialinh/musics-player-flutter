@@ -130,7 +130,6 @@ class _SearchPageState extends State<SearchPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var songs = snapshot.data;
-                    print(songs);
                     return Column(
                       mainAxisAlignment:
                           MainAxisAlignment.spaceEvenly,

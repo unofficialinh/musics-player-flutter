@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/controller/http.dart';
 import 'package:music_player/json/songs_json.dart';
+import 'package:music_player/pages/artist_page.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../bottom_navigation.dart';
@@ -21,6 +23,23 @@ class _LibraryPageState extends State<LibraryPage> {
     Tab(text: "Downloaded")
   ];
   int activeMenu = 0;
+
+  Future<List<dynamic>> Songs;
+  Future<List<dynamic>> Albums;
+  Future<List<dynamic>> Playlists;
+  Future<List<dynamic>> Artists;
+  Future<List<dynamic>> Downloaded;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Songs = fetchSongs('song/by_name/a');
+    Albums = fetchAlbums('album/by_name/a');
+    Playlists = fetchAlbums('album/by_name/a');
+    Artists = fetchArtists('artist/by_name/a');
+    Downloaded = fetchSongs('song/by_name/a');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,347 +105,360 @@ class _LibraryPageState extends State<LibraryPage> {
     List song = songs;
     return TabBarView(children: [
       //Song
-      SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(song.length, (index) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 20, top: 15),
-              child: GestureDetector(
-                onTap: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(song[index]['img']),
-                              fit: BoxFit.cover),
-                          color: primaryColor,
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                    Container(
-                      width: (size.width - 60) * 0.7,
-                      height: 60,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                song[index]['title'],
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.black),
+      FutureBuilder(
+          future: Songs,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var songs = snapshot.data;
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(songs.length, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 20, top: 15),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(songs[index]['img']),
+                                      fit: BoxFit.cover),
+                                  color: primaryColor,
+                                  borderRadius: BorderRadius.circular(5)),
+                            ),
+                            Container(
+                              width: (size.width - 60) * 0.7,
+                              height: 60,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        songs[index]['title'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        songs[index]['artist'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                song[index]['artist'],
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            Container(
+                              width: 50,
+                              height: 50,
+                              child: Icon(Icons.more_vert),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      child: Icon(Icons.more_vert),
-                    ),
-                  ],
+                    );
+                  }),
                 ),
-              ),
-            );
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return Center(
+                child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+            ));
           }),
-        ),
-      ),
 
       //Album
-      GridView.count(
-        padding: EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
-        crossAxisCount: 2,
-        childAspectRatio: 4 / 5,
-        children: List.generate(song.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      alignment: Alignment.bottomCenter,
-                      child: AlbumPage(
-                        album: song[index],
-                      ),
-                      type: PageTransitionType.rightToLeft));
-            },
-            child: Column(
-              children: [
-                Container(
-                  width: size.width * 0.4,
-                  height: size.width * 0.4,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(song[index]['img']),
-                          fit: BoxFit.cover),
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  songs[index]['title'],
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  songs[index]['artist'],
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 15,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
-      ),
+      FutureBuilder(
+          future: Albums,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var albums = snapshot.data;
+              return GridView.count(
+                padding:
+                    EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
+                crossAxisCount: 2,
+                childAspectRatio: 4 / 5,
+                children: List.generate(albums.length, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              alignment: Alignment.bottomCenter,
+                              child: AlbumPage(
+                                album_id: albums[index]['id'],
+                              ),
+                              type: PageTransitionType.rightToLeft));
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          width: size.width * 0.4,
+                          height: size.width * 0.4,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(albums[index]['img']),
+                                  fit: BoxFit.cover),
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          albums[index]['title'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'artist',
+                          // albums[index]['artist'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return Center(
+                child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+            ));
+          }),
 
       //Playlist
-      GridView.count(
-        padding: EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
-        crossAxisCount: 2,
-        childAspectRatio: 4 / 4.5,
-        children: List.generate(song.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      alignment: Alignment.bottomCenter,
-                      child: AlbumPage(
-                        album: song[index],
-                      ),
-                      type: PageTransitionType.rightToLeft));
-            },
-            child: Column(
-              children: [
-                Container(
-                  width: size.width * 0.4,
-                  height: size.width * 0.4,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(song[index]['img']),
-                          fit: BoxFit.cover),
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  songs[index]['title'],
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
-      ),
+      FutureBuilder(
+          future: Playlists,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var playlists = snapshot.data;
+              return GridView.count(
+                padding:
+                    EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
+                crossAxisCount: 2,
+                childAspectRatio: 4 / 4.5,
+                children: List.generate(playlists.length, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              alignment: Alignment.bottomCenter,
+                              child: AlbumPage(
+                                album_id: playlists[index]['id'],
+                              ),
+                              type: PageTransitionType.rightToLeft));
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          width: size.width * 0.4,
+                          height: size.width * 0.4,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(playlists[index]['img']),
+                                  fit: BoxFit.cover),
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          playlists[index]['title'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return Center(
+                child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+            ));
+          }),
 
       //Artist
-      GridView.count(
-        padding: EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
-        crossAxisCount: 2,
-        childAspectRatio: 4 / 4.5,
-        children: List.generate(song.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      alignment: Alignment.bottomCenter,
-                      child: AlbumPage(
-                        album: song[index],
-                      ),
-                      type: PageTransitionType.rightToLeft));
-            },
-            child: Column(
-              children: [
-                Container(
-                  width: size.width * 0.4,
-                  height: size.width * 0.4,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: AssetImage(song[index]['img']),
-                          fit: BoxFit.cover),
-                      color: primaryColor,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  songs[index]['artist'],
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
-      ),
+      FutureBuilder(
+          future: Artists,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var artists = snapshot.data;
+              return GridView.count(
+                padding:
+                    EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
+                crossAxisCount: 2,
+                childAspectRatio: 4 / 4.5,
+                children: List.generate(artists.length, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              alignment: Alignment.bottomCenter,
+                              child: ArtistPage(
+                                artist_id: artists[index]['id'],
+                              ),
+                              type: PageTransitionType.rightToLeft));
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          width: size.width * 0.4,
+                          height: size.width * 0.4,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(artists[index]['img']),
+                                fit: BoxFit.cover),
+                            color: primaryColor,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          artists[index]['name'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return Center(
+                child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+            ));
+          }),
 
       //Downloaded
-      SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(song.length, (index) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 20, top: 15),
-              child: GestureDetector(
-                onTap: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(song[index]['img']),
-                              fit: BoxFit.cover),
-                          color: primaryColor,
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                    Container(
-                      width: (size.width - 60) * 0.7,
-                      height: 60,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                song[index]['title'],
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.black),
+      FutureBuilder(
+          future: Downloaded,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var downloaded = snapshot.data;
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(downloaded.length, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 20, top: 15),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          downloaded[index]['img']),
+                                      fit: BoxFit.cover),
+                                  color: primaryColor,
+                                  borderRadius: BorderRadius.circular(5)),
+                            ),
+                            Container(
+                              width: (size.width - 60) * 0.7,
+                              height: 60,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        downloaded[index]['title'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        downloaded[index]['artist'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                song[index]['artist'],
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            Container(
+                              width: 50,
+                              height: 50,
+                              child: Icon(Icons.more_vert),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      child: Icon(Icons.more_vert),
-                    ),
-                  ],
+                    );
+                  }),
                 ),
-              ),
-            );
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return Center(
+                child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+            ));
           }),
-        ),
-      ),
     ]);
-    // return Padding(
-    //   padding: const EdgeInsets.only(left: 25, right: 40, top: 20),
-    //   child: SingleChildScrollView(
-    //     scrollDirection: Axis.vertical,
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         SingleChildScrollView(
-    //           scrollDirection: Axis.horizontal,
-    //           child: Row(
-    //             children: List.generate(tabs.length, (index) {
-    //               return Padding(
-    //                 padding: const EdgeInsets.only(right: 15),
-    //                 child: GestureDetector(
-    //                   onTap: () {
-    //                     setState(() {
-    //                       activeMenu = index;
-    //                     });
-    //                   },
-    //                   child: Column(
-    //                     crossAxisAlignment: CrossAxisAlignment.start,
-    //                     children: [
-    //                       Text(
-    //                         tabs[index],
-    //                         style: TextStyle(
-    //                           fontSize: 22,
-    //                           fontWeight: activeMenu == index
-    //                               ? FontWeight.bold
-    //                               : FontWeight.normal,
-    //                           color:
-    //                           activeMenu == index ? primaryColor : Colors.grey,
-    //                         ),
-    //                       ),
-    //                       SizedBox(
-    //                         height: 3,
-    //                       ),
-    //                       activeMenu == index
-    //                           ? Container(
-    //                               width: 40,
-    //                               height: 3,
-    //                               decoration: BoxDecoration(
-    //                                 color: primaryColor,
-    //                                 borderRadius: BorderRadius.circular(5),
-    //                               ),
-    //                             )
-    //                           : Container(),
-    //                     ],
-    //                   ),
-    //                 ),
-    //               );
-    //             }),
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }

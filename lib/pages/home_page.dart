@@ -4,26 +4,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:music_player/bottom_navigation.dart';
 import 'package:music_player/color.dart';
-import 'package:music_player/json/songs_json.dart';
+import 'package:music_player/controller/http.dart';
 import 'package:music_player/pages/album_page.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:http/http.dart' as http;
-import 'package:music_player/model/album.dart';
-
-List<Album> parseAlbums(String responseBody) {
-  final parsed = json.decode(responseBody)['albums'];
-  return List<Album>.from(parsed.map((model)=> Album.fromJson(model)));
-}
-
-Future<List<Album>> fetchAlbums(path) async {
-  final response =
-      await http.get(Uri.http('192.168.1.6:5000', path));
-  if (response.statusCode == 200) {
-    return parseAlbums(response.body);
-  } else {
-    throw Exception('Unable to fetch products from the REST API');
-  }
-}
 
 class HomePage extends StatefulWidget {
   @override
@@ -31,13 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<List<Album>> recentlyPlayed;
+  Future<List<dynamic>> recentlyPlayed;
+  Future<List<dynamic>> newestSongs;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     recentlyPlayed = fetchAlbums('album/by_name/a');
+    newestSongs = fetchSongs('/song/newest/5');
   }
 
   @override
@@ -107,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 20,
               ),
-              FutureBuilder<List<Album>>(
+              FutureBuilder<List<dynamic>>(
                 future: recentlyPlayed,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -117,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 30),
                         child: Row(
-                          children: List.generate(albums.length - 5, (index) {
+                          children: List.generate(albums.length, (index) {
                             return Padding(
                               padding: const EdgeInsets.only(right: 30),
                               child: GestureDetector(
@@ -127,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                                       PageTransition(
                                           alignment: Alignment.bottomCenter,
                                           child: AlbumPage(
-                                            album: albums[index],
+                                            album_id: albums[index]['id'],
                                           ),
                                           type:
                                               PageTransitionType.rightToLeft));
@@ -139,8 +124,8 @@ class _HomePageState extends State<HomePage> {
                                       height: 180,
                                       decoration: BoxDecoration(
                                           image: DecorationImage(
-                                              image: AssetImage(
-                                                  albums[index].img),
+                                              image: NetworkImage(
+                                                  albums[index]['img']),
                                               fit: BoxFit.cover),
                                           color: primaryColor,
                                           borderRadius:
@@ -150,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                                       height: 20,
                                     ),
                                     Text(
-                                      albums[index].title,
+                                      albums[index]['title'],
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
@@ -164,15 +149,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     );
-                  }
-                  else if (snapshot.hasError) {
+                  } else if (snapshot.hasError) {
                     return Text("${snapshot.error}");
                   }
                   return Center(
-                  //     child: CircularProgressIndicator(
-                  //   valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-                  // ));
-                      child: Text("Nothing here"));
+                      child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                  ));
                 },
               ),
             ],
@@ -204,63 +187,80 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 20,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: Row(
-                    children: List.generate(songs.length - 5, (index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 30),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    alignment: Alignment.bottomCenter,
-                                    child: AlbumPage(
-                                      album: songs[index + 5],
+              FutureBuilder<List<dynamic>>(
+                future: newestSongs,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var songs = snapshot.data;
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 30),
+                        child: Row(
+                          children: List.generate(songs.length, (index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 30),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          alignment: Alignment.bottomCenter,
+                                          child: AlbumPage(
+                                            album_id: songs[index]['id'],
+                                          ),
+                                          type:
+                                              PageTransitionType.rightToLeft));
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: 180,
+                                      height: 180,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  songs[index]['img']),
+                                              fit: BoxFit.cover),
+                                          color: primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                     ),
-                                    type: PageTransitionType.rightToLeft));
-                          },
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 180,
-                                height: 180,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image:
-                                            AssetImage(songs[index + 5]['img']),
-                                        fit: BoxFit.cover),
-                                    color: primaryColor,
-                                    borderRadius: BorderRadius.circular(10)),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                songs[index + 5]['title'],
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      songs[index]['title'],
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      songs[index]['artist'],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Text(
-                                songs[index + 5]['artist'],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
+                            );
+                          }),
                         ),
-                      );
-                    }),
-                  ),
-                ),
+                      ),
+                    );
+                  }
+                  else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return Center(
+                      child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                  ));
+                },
               ),
             ],
           ),

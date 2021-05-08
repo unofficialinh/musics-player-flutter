@@ -58,11 +58,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                   context,
                   PageTransition(
                       child: MusicDetailPage(
-                        artist: "Harry Style",
-                        title: "Feelin' Good",
-                        img: "assets/images/img_3.jpg",
-                        description: "abc",
-                        mp3: "abc",
+                        song_id: 3,
                       ),
                       type: PageTransitionType.bottomToTop));
             },

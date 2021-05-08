@@ -16,13 +16,13 @@ class ArtistPage extends StatefulWidget {
 }
 
 class _ArtistPageState extends State<ArtistPage> {
-  Future<dynamic> Artist;
+  Future<dynamic> _artist;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Artist = fetchArtist('artist/' + widget.artist_id.toString());
+    _artist = fetchArtist('artist/' + widget.artist_id.toString());
   }
 
   @override
@@ -37,7 +37,7 @@ class _ArtistPageState extends State<ArtistPage> {
   Widget getBody() {
     var size = MediaQuery.of(context).size;
     return FutureBuilder(
-        future: Artist,
+        future: _artist,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var artist = snapshot.data;

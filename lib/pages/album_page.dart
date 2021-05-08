@@ -18,13 +18,13 @@ class AlbumPage extends StatefulWidget {
 }
 
 class _AlbumPageState extends State<AlbumPage> {
-  Future<dynamic> Album;
+  Future<dynamic> _album;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Album = fetchAlbum('album/' + widget.album_id.toString());
+    _album = fetchAlbum('album/' + widget.album_id.toString());
   }
 
   @override
@@ -39,7 +39,7 @@ class _AlbumPageState extends State<AlbumPage> {
   Widget getBody() {
     var size = MediaQuery.of(context).size;
     return FutureBuilder<dynamic>(
-        future: Album,
+        future: _album,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var album = snapshot.data;

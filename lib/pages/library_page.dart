@@ -24,21 +24,21 @@ class _LibraryPageState extends State<LibraryPage> {
   ];
   int activeMenu = 0;
 
-  Future<List<dynamic>> Songs;
-  Future<List<dynamic>> Albums;
-  Future<List<dynamic>> Playlists;
-  Future<List<dynamic>> Artists;
-  Future<List<dynamic>> Downloaded;
+  Future<List<dynamic>> _songs;
+  Future<List<dynamic>> _albums;
+  Future<List<dynamic>> _playlists;
+  Future<List<dynamic>> _artists;
+  Future<List<dynamic>> _downloaded;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Songs = fetchSongs('song/by_name/a');
-    Albums = fetchAlbums('album/by_name/a');
-    Playlists = fetchAlbums('album/by_name/a');
-    Artists = fetchArtists('artist/by_name/a');
-    Downloaded = fetchSongs('song/by_name/a');
+    _songs = fetchSongs('song/by_name/a');
+    _albums = fetchAlbums('album/by_name/a');
+    _playlists = fetchAlbums('album/by_name/a');
+    _artists = fetchArtists('artist/by_name/a');
+    _downloaded = fetchSongs('song/by_name/a');
   }
 
   @override
@@ -102,11 +102,10 @@ class _LibraryPageState extends State<LibraryPage> {
 
   Widget getBody() {
     var size = MediaQuery.of(context).size;
-    List song = songs;
     return TabBarView(children: [
       //Song
       FutureBuilder(
-          future: Songs,
+          future: _songs,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var songs = snapshot.data;
@@ -186,7 +185,7 @@ class _LibraryPageState extends State<LibraryPage> {
 
       //Album
       FutureBuilder(
-          future: Albums,
+          future: _albums,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var albums = snapshot.data;
@@ -258,7 +257,7 @@ class _LibraryPageState extends State<LibraryPage> {
 
       //Playlist
       FutureBuilder(
-          future: Playlists,
+          future: _playlists,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var playlists = snapshot.data;
@@ -319,7 +318,7 @@ class _LibraryPageState extends State<LibraryPage> {
 
       //Artist
       FutureBuilder(
-          future: Artists,
+          future: _artists,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var artists = snapshot.data;
@@ -381,7 +380,7 @@ class _LibraryPageState extends State<LibraryPage> {
 
       //Downloaded
       FutureBuilder(
-          future: Downloaded,
+          future: _downloaded,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var downloaded = snapshot.data;

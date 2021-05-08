@@ -22,20 +22,20 @@ class MusicDetailPage extends StatefulWidget {
 }
 
 class _MusicDetailPageState extends State<MusicDetailPage> {
-  Future<dynamic> Song;
+  Future<dynamic> _song;
   double _currentSliderValue = 20;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Song = fetchSong('song/' + widget.song_id.toString());
+    _song = fetchSong('song/' + widget.song_id.toString());
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Song,
+        future: _song,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var song = snapshot.data;

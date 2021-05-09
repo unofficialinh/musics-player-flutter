@@ -24,9 +24,8 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _song = fetchSong('song/' + widget.song_id.toString());
+    _song = searchSongById(widget.song_id);
   }
 
   @override

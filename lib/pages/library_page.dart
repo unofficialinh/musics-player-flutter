@@ -31,13 +31,13 @@ class _LibraryPageState extends State<LibraryPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    // TODO: change what album, song to display in library
     super.initState();
-    _songs = fetchSongs('song/by_name/a');
-    _albums = fetchAlbums('album/by_name/a');
-    _playlists = fetchAlbums('album/by_name/a');
-    _artists = fetchArtists('artist/by_name/a');
-    _downloaded = fetchSongs('song/by_name/a');
+    _songs = searchSongsByName('a');
+    _albums = searchAlbumsByName('a');
+    _playlists = searchAlbumsByName('a');
+    _artists = searchArtistsByName('a');
+    _downloaded = searchSongsByName('a');
   }
 
   @override

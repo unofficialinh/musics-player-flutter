@@ -11,9 +11,8 @@ class _TestState extends State<Test> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    futureAlbum = fetchAlbums('album/by_name/a');
+    futureAlbum = searchAlbumsByName('album/by_name/a');
   }
   @override
   Widget build(BuildContext context) {

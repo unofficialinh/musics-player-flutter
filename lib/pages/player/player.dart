@@ -61,18 +61,19 @@ class _PlayerState extends State<Player> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     audioPlayer = AudioPlayer();
     audioPlayer.setAudioSource(ConcatenatingAudioSource(
         children: List.generate(songs.length, (index) {
-      return AudioSource.uri(Uri.parse(songs[index]['mp3']));
-    })));
+          return AudioSource.uri(Uri.parse(songs[index]['mp3']));
+          }
+        )
+    )
+    );
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     audioPlayer.dispose();
     super.dispose();
   }
@@ -188,7 +189,8 @@ class _PlayerState extends State<Player> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                      padding:
+                          const EdgeInsets.only(left: 20, right: 20, top: 15),
                       child: Column(
                         children: [
                           SingleChildScrollView(
@@ -209,8 +211,9 @@ class _PlayerState extends State<Player> {
                                   PageTransition(
                                       alignment: Alignment.bottomCenter,
                                       child: ArtistPage(
-                                        artist_id: songs[audioPlayer.currentIndex]
-                                        ['artist_id'],
+                                        artist_id:
+                                            songs[audioPlayer.currentIndex]
+                                                ['artist_id'],
                                       ),
                                       type: PageTransitionType.rightToLeft));
                             },

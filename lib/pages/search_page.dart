@@ -21,7 +21,6 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void dispose() {
     _controller.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -104,10 +103,10 @@ class _SearchPageState extends State<SearchPage> {
   Widget getResult() {
     var size = MediaQuery.of(context).size;
     if (_search != '') {
-      _songs = fetchSongs('song/by_name/' + _search);
+      _songs = searchSongsByName(_search);
       _artists =
-          fetchArtists('artist/by_name/' + _search);
-      _albums = fetchAlbums('album/by_name/' + _search);
+          searchArtistsByName(_search);
+      _albums = searchAlbumsByName(_search);
       return SingleChildScrollView(
         child: Column(
           children: [

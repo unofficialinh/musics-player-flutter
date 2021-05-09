@@ -21,9 +21,8 @@ class _ArtistPageState extends State<ArtistPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _artist = fetchArtist('artist/' + widget.artist_id.toString());
+    _artist = searchArtistById(widget.artist_id);
   }
 
   @override

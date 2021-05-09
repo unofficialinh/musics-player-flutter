@@ -18,10 +18,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    recentlyPlayed = fetchAlbums('album/by_name/a');
-    newestSongs = fetchSongs('/song/newest/5');
+    recentlyPlayed = searchAlbumsByName('a');
+    newestSongs = searchNewestSongs(5);
   }
 
   @override

@@ -22,9 +22,8 @@ class _AlbumPageState extends State<AlbumPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _album = fetchAlbum('album/' + widget.album_id.toString());
+    _album = searchAlbumById(widget.album_id);
   }
 
   @override

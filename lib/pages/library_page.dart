@@ -170,10 +170,9 @@ class _LibraryPageState extends State<LibraryPage> {
                                 ),
                                 offset: Offset(0, 10),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(10)),
+                                    borderRadius: BorderRadius.circular(10)),
                                 itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry>[
+                                    <PopupMenuEntry>[
                                   PopupMenuItem(
                                     child: ListTile(
                                       title: Text('Play next'),
@@ -489,10 +488,9 @@ class _LibraryPageState extends State<LibraryPage> {
                                 ),
                                 offset: Offset(0, 10),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(10)),
+                                    borderRadius: BorderRadius.circular(10)),
                                 itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry>[
+                                    <PopupMenuEntry>[
                                   PopupMenuItem(
                                     child: ListTile(
                                       title: Text('Play next'),

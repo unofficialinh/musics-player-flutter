@@ -3,6 +3,7 @@ import 'package:music_player/color.dart';
 import 'package:music_player/pages/home_page.dart';
 import 'package:music_player/pages/library_page.dart';
 import 'package:music_player/pages/music_detail_page.dart';
+import 'package:music_player/pages/player/player.dart';
 import 'package:music_player/pages/search_page.dart';
 import 'package:music_player/pages/settings_page.dart';
 import 'package:page_transition/page_transition.dart';
@@ -21,7 +22,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     HomePage(),
     LibraryPage(),
     SearchPage(),
-    SettingsPage(),
+    Player(),
   ];
 
   List items = [

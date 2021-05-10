@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/json/songs_json.dart';
+import 'package:music_player/model/PlayingListModel.dart';
+import 'package:provider/provider.dart';
 
 import '../color.dart';
 
@@ -50,105 +51,111 @@ class _PlayingListState extends State<PlayingList> {
 
   Widget getBody() {
     var size = MediaQuery.of(context).size;
-    List next = songs;
-    return SingleChildScrollView(
-      child: Column(
-        children: List.generate(next.length, (index) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 30, right: 15, bottom: 15),
-            child: GestureDetector(
-              onTap: () {},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(next[index]['img']),
-                            fit: BoxFit.cover),
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(5)),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 12),
-                    width: (size.width - 60) * 0.7,
-                    height: 60,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              next[index]['title'],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.left,
-                              style:
-                                  TextStyle(fontSize: 22, color: Colors.black),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              next[index]['artist'],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.left,
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 50,
-                    height: 50,
-                    child: PopupMenuButton(
-                      icon: Icon(
-                        Icons.more_vert,
+    return Consumer<PlayingListModel> (
+      builder: (context, appState, child) {
+        List<dynamic> songs = appState.songs;
+        return SingleChildScrollView(
+          child: Column(
+            children: List.generate(songs.length, (index) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 30, right: 15, bottom: 15),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(songs[index]['img']),
+                                fit: BoxFit.cover),
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(5)),
                       ),
-                      offset: Offset(0, 10),
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(10)),
-                      itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry>[
-                        PopupMenuItem(
-                          child: ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            title: Text('Remove'),
-                            trailing: Icon(
-                              Icons.remove_rounded,
-                              color: primaryColor,
+                      Container(
+                        padding: EdgeInsets.only(left: 12),
+                        width: (size.width - 60) * 0.7,
+                        height: 60,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  songs[index]['title'],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style:
+                                  TextStyle(fontSize: 22, color: Colors.black),
+                                ),
+                              ],
                             ),
-                            onTap: () {},
-                          ),
-                        ),
-                        PopupMenuDivider(),
-                        PopupMenuItem(
-                          child: ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            title: Text('To first'),
-                            trailing: Icon(
-                              Icons.arrow_upward_rounded,
-                              color: primaryColor,
+                            Row(
+                              children: [
+                                Text(
+                                  songs[index]['artist'],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style:
+                                  TextStyle(fontSize: 16, color: Colors.grey),
+                                ),
+                              ],
                             ),
-                            onTap: () {},
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: PopupMenuButton(
+                          icon: Icon(
+                            Icons.more_vert,
+                          ),
+                          offset: Offset(0, 10),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.circular(10)),
+                          itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry>[
+                            PopupMenuItem(
+                              child: ListTile(
+                                contentPadding: EdgeInsets.all(0),
+                                title: Text('Remove'),
+                                trailing: Icon(
+                                  Icons.remove_rounded,
+                                  color: primaryColor,
+                                ),
+                                onTap: () {
+
+                                },
+                              ),
+                            ),
+                            PopupMenuDivider(),
+                            PopupMenuItem(
+                              child: ListTile(
+                                contentPadding: EdgeInsets.all(0),
+                                title: Text('To first'),
+                                trailing: Icon(
+                                  Icons.arrow_upward_rounded,
+                                  color: primaryColor,
+                                ),
+                                onTap: () {},
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          );
-        }),
-      ),
+                ),
+              );
+            }),
+          ),
+        );
+      }
     );
   }
 }

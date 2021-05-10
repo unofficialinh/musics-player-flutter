@@ -14,13 +14,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<List<dynamic>> recentlyPlayed;
-  Future<List<dynamic>> newestSongs;
+  Future<List<dynamic>> newestAlbums;
 
   @override
   void initState() {
     super.initState();
     recentlyPlayed = searchAlbumsByName('a');
-    newestSongs = searchNewestSongs(5);
+    newestAlbums = searchNewestAlbums(5);
   }
 
   @override
@@ -173,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     Text(
-                      "Newest songs",
+                      "Newest albums",
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -186,16 +186,16 @@ class _HomePageState extends State<HomePage> {
                 height: 20,
               ),
               FutureBuilder<List<dynamic>>(
-                future: newestSongs,
+                future: newestAlbums,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    var songs = snapshot.data;
+                    var albums = snapshot.data;
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 30),
                         child: Row(
-                          children: List.generate(songs.length, (index) {
+                          children: List.generate(albums.length, (index) {
                             return Padding(
                               padding: const EdgeInsets.only(right: 30),
                               child: GestureDetector(
@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                                       PageTransition(
                                           alignment: Alignment.bottomCenter,
                                           child: AlbumPage(
-                                            album_id: songs[index]['id'],
+                                            album_id: albums[index]['id'],
                                           ),
                                           type:
                                               PageTransitionType.rightToLeft));
@@ -218,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                                       decoration: BoxDecoration(
                                           image: DecorationImage(
                                               image: NetworkImage(
-                                                  songs[index]['img']),
+                                                  albums[index]['img']),
                                               fit: BoxFit.cover),
                                           color: primaryColor,
                                           borderRadius:
@@ -228,14 +228,14 @@ class _HomePageState extends State<HomePage> {
                                       height: 20,
                                     ),
                                     Text(
-                                      songs[index]['title'],
+                                      albums[index]['title'],
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
-                                      songs[index]['artist'],
+                                      albums[index]['artist'],
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 12,

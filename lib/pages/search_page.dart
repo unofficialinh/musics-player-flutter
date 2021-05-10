@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/color.dart';
 import 'package:music_player/controller/http.dart';
+import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/artist_page.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import '../bottom_navigation.dart';
 import 'album_page.dart';
 
@@ -129,124 +131,141 @@ class _SearchPageState extends State<SearchPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var songs = snapshot.data;
-                    return Column(
-                      mainAxisAlignment:
+                    return Consumer<PlayingListModel> (
+                      builder: (context, appState, child) {
+                        return Column(
+                          mainAxisAlignment:
                           MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                          songs.length > 3 ? 3 : songs.length,
-                          (index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              songs[index]['img']),
-                                          fit: BoxFit.cover),
-                                      color: primaryColor,
-                                      borderRadius:
-                                          BorderRadius.circular(5)),
-                                ),
-                                Container(
-                                  width: (size.width - 60) * 0.65,
-                                  height: 60,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            songs[index]['title'],
-                                            maxLines: 1,
-                                            overflow: TextOverflow
-                                                .ellipsis,
-                                            textAlign:
-                                                TextAlign.left,
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color:
-                                                    Colors.black),
+                          children: List.generate(
+                              songs.length > 3 ? 3 : songs.length,
+                                  (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      appState.addBack(songs[index]);
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      songs[index]['img']),
+                                                  fit: BoxFit.cover),
+                                              color: primaryColor,
+                                              borderRadius:
+                                              BorderRadius.circular(5)),
+                                        ),
+                                        Container(
+                                          width: (size.width - 60) * 0.65,
+                                          height: 60,
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    songs[index]['title'],
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow
+                                                        .ellipsis,
+                                                    textAlign:
+                                                    TextAlign.left,
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        color:
+                                                        Colors.black),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    songs[index]['artist'],
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow
+                                                        .ellipsis,
+                                                    textAlign:
+                                                    TextAlign.left,
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.grey),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            songs[index]['artist'],
-                                            maxLines: 1,
-                                            overflow: TextOverflow
-                                                .ellipsis,
-                                            textAlign:
-                                                TextAlign.left,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey),
+                                        ),
+                                        Container(
+                                          width: 50,
+                                          height: 50,
+                                          child: PopupMenuButton(
+                                            icon: Icon(
+                                              Icons.more_vert,
+                                            ),
+                                            offset: Offset(0, 10),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(10)),
+                                            itemBuilder: (BuildContext context) =>
+                                            <PopupMenuEntry>[
+                                              PopupMenuItem(
+                                                child: ListTile(
+                                                  title: Text('Play next'),
+                                                  trailing: Icon(
+                                                    Icons.playlist_add_rounded,
+                                                    color: primaryColor,
+                                                  ),
+                                                  onTap: () {
+                                                    String msg;
+                                                    if (appState.addBack(songs[index])) msg = 'Song added to playing list!';
+                                                    else msg = 'Song already in your playing list!';
+                                                    final snackBar = SnackBar(
+                                                      content: Text(msg),
+                                                    );
+                                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                                    }
+
+
+                                                ),
+                                              ),
+                                              PopupMenuDivider(),
+                                              PopupMenuItem(
+                                                child: ListTile(
+                                                  title: Text('Favorite'),
+                                                  trailing: Icon(
+                                                    Icons.favorite_border,
+                                                    color: primaryColor,
+                                                  ),
+                                                  onTap: () {
+                                                  },
+                                                ),
+                                              ),
+                                              PopupMenuDivider(),
+                                              PopupMenuItem(
+                                                child: ListTile(
+                                                  title: Text('Add to playlist'),
+                                                  trailing: Icon(
+                                                    Icons.add_rounded,
+                                                    color: primaryColor,
+                                                  ),
+                                                  onTap: () {},
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  child: PopupMenuButton(
-                                    icon: Icon(
-                                      Icons.more_vert,
+                                        ),
+                                      ],
                                     ),
-                                    offset: Offset(0, 10),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10)),
-                                    itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry>[
-                                      PopupMenuItem(
-                                        child: ListTile(
-                                          title: Text('Play next'),
-                                          trailing: Icon(
-                                            Icons.playlist_add_rounded,
-                                            color: primaryColor,
-                                          ),
-                                          onTap: () {},
-                                        ),
-                                      ),
-                                      PopupMenuDivider(),
-                                      PopupMenuItem(
-                                        child: ListTile(
-                                          title: Text('Favorite'),
-                                          trailing: Icon(
-                                            Icons.favorite_border,
-                                            color: primaryColor,
-                                          ),
-                                          onTap: () {},
-                                        ),
-                                      ),
-                                      PopupMenuDivider(),
-                                      PopupMenuItem(
-                                        child: ListTile(
-                                          title: Text('Add to playlist'),
-                                          trailing: Icon(
-                                            Icons.add_rounded,
-                                            color: primaryColor,
-                                          ),
-                                          onTap: () {},
-                                        ),
-                                      ),
-                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
+                                );
+                              }),
                         );
-                      }),
+                      }
                     );
                   }
                   if (snapshot.hasError) {

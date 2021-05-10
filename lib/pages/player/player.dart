@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player/bottom_navigation.dart';
+import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/player/control_buttons.dart';
 import 'package:music_player/pages/player/seek_bar.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../../color.dart';
 import '../album_page.dart';
@@ -16,60 +18,18 @@ class Player extends StatefulWidget {
 
 class _PlayerState extends State<Player> {
   AudioPlayer audioPlayer;
-  List<dynamic> songs = [
-    {
-      "album": "To the moon",
-      "album_id": 1,
-      "artist": "Hooligan",
-      "artist_id": 1,
-      "id": 1,
-      "img": "http://10.0.2.2:5000/img/to-the-moon.jpg",
-      "title": "To the moon",
-      "mp3": "http://10.0.2.2:5000/mp3/to-the-moon.mp3",
-    },
-    {
-      "album": "I met you when I was 18.",
-      "album_id": 2,
-      "artist": "Lauv",
-      "artist_id": 2,
-      "id": 2,
-      "img": "http://10.0.2.2:5000/img/paris-in-the-rain.jpg",
-      "title": "Paris in the rain",
-      "mp3": "http://10.0.2.2:5000/mp3/paris-in-the-rain.mp3",
-    },
-    {
-      "album": "I met you when I was 18.",
-      "album_id": 2,
-      "artist": "Lauv",
-      "artist_id": 2,
-      "id": 3,
-      "img": "http://10.0.2.2:5000/img/i-like-me-better.jpg",
-      "title": "I like me better",
-      "mp3": "http://10.0.2.2:5000/mp3/i-like-me-better.mp3",
-    },
-    {
-      "album": "I met you when I was 18.",
-      "album_id": 2,
-      "artist": "Lauv",
-      "artist_id": 2,
-      "id": 4,
-      "img": "http://10.0.2.2:5000/img/paranoid.jpg",
-      "title": "Paranoid",
-      "mp3": "http://10.0.2.2:5000/mp3/paranoid.mp3",
-    },
-  ];
 
   @override
   void initState() {
     super.initState();
     audioPlayer = AudioPlayer();
+    List<dynamic> initSongs =
+        Provider.of<PlayingListModel>(context, listen: false).songs;
+    print('hu');
     audioPlayer.setAudioSource(ConcatenatingAudioSource(
-        children: List.generate(songs.length, (index) {
-          return AudioSource.uri(Uri.parse(songs[index]['mp3']));
-          }
-        )
-    )
-    );
+        children: List.generate(initSongs.length, (index) {
+      return AudioSource.uri(Uri.parse(initSongs[index]['mp3']));
+    })));
   }
 
   @override
@@ -127,26 +87,28 @@ class _PlayerState extends State<Player> {
               ),
             ),
             PopupMenuDivider(),
-            PopupMenuItem(
-              child: ListTile(
-                title: Text('Album'),
-                trailing: Icon(
-                  Icons.library_music,
-                  color: primaryColor,
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          alignment: Alignment.bottomCenter,
-                          child: AlbumPage(
-                            album_id: songs[audioPlayer.currentIndex]
-                                ['album_id'],
-                          ),
-                          type: PageTransitionType.rightToLeft));
-                },
-              ),
-            ),
+            PopupMenuItem(child:
+                Consumer<PlayingListModel>(builder: (context, appState, child) {
+                  List<dynamic> songs = appState.songs;
+                  return ListTile(
+                    title: Text('Album'),
+                    trailing: Icon(
+                      Icons.library_music,
+                      color: primaryColor,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              alignment: Alignment.bottomCenter,
+                              child: AlbumPage(
+                                album_id: songs[audioPlayer.currentIndex]
+                                    ['album_id'],
+                              ),
+                              type: PageTransitionType.rightToLeft));
+                    },
+                  );
+            })),
           ],
         ),
       ],
@@ -162,78 +124,83 @@ class _PlayerState extends State<Player> {
           StreamBuilder(
               stream: audioPlayer.currentIndexStream,
               builder: (context, snapshot) {
-                return Column(
-                  children: [
-                    Stack(
-                      children: [
-                        Center(
-                          child: Container(
-                            width: size.width * 0.8,
-                            height: size.width * 0.8,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      songs[audioPlayer.currentIndex]['img'])),
-                              color: primaryColor,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 10,
-                                  spreadRadius: 5,
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20, right: 20, top: 15),
-                      child: Column(
+                return Consumer<PlayingListModel>(
+                    builder: (context, appState, child) {
+                  List<dynamic> songs = appState.songs;
+                  return Column(
+                    children: [
+                      Stack(
                         children: [
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(
-                              songs[audioPlayer.currentIndex]['title'],
-                              maxLines: 1,
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
+                          Center(
+                            child: Container(
+                              width: size.width * 0.8,
+                              height: size.width * 0.8,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        songs[audioPlayer.currentIndex]
+                                            ['img'])),
+                                color: primaryColor,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 10,
+                                    spreadRadius: 5,
+                                  )
+                                ],
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      alignment: Alignment.bottomCenter,
-                                      child: ArtistPage(
-                                        artist_id:
-                                            songs[audioPlayer.currentIndex]
-                                                ['artist_id'],
-                                      ),
-                                      type: PageTransitionType.rightToLeft));
-                            },
-                            child: SingleChildScrollView(
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 20, right: 20, top: 15),
+                        child: Column(
+                          children: [
+                            SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              // controller: ,
                               child: Text(
-                                songs[audioPlayer.currentIndex]['artist'],
+                                songs[audioPlayer.currentIndex]['title'],
+                                maxLines: 1,
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  color: primaryColor,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        alignment: Alignment.bottomCenter,
+                                        child: ArtistPage(
+                                          artist_id:
+                                              songs[audioPlayer.currentIndex]
+                                                  ['artist_id'],
+                                        ),
+                                        type: PageTransitionType.rightToLeft));
+                              },
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                // controller: ,
+                                child: Text(
+                                  songs[audioPlayer.currentIndex]['artist'],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                );
+                    ],
+                  );
+                });
               }),
           SeekBar(audioPlayer),
           ControlButtons(audioPlayer),

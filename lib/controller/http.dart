@@ -44,11 +44,11 @@ Future<dynamic> searchSongById(songId) async {
   }
 }
 
-// search newest songs
-Future<List<dynamic>> searchNewestSongs(num) async {
-  final response = await http.get(Uri.http(apiUrl, 'song/newest/' + num.toString()));
+// search newest albums
+Future<List<dynamic>> searchNewestAlbums(num) async {
+  final response = await http.get(Uri.http(apiUrl, 'album/newest/' + num.toString()));
   if (response.statusCode == 200) {
-    return json.decode(response.body)['songs'];
+    return json.decode(response.body)['albums'];
   } else {
     throw Exception('Unable to fetch products from the REST API');
   }

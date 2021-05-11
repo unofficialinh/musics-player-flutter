@@ -54,6 +54,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ),
           ),
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Navigator.push(
                   context,

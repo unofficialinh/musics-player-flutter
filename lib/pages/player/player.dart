@@ -25,11 +25,13 @@ class _PlayerState extends State<Player> {
     audioPlayer = AudioPlayer();
     List<dynamic> initSongs =
         Provider.of<PlayingListModel>(context, listen: false).songs;
-    print('hu');
     audioPlayer.setAudioSource(ConcatenatingAudioSource(
         children: List.generate(initSongs.length, (index) {
       return AudioSource.uri(Uri.parse(initSongs[index]['mp3']));
     })));
+    if (audioPlayer.duration == null){
+      print('null');
+    }
   }
 
   @override
@@ -97,6 +99,8 @@ class _PlayerState extends State<Player> {
                       color: primaryColor,
                     ),
                     onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                       Navigator.push(
                           context,
                           PageTransition(
@@ -172,6 +176,7 @@ class _PlayerState extends State<Player> {
                             ),
                             GestureDetector(
                               onTap: () {
+                                Navigator.pop(context);
                                 Navigator.push(
                                     context,
                                     PageTransition(

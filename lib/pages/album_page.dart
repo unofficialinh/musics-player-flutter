@@ -356,6 +356,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                     color: primaryColor,
                                   ),
                                   onTap: () {
+                                    Navigator.pop(context);
                                     Navigator.push(
                                         context,
                                         PageTransition(

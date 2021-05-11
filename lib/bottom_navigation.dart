@@ -126,7 +126,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     onPressed: () {
                       setState(() {
                         // ignore: unnecessary_statements
-                        Navigator.push(context,
+                        Navigator.pushReplacement(context,
                             PageTransition(child: pages[index], type: null));
                       });
                     });

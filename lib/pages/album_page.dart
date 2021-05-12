@@ -132,61 +132,45 @@ class _AlbumPageState extends State<AlbumPage> {
                         children: List.generate(songs.length, (index) {
                           return Padding(
                             padding: const EdgeInsets.only(
-                                left: 30, right: 30, bottom: 10),
+                                left: 30, right: 30, bottom: 5),
                             child: GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     PageTransition(
-                                //         alignment: Alignment.bottomCenter,
-                                //         child: MusicDetailPage(
-                                //           title: songs[index]['title'],
-                                //           description: songs[index]['description'],
-                                //           artist: songs[index]['artist'],
-                                //           img: songs[index]['img'],
-                                //           mp3: songs[index]['mp3'],
-                                //         ),
-                                //         type: PageTransitionType.scale));
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        alignment: Alignment.bottomCenter,
+                                        child: MusicDetailPage(),
+                                        type: PageTransitionType.bottomToTop));
                               },
                               child: Row(
                                 children: [
                                   Container(
                                     width: (size.width - 60) * 0.1,
                                     height: 50,
-                                    child: Text(
-                                      (index + 1).toString(),
-                                      style: TextStyle(
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          (index + 1).toString(),
+                                          style: TextStyle(
+                                            color: primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Container(
                                     width: (size.width - 60) * 0.8,
                                     height: 60,
-                                    child: Column(
+                                    child: Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              songs[index]['title'],
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'duration',
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.grey),
-                                            ),
-                                          ],
+                                        Text(
+                                          songs[index]['title'],
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
                                         ),
                                       ],
                                     ),
@@ -211,7 +195,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                               Icons.playlist_add_rounded,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                         PopupMenuDivider(),
@@ -222,7 +208,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                               Icons.favorite_border,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                         PopupMenuDivider(),
@@ -233,7 +221,22 @@ class _AlbumPageState extends State<AlbumPage> {
                                               Icons.add_rounded,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+                                        PopupMenuDivider(),
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            title: Text('Download'),
+                                            trailing: Icon(
+                                              Icons.download_sharp,
+                                              color: primaryColor,
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                       ],
@@ -271,7 +274,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                   PageTransition(
                                       alignment: Alignment.bottomCenter,
                                       child: MusicDetailPage(),
-                                      type: PageTransitionType.scale));
+                                      type: PageTransitionType.bottomToTop));
                             }),
                       ]),
                     ),
@@ -354,6 +357,19 @@ class _AlbumPageState extends State<AlbumPage> {
                               PopupMenuDivider(),
                               PopupMenuItem(
                                 child: ListTile(
+                                  title: Text('Download'),
+                                  trailing: Icon(
+                                    Icons.download_sharp,
+                                    color: primaryColor,
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                              PopupMenuDivider(),
+                              PopupMenuItem(
+                                child: ListTile(
                                   title: Text('Artist'),
                                   trailing: Icon(
                                     Icons.person,
@@ -368,8 +384,8 @@ class _AlbumPageState extends State<AlbumPage> {
                                             child: ArtistPage(
                                               artist_id: album['artist_id'],
                                             ),
-                                            type:
-                                            PageTransitionType.rightToLeft));
+                                            type: PageTransitionType
+                                                .rightToLeft));
                                   },
                                 ),
                               ),
@@ -382,8 +398,7 @@ class _AlbumPageState extends State<AlbumPage> {
                 ],
               ),
             );
-          }
-          else if (snapshot.hasError) {
+          } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
           return Center(

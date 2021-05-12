@@ -95,6 +95,32 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                 },
               );
             })),
+            PopupMenuDivider(),
+            PopupMenuItem(
+              child: ListTile(
+                title: Text('Download'),
+                trailing: Icon(
+                  Icons.download_sharp,
+                  color: primaryColor,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            PopupMenuDivider(),
+            PopupMenuItem(
+              child: ListTile(
+                title: Text('Lyrics'),
+                trailing: Icon(
+                  Icons.textsms_outlined,
+                  color: primaryColor,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
           ],
         ),
       ],

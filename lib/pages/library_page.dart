@@ -7,6 +7,7 @@ import 'package:page_transition/page_transition.dart';
 import '../bottom_navigation.dart';
 import '../color.dart';
 import 'album_page.dart';
+import 'music_detail_page.dart';
 
 class LibraryPage extends StatefulWidget {
   @override
@@ -115,7 +116,13 @@ class _LibraryPageState extends State<LibraryPage> {
                     return Padding(
                       padding: const EdgeInsets.only(left: 20, top: 15),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: MusicDetailPage(),
+                                  type: PageTransitionType.bottomToTop));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -180,7 +187,9 @@ class _LibraryPageState extends State<LibraryPage> {
                                         Icons.playlist_add_rounded,
                                         color: primaryColor,
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
                                     ),
                                   ),
                                   PopupMenuDivider(),
@@ -191,7 +200,9 @@ class _LibraryPageState extends State<LibraryPage> {
                                         Icons.favorite_border,
                                         color: primaryColor,
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
                                     ),
                                   ),
                                   PopupMenuDivider(),
@@ -202,7 +213,22 @@ class _LibraryPageState extends State<LibraryPage> {
                                         Icons.add_rounded,
                                         color: primaryColor,
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ),
+                                  PopupMenuDivider(),
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                      title: Text('Download'),
+                                      trailing: Icon(
+                                        Icons.download_sharp,
+                                        color: primaryColor,
+                                      ),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
                                     ),
                                   ),
                                 ],
@@ -272,8 +298,7 @@ class _LibraryPageState extends State<LibraryPage> {
                           ),
                         ),
                         Text(
-                          'artist',
-                          // albums[index]['artist'],
+                          albums[index]['artist'],
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -432,7 +457,13 @@ class _LibraryPageState extends State<LibraryPage> {
                     return Padding(
                       padding: const EdgeInsets.only(left: 20, top: 15),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: MusicDetailPage(),
+                                  type: PageTransitionType.bottomToTop));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

@@ -52,6 +52,7 @@ class _PlayingListState extends State<PlayingList> {
   Widget getBody() {
     var size = MediaQuery.of(context).size;
     return Consumer<PlayingListModel>(builder: (context, appState, child) {
+      final currentIndex = appState.audioPlayer.currentIndex;
       if (appState.audioSource.length == 0) {
         return Center(
           child: Column(children: [
@@ -111,7 +112,10 @@ class _PlayingListState extends State<PlayingList> {
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
-                                    fontSize: 22, color: Colors.black),
+                                    fontSize: 22,
+                                    color: index == currentIndex
+                                        ? primaryColor
+                                        : Colors.black),
                               ),
                             ],
                           ),
@@ -122,8 +126,11 @@ class _PlayingListState extends State<PlayingList> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.grey),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: index == currentIndex
+                                        ? primaryColor
+                                        : Colors.grey),
                               ),
                             ],
                           ),
@@ -136,6 +143,9 @@ class _PlayingListState extends State<PlayingList> {
                       child: PopupMenuButton(
                         icon: Icon(
                           Icons.more_vert,
+                          color: index == currentIndex
+                              ? primaryColor
+                              : Colors.grey,
                         ),
                         offset: Offset(0, 10),
                         shape: RoundedRectangleBorder(

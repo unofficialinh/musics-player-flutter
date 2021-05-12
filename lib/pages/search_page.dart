@@ -3,6 +3,7 @@ import 'package:music_player/color.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/artist_page.dart';
+import 'package:music_player/pages/music_detail_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../bottom_navigation.dart';
@@ -106,8 +107,7 @@ class _SearchPageState extends State<SearchPage> {
     var size = MediaQuery.of(context).size;
     if (_search != '') {
       _songs = searchSongsByName(_search);
-      _artists =
-          searchArtistsByName(_search);
+      _artists = searchArtistsByName(_search);
       _albums = searchAlbumsByName(_search);
       return SingleChildScrollView(
         child: Column(
@@ -131,159 +131,176 @@ class _SearchPageState extends State<SearchPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var songs = snapshot.data;
-                    return Consumer<PlayingListModel> (
-                      builder: (context, appState, child) {
-                        return Column(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: List.generate(
-                              songs.length > 3 ? 3 : songs.length,
-                                  (index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 15),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // appState.addBack(songs[index]);
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                    return Consumer<PlayingListModel>(
+                        builder: (context, appState, child) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(
+                            songs.length > 3 ? 3 : songs.length, (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 15),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        child: MusicDetailPage(),
+                                        type: PageTransitionType.bottomToTop));
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                songs[index]['img']),
+                                            fit: BoxFit.cover),
+                                        color: primaryColor,
+                                        borderRadius: BorderRadius.circular(5)),
+                                  ),
+                                  Container(
+                                    width: (size.width - 60) * 0.65,
+                                    height: 60,
+                                    child: Column(
                                       children: [
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      songs[index]['img']),
-                                                  fit: BoxFit.cover),
-                                              color: primaryColor,
-                                              borderRadius:
-                                              BorderRadius.circular(5)),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              songs[index]['title'],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.black),
+                                            ),
+                                          ],
                                         ),
-                                        Container(
-                                          width: (size.width - 60) * 0.65,
-                                          height: 60,
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    songs[index]['title'],
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow
-                                                        .ellipsis,
-                                                    textAlign:
-                                                    TextAlign.left,
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        color:
-                                                        Colors.black),
-                                                  ),
-                                                ],
+                                        Row(
+                                          children: [
+                                            Text(
+                                              songs[index]['artist'],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: PopupMenuButton(
+                                      icon: Icon(
+                                        Icons.more_vert,
+                                      ),
+                                      offset: Offset(0, 10),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      itemBuilder: (BuildContext context) =>
+                                          <PopupMenuEntry>[
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                              title: Text('Play next'),
+                                              trailing: Icon(
+                                                Icons.playlist_add_rounded,
+                                                color: primaryColor,
                                               ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    songs[index]['artist'],
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow
-                                                        .ellipsis,
-                                                    textAlign:
-                                                    TextAlign.left,
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                String msg;
+                                                if (appState
+                                                    .addBack(songs[index]))
+                                                  msg =
+                                                      'Song added to playing list!';
+                                                else
+                                                  msg =
+                                                      'Song already in your playing list!';
+                                                final snackBar = SnackBar(
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  content: Text(
+                                                    msg,
                                                     style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.grey),
+                                                        fontFamily: 'Poppins'),
                                                   ),
-                                                ],
-                                              ),
-                                            ],
+                                                  backgroundColor: primaryColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                              }),
+                                        ),
+                                        PopupMenuDivider(),
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            title: Text('Favorite'),
+                                            trailing: Icon(
+                                              Icons.favorite_border,
+                                              color: primaryColor,
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          child: PopupMenuButton(
-                                            icon: Icon(
-                                              Icons.more_vert,
+                                        PopupMenuDivider(),
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            title: Text('Add to playlist'),
+                                            trailing: Icon(
+                                              Icons.add_rounded,
+                                              color: primaryColor,
                                             ),
-                                            offset: Offset(0, 10),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.circular(10)),
-                                            itemBuilder: (BuildContext context) =>
-                                            <PopupMenuEntry>[
-                                              PopupMenuItem(
-                                                child: ListTile(
-                                                  title: Text('Play next'),
-                                                  trailing: Icon(
-                                                    Icons.playlist_add_rounded,
-                                                    color: primaryColor,
-                                                  ),
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                    String msg;
-                                                    if (appState.addBack(songs[index])) msg = 'Song added to playing list!';
-                                                    else msg = 'Song already in your playing list!';
-                                                    final snackBar = SnackBar(
-                                                      behavior: SnackBarBehavior.floating,
-                                                      content: Text(msg, style: TextStyle(fontFamily: 'Poppins'),),
-                                                      backgroundColor: primaryColor,
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                    );
-                                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                                    }
-
-
-                                                ),
-                                              ),
-                                              PopupMenuDivider(),
-                                              PopupMenuItem(
-                                                child: ListTile(
-                                                  title: Text('Favorite'),
-                                                  trailing: Icon(
-                                                    Icons.favorite_border,
-                                                    color: primaryColor,
-                                                  ),
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                              ),
-                                              PopupMenuDivider(),
-                                              PopupMenuItem(
-                                                child: ListTile(
-                                                  title: Text('Add to playlist'),
-                                                  trailing: Icon(
-                                                    Icons.add_rounded,
-                                                    color: primaryColor,
-                                                  ),
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                              ),
-                                            ],
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+                                        PopupMenuDivider(),
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            title: Text('Download'),
+                                            trailing: Icon(
+                                              Icons.download_sharp,
+                                              color: primaryColor,
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                );
-                              }),
-                        );
-                      }
-                    );
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                      );
+                    });
                   }
                   if (snapshot.hasError) {
                     return Text("${snapshot.error}");
                   }
                   return Center(
                       child: CircularProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(primaryColor),
+                    valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
                   ));
                 }),
             Padding(
@@ -307,8 +324,7 @@ class _SearchPageState extends State<SearchPage> {
                     var albums = snapshot.data;
                     return Column(
                       children: List.generate(
-                          albums.length > 3 ? 3 : albums.length,
-                          (index) {
+                          albums.length > 3 ? 3 : albums.length, (index) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: GestureDetector(
@@ -320,8 +336,7 @@ class _SearchPageState extends State<SearchPage> {
                                       child: AlbumPage(
                                         album_id: albums[index]['id'],
                                       ),
-                                      type:
-                                      PageTransitionType.rightToLeft));
+                                      type: PageTransitionType.rightToLeft));
                             },
                             child: Row(
                               children: [
@@ -334,8 +349,7 @@ class _SearchPageState extends State<SearchPage> {
                                               albums[index]['img']),
                                           fit: BoxFit.cover),
                                       color: primaryColor,
-                                      borderRadius:
-                                          BorderRadius.circular(5)),
+                                      borderRadius: BorderRadius.circular(5)),
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(left: 15),
@@ -348,25 +362,20 @@ class _SearchPageState extends State<SearchPage> {
                                           Text(
                                             albums[index]['title'],
                                             maxLines: 1,
-                                            overflow: TextOverflow
-                                                .ellipsis,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 fontSize: 20,
-                                                color:
-                                                    Colors.black),
+                                                color: Colors.black),
                                           ),
                                         ],
                                       ),
                                       Row(
                                         children: [
                                           Text(
-                                            'artist',
-                                            // albums[index]['artist'],
+                                            albums[index]['artist'],
                                             maxLines: 1,
-                                            overflow: TextOverflow
-                                                .ellipsis,
-                                            textAlign:
-                                                TextAlign.left,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.grey),
@@ -388,8 +397,7 @@ class _SearchPageState extends State<SearchPage> {
                   }
                   return Center(
                       child: CircularProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(primaryColor),
+                    valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
                   ));
                 }),
             Padding(
@@ -412,11 +420,9 @@ class _SearchPageState extends State<SearchPage> {
                   if (snapshot.hasData) {
                     var artists = snapshot.data;
                     return Column(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: List.generate(
-                          artists.length > 3 ? 3 : artists.length,
-                          (index) {
+                          artists.length > 3 ? 3 : artists.length, (index) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: GestureDetector(
@@ -428,8 +434,7 @@ class _SearchPageState extends State<SearchPage> {
                                       child: ArtistPage(
                                         artist_id: artists[index]['id'],
                                       ),
-                                      type:
-                                      PageTransitionType.rightToLeft));
+                                      type: PageTransitionType.rightToLeft));
                             },
                             child: Row(
                               children: [
@@ -439,8 +444,7 @@ class _SearchPageState extends State<SearchPage> {
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: NetworkImage(
-                                              artists[index]
-                                                  ['img']),
+                                              artists[index]['img']),
                                           fit: BoxFit.cover),
                                       color: primaryColor,
                                       shape: BoxShape.circle),
@@ -454,12 +458,9 @@ class _SearchPageState extends State<SearchPage> {
                                       Text(
                                         artists[index]['name'],
                                         maxLines: 1,
-                                        overflow: TextOverflow
-                                            .ellipsis,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            fontSize: 20,
-                                            color:
-                                                Colors.black),
+                                            fontSize: 20, color: Colors.black),
                                       ),
                                     ],
                                   ),
@@ -476,14 +477,13 @@ class _SearchPageState extends State<SearchPage> {
                   }
                   return Center(
                       child: CircularProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(primaryColor),
+                    valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
                   ));
                 }),
           ],
         ),
       );
-    }
-    else return Container();
+    } else
+      return Container();
   }
 }

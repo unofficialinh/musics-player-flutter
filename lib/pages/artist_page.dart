@@ -133,18 +133,12 @@ class _ArtistPageState extends State<ArtistPage> {
                                 left: 30, right: 30, bottom: 10),
                             child: GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     PageTransition(
-                                //         alignment: Alignment.bottomCenter,
-                                //         child: MusicDetailPage(
-                                //           title: widget.song['title'],
-                                //           description: widget.song['description'],
-                                //           artist: widget.song['artist'],
-                                //           img: widget.song['img'],
-                                //           songUrl: widget.song['song_url'],
-                                //         ),
-                                //         type: PageTransitionType.scale));
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        alignment: Alignment.bottomCenter,
+                                        child: MusicDetailPage(),
+                                        type: PageTransitionType.bottomToTop));
                               },
                               child: Row(
                                 children: [
@@ -179,7 +173,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              'duration',
+                                              songs[index]['album'],
                                               style: TextStyle(
                                                   fontSize: 17,
                                                   color: Colors.grey),
@@ -209,7 +203,9 @@ class _ArtistPageState extends State<ArtistPage> {
                                               Icons.playlist_add_rounded,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                         PopupMenuDivider(),
@@ -220,7 +216,9 @@ class _ArtistPageState extends State<ArtistPage> {
                                               Icons.favorite_border,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                         PopupMenuDivider(),
@@ -231,7 +229,22 @@ class _ArtistPageState extends State<ArtistPage> {
                                               Icons.add_rounded,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+                                        PopupMenuDivider(),
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            title: Text('Download'),
+                                            trailing: Icon(
+                                              Icons.download_sharp,
+                                              color: primaryColor,
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                       ],
@@ -337,7 +350,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                   PageTransition(
                                       alignment: Alignment.bottomCenter,
                                       child: MusicDetailPage(),
-                                      type: PageTransitionType.scale));
+                                      type: PageTransitionType.bottomToTop));
                             }),
                       ]),
                     ),

@@ -3,7 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:music_player/color.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../playing_list_page.dart';
+import 'playing_list_page.dart';
 
 class ControlButtons extends StatelessWidget {
   final AudioPlayer audioPlayer;
@@ -57,7 +57,8 @@ class ControlButtons extends StatelessWidget {
                 color: Colors.black,
               ),
               onPressed: () {
-                if (audioPlayer.position.inSeconds.toInt() + 30 < audioPlayer.duration.inSeconds.toInt())
+                if (audioPlayer.position.inSeconds.toInt() + 30 <
+                    audioPlayer.duration.inSeconds.toInt())
                   audioPlayer.seek(Duration(
                       seconds: audioPlayer.position.inSeconds.toInt() + 30));
                 else

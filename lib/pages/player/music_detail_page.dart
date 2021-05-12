@@ -2,15 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/json/songs_json.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/album_page.dart';
 import 'package:music_player/pages/artist_page.dart';
 import 'package:music_player/pages/player/control_buttons.dart';
+import 'package:music_player/pages/player/lyrics_page.dart';
 import 'package:music_player/pages/player/seek_bar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../color.dart';
+import '../../color.dart';
 
 class MusicDetailPage extends StatefulWidget {
   @override
@@ -46,83 +48,89 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
         ),
       ),
       actions: [
-        PopupMenuButton(
-          icon: Icon(
-            Icons.more_vert,
-            color: Colors.grey,
-          ),
-          offset: Offset(0, 15),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-            PopupMenuItem(
-              child: ListTile(
-                title: Text('Add to playlist'),
-                trailing: Icon(
-                  Icons.add_rounded,
-                  color: primaryColor,
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              ),
+        Consumer<PlayingListModel>(builder: (context, appState, child) {
+          List<dynamic> songs = appState.songs;
+          AudioPlayer audioPlayer = appState.audioPlayer;
+          return PopupMenuButton(
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.grey,
             ),
-            PopupMenuDivider(),
-            PopupMenuItem(child:
-                Consumer<PlayingListModel>(builder: (context, appState, child) {
-              // Get necessary app state variable
-              List<dynamic> songs = appState.songs;
-              AudioPlayer audioPlayer = appState.audioPlayer;
-              return ListTile(
-                title: Text('Album'),
-                trailing: Icon(
-                  Icons.library_music,
-                  color: primaryColor,
+            offset: Offset(0, 15),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                child: ListTile(
+                  title: Text('Add to playlist'),
+                  trailing: Icon(
+                    Icons.add_rounded,
+                    color: primaryColor,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          alignment: Alignment.bottomCenter,
-                          child: AlbumPage(
-                            album_id: songs[audioPlayer.currentIndex]
-                                ['album_id'],
-                          ),
-                          type: PageTransitionType.rightToLeft));
-                },
-              );
-            })),
-            PopupMenuDivider(),
-            PopupMenuItem(
-              child: ListTile(
-                title: Text('Download'),
-                trailing: Icon(
-                  Icons.download_sharp,
-                  color: primaryColor,
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
               ),
-            ),
-            PopupMenuDivider(),
-            PopupMenuItem(
-              child: ListTile(
-                title: Text('Lyrics'),
-                trailing: Icon(
-                  Icons.textsms_outlined,
-                  color: primaryColor,
-                ),
-                onTap: () {
-                  Navigator.pop(context);
+              PopupMenuDivider(),
+              PopupMenuItem(
+                  child: ListTile(
+                    title: Text('Album'),
+                    trailing: Icon(
+                      Icons.library_music,
+                      color: primaryColor,
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              alignment: Alignment.bottomCenter,
+                              child: AlbumPage(
+                                album_id: songs[audioPlayer.currentIndex]
+                                    ['album_id'],
+                              ),
+                              type: PageTransitionType.rightToLeft));
                 },
+              )),
+              PopupMenuDivider(),
+              PopupMenuItem(
+                child: ListTile(
+                  title: Text('Download'),
+                  trailing: Icon(
+                    Icons.download_sharp,
+                    color: primaryColor,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
-            ),
-          ],
-        ),
+              PopupMenuDivider(),
+              PopupMenuItem(
+                child: ListTile(
+                  title: Text('Lyrics'),
+                  trailing: Icon(
+                    Icons.textsms_outlined,
+                    color: primaryColor,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: LyricsPage(
+                                lyrics: songs[audioPlayer.currentIndex]
+                                    ['lyrics']),
+                            type: PageTransitionType.rightToLeft));
+                  },
+                ),
+              ),
+            ],
+          );
+        }),
       ],
     );
   }

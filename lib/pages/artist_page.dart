@@ -5,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../color.dart';
 import 'album_page.dart';
-import 'music_detail_page.dart';
+import 'player/music_detail_page.dart';
 
 class ArtistPage extends StatefulWidget {
   final dynamic artist_id;

@@ -143,7 +143,7 @@ class _SearchPageState extends State<SearchPage> {
                                   padding: const EdgeInsets.only(top: 15),
                                   child: GestureDetector(
                                     onTap: () {
-                                      appState.addBack(songs[index]);
+                                      // appState.addBack(songs[index]);
                                     },
                                     child: Row(
                                       mainAxisAlignment:

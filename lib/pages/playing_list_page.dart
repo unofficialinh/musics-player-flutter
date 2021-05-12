@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:provider/provider.dart';
 
@@ -129,7 +130,7 @@ class _PlayingListState extends State<PlayingList> {
                                   color: primaryColor,
                                 ),
                                 onTap: () {
-
+                                  appState.removeAt(index);
                                 },
                               ),
                             ),

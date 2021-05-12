@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:just_audio/just_audio.dart';
 
 class PlayingListModel extends ChangeNotifier {
   List<dynamic> _songs;
+  AudioPlayer audioPlayer;
+  ConcatenatingAudioSource audioSource;
   PlayingListModel() {
      // TODO: add some sample songs, delete later
     _songs = [
@@ -28,6 +31,13 @@ class PlayingListModel extends ChangeNotifier {
         "title": "Paris in the rain"
       },
     ];
+    audioSource = ConcatenatingAudioSource(
+        children: List.generate(_songs.length, (index) => AudioSource.uri(Uri.parse(_songs[index]['mp3'])))
+    );
+    // end TODO
+
+    audioPlayer = new AudioPlayer();
+    audioPlayer.setAudioSource(audioSource);
     notifyListeners();
   }
 
@@ -52,11 +62,17 @@ class PlayingListModel extends ChangeNotifier {
   bool addBack(dynamic newSong) {
     if (!exist(newSong)) {
       _songs.add(newSong);
+      audioSource.add(AudioSource.uri(Uri.parse(newSong['mp3'])));
       notifyListeners();
       return true;
     }
     else return false;
   }
 
-
+  // Remove _songs[index]
+  void removeAt(int index) {
+    _songs.removeAt(index);
+    audioSource.removeAt(index);
+    notifyListeners();
+  }
 }

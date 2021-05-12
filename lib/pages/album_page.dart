@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
+import 'package:music_player/pages/player/music_detail_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -133,50 +134,46 @@ class _AlbumPageState extends State<AlbumPage> {
                         children: List.generate(songs.length, (index) {
                           return Padding(
                             padding: const EdgeInsets.only(
-                                left: 30, right: 30, bottom: 10),
+                                left: 30, right: 30, bottom: 5),
                             child: GestureDetector(
                               onTap: () {
                                 Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, index);
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        alignment: Alignment.bottomCenter,
+                                        child: MusicDetailPage(),
+                                        type: PageTransitionType.bottomToTop));
                               },
                               child: Row(
                                 children: [
                                   Container(
                                     width: (size.width - 60) * 0.1,
                                     height: 50,
-                                    child: Text(
-                                      (index + 1).toString(),
-                                      style: TextStyle(
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          (index + 1).toString(),
+                                          style: TextStyle(
+                                            color: primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Container(
                                     width: (size.width - 60) * 0.8,
                                     height: 60,
-                                    child: Column(
+                                    child: Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              songs[index]['title'],
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'duration',
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.grey),
-                                            ),
-                                          ],
+                                        Text(
+                                          songs[index]['title'],
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
                                         ),
                                       ],
                                     ),
@@ -203,6 +200,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                             ),
                                             onTap: () {
                                               Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]);
+                                              Navigator.pop(context);
                                             },
                                           ),
                                         ),
@@ -214,7 +212,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                               Icons.favorite_border,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                         PopupMenuDivider(),
@@ -225,7 +225,22 @@ class _AlbumPageState extends State<AlbumPage> {
                                               Icons.add_rounded,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+                                        PopupMenuDivider(),
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            title: Text('Download'),
+                                            trailing: Icon(
+                                              Icons.download_sharp,
+                                              color: primaryColor,
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                       ],
@@ -259,6 +274,12 @@ class _AlbumPageState extends State<AlbumPage> {
                             ),
                             onPressed: () {
                               Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, 0);
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      alignment: Alignment.bottomCenter,
+                                      child: MusicDetailPage(),
+                                      type: PageTransitionType.bottomToTop));
                             }),
                       ]),
                     ),
@@ -308,12 +329,12 @@ class _AlbumPageState extends State<AlbumPage> {
                                     color: primaryColor,
                                   ),
                                   onTap: () {
-                                    print('Add full album to playing list');
                                     for (int i = 0; i < songs.length; i++) {
                                       Provider.of<PlayingListModel>(
                                           context, listen: false).addBack(
                                           songs[i]);
                                     }
+                                    Navigator.pop(context);
                                   },
                                 ),
                               ),
@@ -325,7 +346,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                     Icons.favorite_border,
                                     color: primaryColor,
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
                               PopupMenuDivider(),
@@ -336,7 +359,22 @@ class _AlbumPageState extends State<AlbumPage> {
                                     Icons.add_rounded,
                                     color: primaryColor,
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                              PopupMenuDivider(),
+                              PopupMenuItem(
+                                child: ListTile(
+                                  title: Text('Download'),
+                                  trailing: Icon(
+                                    Icons.download_sharp,
+                                    color: primaryColor,
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
                               PopupMenuDivider(),

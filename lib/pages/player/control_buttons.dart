@@ -3,7 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:music_player/color.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../playing_list_page.dart';
+import 'playing_list_page.dart';
 
 class ControlButtons extends StatelessWidget {
   final AudioPlayer audioPlayer;
@@ -23,7 +23,13 @@ class ControlButtons extends StatelessWidget {
                 Icons.replay_30_rounded,
                 color: Colors.black,
               ),
-              onPressed: null,
+              onPressed: () {
+                if (audioPlayer.position.inSeconds.toInt() > 30)
+                  audioPlayer.seek(Duration(
+                      seconds: audioPlayer.position.inSeconds.toInt() - 30));
+                else
+                  audioPlayer.seek(Duration.zero);
+              },
             ),
             StreamBuilder<SequenceState>(
               stream: audioPlayer.sequenceStateStream,
@@ -45,12 +51,20 @@ class ControlButtons extends StatelessWidget {
               },
             ),
             IconButton(
-                iconSize: 25,
-                icon: Icon(
-                  Icons.forward_30_rounded,
-                  color: Colors.black,
-                ),
-                onPressed: null),
+              iconSize: 25,
+              icon: Icon(
+                Icons.forward_30_rounded,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                if (audioPlayer.position.inSeconds.toInt() + 30 <
+                    audioPlayer.duration.inSeconds.toInt())
+                  audioPlayer.seek(Duration(
+                      seconds: audioPlayer.position.inSeconds.toInt() + 30));
+                else
+                  audioPlayer.seek(audioPlayer.duration);
+              },
+            ),
           ],
         ),
         Padding(
@@ -84,7 +98,7 @@ class ControlButtons extends StatelessWidget {
                     color: Colors.grey,
                   ),
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         PageTransition(
                           alignment: Alignment.bottomCenter,
@@ -172,7 +186,10 @@ class ControlButtons extends StatelessWidget {
 
   Widget repeatButton(BuildContext context, LoopMode loopMode) {
     final icons = [
-      Icon(Icons.repeat_rounded, color: Colors.grey,),
+      Icon(
+        Icons.repeat_rounded,
+        color: Colors.grey,
+      ),
       Icon(Icons.repeat_rounded, color: primaryColor),
       Icon(Icons.repeat_one_rounded, color: primaryColor),
     ];

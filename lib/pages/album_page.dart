@@ -270,9 +270,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                   context,
                                   PageTransition(
                                       alignment: Alignment.bottomCenter,
-                                      child: MusicDetailPage(
-                                        song_id: songs[0]['id'],
-                                      ),
+                                      child: MusicDetailPage(),
                                       type: PageTransitionType.scale));
                             }),
                       ]),
@@ -322,7 +320,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                     Icons.playlist_add_rounded,
                                     color: primaryColor,
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
                               PopupMenuDivider(),
@@ -333,7 +333,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                     Icons.favorite_border,
                                     color: primaryColor,
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
                               PopupMenuDivider(),
@@ -344,7 +346,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                     Icons.add_rounded,
                                     color: primaryColor,
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
                               PopupMenuDivider(),

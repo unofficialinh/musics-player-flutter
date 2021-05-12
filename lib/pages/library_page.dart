@@ -498,7 +498,9 @@ class _LibraryPageState extends State<LibraryPage> {
                                         Icons.playlist_add_rounded,
                                         color: primaryColor,
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
                                     ),
                                   ),
                                   PopupMenuDivider(),
@@ -509,7 +511,9 @@ class _LibraryPageState extends State<LibraryPage> {
                                         Icons.favorite_border,
                                         color: primaryColor,
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
                                     ),
                                   ),
                                   PopupMenuDivider(),
@@ -520,7 +524,9 @@ class _LibraryPageState extends State<LibraryPage> {
                                         Icons.add_rounded,
                                         color: primaryColor,
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
                                     ),
                                   ),
                                 ],

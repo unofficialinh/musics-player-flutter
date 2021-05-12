@@ -221,11 +221,17 @@ class _SearchPageState extends State<SearchPage> {
                                                     color: primaryColor,
                                                   ),
                                                   onTap: () {
+                                                    Navigator.pop(context);
                                                     String msg;
                                                     if (appState.addBack(songs[index])) msg = 'Song added to playing list!';
                                                     else msg = 'Song already in your playing list!';
                                                     final snackBar = SnackBar(
-                                                      content: Text(msg),
+                                                      behavior: SnackBarBehavior.floating,
+                                                      content: Text(msg, style: TextStyle(fontFamily: 'Poppins'),),
+                                                      backgroundColor: primaryColor,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      ),
                                                     );
                                                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                                     }
@@ -242,6 +248,7 @@ class _SearchPageState extends State<SearchPage> {
                                                     color: primaryColor,
                                                   ),
                                                   onTap: () {
+                                                    Navigator.pop(context);
                                                   },
                                                 ),
                                               ),
@@ -253,7 +260,9 @@ class _SearchPageState extends State<SearchPage> {
                                                     Icons.add_rounded,
                                                     color: primaryColor,
                                                   ),
-                                                  onTap: () {},
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                  },
                                                 ),
                                               ),
                                             ],

@@ -336,9 +336,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                   context,
                                   PageTransition(
                                       alignment: Alignment.bottomCenter,
-                                      child: MusicDetailPage(
-                                        song_id: songs[0]['id'],
-                                      ),
+                                      child: MusicDetailPage(),
                                       type: PageTransitionType.scale));
                             }),
                       ]),
@@ -388,7 +386,9 @@ class _ArtistPageState extends State<ArtistPage> {
                                     Icons.favorite_border,
                                     color: primaryColor,
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
                             ],

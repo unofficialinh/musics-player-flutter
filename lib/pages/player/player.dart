@@ -17,8 +17,6 @@ class Player extends StatefulWidget {
 }
 
 class _PlayerState extends State<Player> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,9 +68,9 @@ class _PlayerState extends State<Player> {
             PopupMenuDivider(),
             PopupMenuItem(child:
                 Consumer<PlayingListModel>(builder: (context, appState, child) {
-                  // Get neccessary app state variable
-                  List<dynamic> songs = appState.songs;
-                  AudioPlayer audioPlayer = appState.audioPlayer;
+              // Get necessary app state variable
+                List<dynamic> songs = appState.songs;
+                AudioPlayer audioPlayer = appState.audioPlayer;
                   return ListTile(
                     title: Text('Album'),
                     trailing: Icon(
@@ -91,8 +89,8 @@ class _PlayerState extends State<Player> {
                                     ['album_id'],
                               ),
                               type: PageTransitionType.rightToLeft));
-                    },
-                  );
+                },
+              );
             })),
           ],
         ),
@@ -102,15 +100,13 @@ class _PlayerState extends State<Player> {
 
   Widget getBody() {
     var size = MediaQuery.of(context).size;
-    return Consumer<PlayingListModel> (
-      builder: (context, appState, child) {
-        List<dynamic> songs = appState.songs;
-        AudioPlayer audioPlayer = appState.audioPlayer;
-        ConcatenatingAudioSource audioSource = appState.audioSource;
-        if (audioSource.length == 0) {
-          return Text('No song for you bro');
-        }
-        else
+    return Consumer<PlayingListModel>(builder: (context, appState, child) {
+      List<dynamic> songs = appState.songs;
+      AudioPlayer audioPlayer = appState.audioPlayer;
+      ConcatenatingAudioSource audioSource = appState.audioSource;
+      if (audioSource.length == 0) {
+        return Text('No song for you bro');
+      } else
         return SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -130,7 +126,7 @@ class _PlayerState extends State<Player> {
                                   image: DecorationImage(
                                       image: NetworkImage(
                                           songs[audioPlayer.currentIndex]
-                                          ['img'])),
+                                              ['img'])),
                                   color: primaryColor,
                                   borderRadius: BorderRadius.circular(20),
                                   boxShadow: [
@@ -146,8 +142,8 @@ class _PlayerState extends State<Player> {
                           ],
                         ),
                         Padding(
-                          padding:
-                          const EdgeInsets.only(left: 20, right: 20, top: 15),
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 15),
                           child: Column(
                             children: [
                               SingleChildScrollView(
@@ -170,10 +166,11 @@ class _PlayerState extends State<Player> {
                                           alignment: Alignment.bottomCenter,
                                           child: ArtistPage(
                                             artist_id:
-                                            songs[audioPlayer.currentIndex]
-                                            ['artist_id'],
+                                                songs[audioPlayer.currentIndex]
+                                                    ['artist_id'],
                                           ),
-                                          type: PageTransitionType.rightToLeft));
+                                          type:
+                                              PageTransitionType.rightToLeft));
                                 },
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
@@ -198,7 +195,6 @@ class _PlayerState extends State<Player> {
             ],
           ),
         );
-      }
-    );
+    });
   }
 }

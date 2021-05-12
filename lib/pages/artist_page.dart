@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/bottom_navigation.dart';
 import 'package:music_player/controller/http.dart';
+import 'package:music_player/model/PlayingListModel.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../color.dart';
 import 'album_page.dart';
-import 'music_detail_page.dart';
 
 class ArtistPage extends StatefulWidget {
   final dynamic artist_id;
@@ -133,18 +134,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                 left: 30, right: 30, bottom: 10),
                             child: GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     PageTransition(
-                                //         alignment: Alignment.bottomCenter,
-                                //         child: MusicDetailPage(
-                                //           title: widget.song['title'],
-                                //           description: widget.song['description'],
-                                //           artist: widget.song['artist'],
-                                //           img: widget.song['img'],
-                                //           songUrl: widget.song['song_url'],
-                                //         ),
-                                //         type: PageTransitionType.scale));
+                                Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, index);
                               },
                               child: Row(
                                 children: [
@@ -209,7 +199,9 @@ class _ArtistPageState extends State<ArtistPage> {
                                               Icons.playlist_add_rounded,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]);
+                                            },
                                           ),
                                         ),
                                         PopupMenuDivider(),
@@ -332,14 +324,7 @@ class _ArtistPageState extends State<ArtistPage> {
                               color: primaryColor,
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      alignment: Alignment.bottomCenter,
-                                      child: MusicDetailPage(
-                                        song_id: songs[0]['id'],
-                                      ),
-                                      type: PageTransitionType.scale));
+                              Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, 0);
                             }),
                       ]),
                     ),

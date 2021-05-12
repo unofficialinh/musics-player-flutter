@@ -143,7 +143,9 @@ class _SearchPageState extends State<SearchPage> {
                                   padding: const EdgeInsets.only(top: 15),
                                   child: GestureDetector(
                                     onTap: () {
-                                      // appState.addBack(songs[index]);
+                                      print('Click');
+                                      appState.setPlaylist([songs[index]], 0);
+                                      // TODO: add navigator to player here
                                     },
                                     child: Row(
                                       mainAxisAlignment:

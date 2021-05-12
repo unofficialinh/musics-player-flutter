@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
+import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/artist_page.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../bottom_navigation.dart';
 import '../color.dart';
@@ -115,7 +117,10 @@ class _LibraryPageState extends State<LibraryPage> {
                     return Padding(
                       padding: const EdgeInsets.only(left: 20, top: 15),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Provider.of<PlayingListModel>(context, listen: false).setPlaylist([songs[index]], 0);
+                          // TODO: add navigation to player page
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -180,7 +185,9 @@ class _LibraryPageState extends State<LibraryPage> {
                                         Icons.playlist_add_rounded,
                                         color: primaryColor,
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]);
+                                      },
                                     ),
                                   ),
                                   PopupMenuDivider(),

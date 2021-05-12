@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +34,7 @@ class _PlayingListState extends State<PlayingList> {
       elevation: 0,
       title: Center(
         child: Text(
-          'NEXT',
+          'PLAYING LIST',
           style: TextStyle(color: Colors.grey, fontSize: 22),
         ),
       ),
@@ -134,18 +133,22 @@ class _PlayingListState extends State<PlayingList> {
                                 },
                               ),
                             ),
-                            PopupMenuDivider(),
-                            PopupMenuItem(
-                              child: ListTile(
-                                contentPadding: EdgeInsets.all(0),
-                                title: Text('To first'),
-                                trailing: Icon(
-                                  Icons.arrow_upward_rounded,
-                                  color: primaryColor,
-                                ),
-                                onTap: () {},
-                              ),
-                            ),
+                            // PopupMenuDivider(),
+                            // PopupMenuItem(
+                            //   child: ListTile(
+                            //     contentPadding: EdgeInsets.all(0),
+                            //     title: Text('To first'),
+                            //     trailing: Icon(
+                            //       Icons.arrow_upward_rounded,
+                            //       color: primaryColor,
+                            //     ),
+                            //     onTap: () {
+                            //       // This button is disabled because it contains too many problems :)
+                            //       // what is the currentIndex of audioPlayer when I click this button bro?
+                            //       // appState.toFirst(index);
+                            //     },
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

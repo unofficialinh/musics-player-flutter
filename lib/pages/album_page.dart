@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
-import 'package:music_player/pages/music_detail_page.dart';
+import 'package:music_player/model/PlayingListModel.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../bottom_navigation.dart';
 import '../color.dart';
@@ -135,18 +136,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                 left: 30, right: 30, bottom: 10),
                             child: GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     PageTransition(
-                                //         alignment: Alignment.bottomCenter,
-                                //         child: MusicDetailPage(
-                                //           title: songs[index]['title'],
-                                //           description: songs[index]['description'],
-                                //           artist: songs[index]['artist'],
-                                //           img: songs[index]['img'],
-                                //           mp3: songs[index]['mp3'],
-                                //         ),
-                                //         type: PageTransitionType.scale));
+                                Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, index);
                               },
                               child: Row(
                                 children: [
@@ -211,7 +201,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                               Icons.playlist_add_rounded,
                                               color: primaryColor,
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]);
+                                            },
                                           ),
                                         ),
                                         PopupMenuDivider(),
@@ -266,14 +258,7 @@ class _AlbumPageState extends State<AlbumPage> {
                               color: primaryColor,
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      alignment: Alignment.bottomCenter,
-                                      child: MusicDetailPage(
-                                        song_id: songs[0]['id'],
-                                      ),
-                                      type: PageTransitionType.scale));
+                              Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, 0);
                             }),
                       ]),
                     ),
@@ -322,7 +307,14 @@ class _AlbumPageState extends State<AlbumPage> {
                                     Icons.playlist_add_rounded,
                                     color: primaryColor,
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    print('Add full album to playing list');
+                                    for (int i = 0; i < songs.length; i++) {
+                                      Provider.of<PlayingListModel>(
+                                          context, listen: false).addBack(
+                                          songs[i]);
+                                    }
+                                  },
                                 ),
                               ),
                               PopupMenuDivider(),

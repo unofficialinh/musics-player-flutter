@@ -31,7 +31,6 @@ dependencies:
   page_transition: "^1.1.7+6"
   provider:
   http: ^0.13.3
-  flutter_config: ^2.0.0
   just_audio: ^0.7.4+1
   audio_service: ^0.17.0
 

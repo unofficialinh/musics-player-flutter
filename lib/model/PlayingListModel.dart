@@ -34,7 +34,7 @@ class PlayingListModel extends ChangeNotifier {
     audioSource = ConcatenatingAudioSource(
         children: List.generate(_songs.length, (index) => AudioSource.uri(Uri.parse(_songs[index]['mp3'])))
     );
-    // end TODO
+    // endTODO
 
     audioPlayer = new AudioPlayer();
     audioPlayer.setAudioSource(audioSource);
@@ -46,9 +46,12 @@ class PlayingListModel extends ChangeNotifier {
     return _songs;
   }
 
-  // p.songs = ... to set
-  set songs(List<dynamic> songs) {
+  void setPlaylist(List<dynamic> songs, int currentIndex) {
     this._songs = songs;
+    audioSource = ConcatenatingAudioSource(
+        children: List.generate(_songs.length, (index) => AudioSource.uri(Uri.parse(_songs[index]['mp3'])))
+    );
+    audioPlayer.setAudioSource(audioSource, initialIndex: currentIndex);
     notifyListeners();
   }
 
@@ -75,4 +78,16 @@ class PlayingListModel extends ChangeNotifier {
     audioSource.removeAt(index);
     notifyListeners();
   }
+
+// This button is disabled because it contains too many problems :)
+// what is the currentIndex of audioPlayer when I click this button bro?
+  // // Push _songs[index] to the first of list
+  // void toFirst(int index) {
+  //   dynamic moveSong = _songs.removeAt(index);
+  //   _songs.insert(0, moveSong);
+  //   audioSource.removeAt(index);
+  //   audioSource.insert(0, AudioSource.uri(Uri.parse(moveSong['mp3'])));
+  //   notifyListeners();
+  // }
+
 }

@@ -46,5 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ));
   }
 
-  Widget getBody() {}
+  Widget getBody() {
+    return Center(child: Text('Chưa dev xong :)'));
+  }
 }

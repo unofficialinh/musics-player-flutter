@@ -111,6 +111,7 @@ class ControlButtons extends StatelessWidget {
             await audioPlayer.shuffle();
           }
           await audioPlayer.setShuffleModeEnabled(enable);
+          print('shuffle');
         });
   }
 

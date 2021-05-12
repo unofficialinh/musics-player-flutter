@@ -178,8 +178,8 @@ class _ArtistPageState extends State<ArtistPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              // cai nay de la duration nhin dep hon
-                                              new Random().nextInt(100).toString() + 'M plays',
+                                              // cai nay de la so luot nghe nhin dep hon
+                                              (1 + new Random().nextDouble() * 2).toStringAsFixed(2) + 'M plays',
                                               style: TextStyle(
                                                   fontSize: 17,
                                                   color: Colors.grey),
@@ -210,8 +210,25 @@ class _ArtistPageState extends State<ArtistPage> {
                                               color: primaryColor,
                                             ),
                                             onTap: () {
-                                              Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]);
                                               Navigator.pop(context);
+                                              String msg;
+                                              if (Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]))
+                                                msg = 'Song added to playing list!';
+                                              else
+                                                msg = 'Song already in your playing list!';
+                                              final snackBar = SnackBar(
+                                                behavior: SnackBarBehavior.floating,
+                                                content: Text(
+                                                  msg,
+                                                  style: TextStyle(fontFamily: 'Poppins'),
+                                                ),
+                                                backgroundColor: primaryColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(10),
+                                                ),
+                                              );
+                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                             },
                                           ),
                                         ),

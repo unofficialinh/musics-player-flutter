@@ -28,13 +28,15 @@ class _PlayingListState extends State<PlayingList> {
             color: Colors.grey,
           ),
           onPressed: () {
+            // if playlist is empty, pop to player then pop to home page.
+            if (Provider.of<PlayingListModel>(context, listen: false).songs.length == 0) Navigator.pop(context);
             Navigator.pop(context);
           }),
       backgroundColor: Colors.white,
       elevation: 0,
       title: Center(
         child: Text(
-          'NEXT',
+          'PLAYING LIST',
           style: TextStyle(color: Colors.grey, fontSize: 22),
         ),
       ),

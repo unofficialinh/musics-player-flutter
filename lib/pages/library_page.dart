@@ -191,8 +191,25 @@ class _LibraryPageState extends State<LibraryPage> {
                                         color: primaryColor,
                                       ),
                                       onTap: () {
-                                        Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]);
                                         Navigator.pop(context);
+                                        String msg;
+                                        if (Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]))
+                                          msg = 'Song added to playing list!';
+                                        else
+                                          msg = 'Song already in your playing list!';
+                                        final snackBar = SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          content: Text(
+                                            msg,
+                                            style: TextStyle(fontFamily: 'Poppins'),
+                                          ),
+                                          backgroundColor: primaryColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(10),
+                                          ),
+                                        );
+                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                       },
                                     ),
                                   ),
@@ -535,6 +552,24 @@ class _LibraryPageState extends State<LibraryPage> {
                                       ),
                                       onTap: () {
                                         Navigator.pop(context);
+                                        String msg;
+                                        if (Provider.of<PlayingListModel>(context, listen: false).addBack(downloaded[index]))
+                                          msg = 'Song added to playing list!';
+                                        else
+                                          msg = 'Song already in your playing list!';
+                                        final snackBar = SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          content: Text(
+                                            msg,
+                                            style: TextStyle(fontFamily: 'Poppins'),
+                                          ),
+                                          backgroundColor: primaryColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(10),
+                                          ),
+                                        );
+                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                       },
                                     ),
                                   ),

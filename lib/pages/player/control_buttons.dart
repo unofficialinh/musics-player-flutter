@@ -98,7 +98,7 @@ class ControlButtons extends StatelessWidget {
                     color: Colors.grey,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         PageTransition(
                           alignment: Alignment.bottomCenter,
@@ -125,7 +125,6 @@ class ControlButtons extends StatelessWidget {
             await audioPlayer.shuffle();
           }
           await audioPlayer.setShuffleModeEnabled(enable);
-          print('shuffle');
         });
   }
 

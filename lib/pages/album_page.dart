@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
@@ -137,7 +139,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                 left: 30, right: 30, bottom: 5),
                             child: GestureDetector(
                               onTap: () {
-                                Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, index);
+                                Provider.of<PlayingListModel>(context,
+                                        listen: false)
+                                    .setPlaylist(songs, index);
                                 Navigator.push(
                                     context,
                                     PageTransition(
@@ -166,14 +170,29 @@ class _AlbumPageState extends State<AlbumPage> {
                                   Container(
                                     width: (size.width - 60) * 0.8,
                                     height: 60,
-                                    child: Row(
+                                    child: Column(
                                       children: [
-                                        Text(
-                                          songs[index]['title'],
-                                          style: TextStyle(
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              songs[index]['title'],
+                                              style: TextStyle(
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              // cai nay de la so luot nghe nhin dep hon
+                                              (1 + new Random().nextDouble() * 2).toStringAsFixed(2) + 'M plays',
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  color: Colors.grey),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -199,8 +218,25 @@ class _AlbumPageState extends State<AlbumPage> {
                                               color: primaryColor,
                                             ),
                                             onTap: () {
-                                              Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]);
                                               Navigator.pop(context);
+                                              String msg;
+                                              if (Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]))
+                                                msg = 'Song added to playing list!';
+                                              else
+                                                msg = 'Song already in your playing list!';
+                                              final snackBar = SnackBar(
+                                                behavior: SnackBarBehavior.floating,
+                                                content: Text(
+                                                  msg,
+                                                  style: TextStyle(fontFamily: 'Poppins'),
+                                                ),
+                                                backgroundColor: primaryColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(10),
+                                                ),
+                                              );
+                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                             },
                                           ),
                                         ),
@@ -273,7 +309,9 @@ class _AlbumPageState extends State<AlbumPage> {
                               color: primaryColor,
                             ),
                             onPressed: () {
-                              Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, 0);
+                              Provider.of<PlayingListModel>(context,
+                                      listen: false)
+                                  .setPlaylist(songs, 0);
                               Navigator.push(
                                   context,
                                   PageTransition(
@@ -329,12 +367,28 @@ class _AlbumPageState extends State<AlbumPage> {
                                     color: primaryColor,
                                   ),
                                   onTap: () {
-                                    for (int i = 0; i < songs.length; i++) {
-                                      Provider.of<PlayingListModel>(
-                                          context, listen: false).addBack(
-                                          songs[i]);
-                                    }
                                     Navigator.pop(context);
+                                    String msg = 'Album added to playing list!';
+                                    for (int i = 0; i < songs.length; i++) {
+                                      Provider.of<PlayingListModel>(context,
+                                          listen: false)
+                                          .addBack(songs[i]);
+                                    }
+
+                                    final snackBar = SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      content: Text(
+                                        msg,
+                                        style: TextStyle(fontFamily: 'Poppins'),
+                                      ),
+                                      backgroundColor: primaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10),
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                                   },
                                 ),
                               ),
@@ -394,8 +448,8 @@ class _AlbumPageState extends State<AlbumPage> {
                                             child: ArtistPage(
                                               artist_id: album['artist_id'],
                                             ),
-                                            type:
-                                            PageTransitionType.rightToLeft));
+                                            type: PageTransitionType
+                                                .rightToLeft));
                                   },
                                 ),
                               ),
@@ -408,8 +462,7 @@ class _AlbumPageState extends State<AlbumPage> {
                 ],
               ),
             );
-          }
-          else if (snapshot.hasError) {
+          } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
           return Center(

@@ -142,6 +142,7 @@ class _SearchPageState extends State<SearchPage> {
                             child: GestureDetector(
                               onTap: () {
                                 appState.setPlaylist([songs[index]], 0);
+                                appState.audioPlayer.play();
                                 Navigator.push(
                                     context,
                                     PageTransition(

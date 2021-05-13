@@ -43,7 +43,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return Consumer<PlayingListModel>(builder: (context, appState, child) {
       List<dynamic> songs = appState.songs;
       return Container(
-        height: appState.audioSource.length == 0 ? 55 : 120,
+        height: songs.length == 0 ? 55 : 120,
         color: Colors.grey.withOpacity(0.05),
         child: Column(
           children: [
@@ -56,7 +56,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     offset: Offset(0, -2))
               ]),
             ),
-            appState.audioSource.length == 0
+            songs.length == 0
                 ? Container(
                     height: 6,
                   )

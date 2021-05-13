@@ -142,6 +142,8 @@ class _AlbumPageState extends State<AlbumPage> {
                                 Provider.of<PlayingListModel>(context,
                                         listen: false)
                                     .setPlaylist(songs, index);
+                                Provider.of<PlayingListModel>(context,
+                                    listen: false).audioPlayer.play();
                                 Navigator.push(
                                     context,
                                     PageTransition(
@@ -310,8 +312,9 @@ class _AlbumPageState extends State<AlbumPage> {
                             ),
                             onPressed: () {
                               Provider.of<PlayingListModel>(context,
-                                      listen: false)
-                                  .setPlaylist(songs, 0);
+                                      listen: false).setPlaylist(songs, 0);
+                              Provider.of<PlayingListModel>(context,
+                                  listen: false).audioPlayer.play();
                               Navigator.push(
                                   context,
                                   PageTransition(

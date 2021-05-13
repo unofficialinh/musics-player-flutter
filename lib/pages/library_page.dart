@@ -119,7 +119,8 @@ class _LibraryPageState extends State<LibraryPage> {
                       padding: const EdgeInsets.only(left: 20, top: 15),
                       child: GestureDetector(
                         onTap: () {
-                          Provider.of<PlayingListModel>(context, listen: false).setPlaylist([songs[index]], 0);
+                          Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, index);
+                          Provider.of<PlayingListModel>(context, listen: false).audioPlayer.play();
                           Navigator.push(
                               context,
                               PageTransition(
@@ -479,6 +480,8 @@ class _LibraryPageState extends State<LibraryPage> {
                       padding: const EdgeInsets.only(left: 20, top: 15),
                       child: GestureDetector(
                         onTap: () {
+                          Provider.of<PlayingListModel>(context, listen: false).setPlaylist(downloaded, index);
+                          Provider.of<PlayingListModel>(context, listen: false).audioPlayer.play();
                           Navigator.push(
                               context,
                               PageTransition(

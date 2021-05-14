@@ -55,15 +55,5 @@ class PlayingListModel extends ChangeNotifier {
     notifyListeners();
   }
 
-// This button is disabled because it contains too many problems :)
-// what is the currentIndex of audioPlayer when I click this button bro?
-  // // Push _songs[index] to the first of list
-  // void toFirst(int index) {
-  //   dynamic moveSong = _songs.removeAt(index);
-  //   _songs.insert(0, moveSong);
-  //   audioSource.removeAt(index);
-  //   audioSource.insert(0, AudioSource.uri(Uri.parse(moveSong['mp3'])));
-  //   notifyListeners();
-  // }
 
 }

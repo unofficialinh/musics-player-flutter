@@ -176,20 +176,7 @@ class _PlayingListState extends State<PlayingList> {
                                 },
                               ),
                             ),
-                            PopupMenuDivider(),
-                            PopupMenuItem(
-                              child: ListTile(
-                                contentPadding: EdgeInsets.all(0),
-                                title: Text('To first'),
-                                trailing: Icon(
-                                  Icons.arrow_upward_rounded,
-                                  color: primaryColor,
-                                ),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ),
+
                           ],
                         ),
                       ),

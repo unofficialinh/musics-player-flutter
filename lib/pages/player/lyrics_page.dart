@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/color.dart';
+import 'package:music_player/pattern/color.dart';
 
 class LyricsPage extends StatefulWidget {
   final String lyrics;

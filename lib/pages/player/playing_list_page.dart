@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:provider/provider.dart';
 
-import '../../color.dart';
+import '../../pattern/color.dart';
 
 class PlayingList extends StatefulWidget {
   @override

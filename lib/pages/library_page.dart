@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
@@ -6,8 +8,8 @@ import 'package:music_player/pages/artist_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../bottom_navigation.dart';
-import '../color.dart';
+import '../pattern/bottom_navigation.dart';
+import '../pattern/color.dart';
 import 'album_page.dart';
 import 'player/music_detail_page.dart';
 
@@ -25,6 +27,22 @@ class _LibraryPageState extends State<LibraryPage> {
     Tab(text: "Downloaded")
   ];
   int activeMenu = 0;
+  bool isConnected = true;
+
+  Future<void> _checkInternetConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      if (response.isNotEmpty) {
+        setState(() {
+          isConnected = true;
+        });
+      }
+    } on SocketException catch (err) {
+      setState(() {
+        isConnected = false;
+      });
+    }
+  }
 
   Future<List<dynamic>> _songs;
   Future<List<dynamic>> _albums;
@@ -103,6 +121,20 @@ class _LibraryPageState extends State<LibraryPage> {
   }
 
   Widget getBody() {
+    _checkInternetConnection();
+    if (!isConnected) {
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.wifi_off, size: 80,),
+            Text('No internet', style: TextStyle(fontSize: 20),),
+          ],
+        ),
+      );
+    }
+
     var size = MediaQuery.of(context).size;
     return TabBarView(children: [
       //Song
@@ -268,7 +300,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              return Text("");
             }
             return Center(
                 child: CircularProgressIndicator(
@@ -339,7 +371,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 }),
               );
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              return Text("");
             }
             return Center(
                 child: CircularProgressIndicator(
@@ -400,7 +432,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 }),
               );
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              return Text("");
             }
             return Center(
                 child: CircularProgressIndicator(
@@ -462,7 +494,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 }),
               );
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              return Text("");
             }
             return Center(
                 child: CircularProgressIndicator(
@@ -621,7 +653,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              return Text("");
             }
             return Center(
                 child: CircularProgressIndicator(

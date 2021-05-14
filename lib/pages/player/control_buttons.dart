@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player/color.dart';
+import 'package:music_player/pattern/color.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'playing_list_page.dart';
@@ -13,6 +13,7 @@ class ControlButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -164,14 +165,15 @@ class ControlButtons extends StatelessWidget {
           ),
           onPressed: audioPlayer.pause);
     } else {
+      audioPlayer.seek(Duration.zero, index: audioPlayer.effectiveIndices.first);
+      audioPlayer.pause();
       return IconButton(
         iconSize: 80,
         icon: Icon(
           Icons.play_circle_fill_rounded,
           color: primaryColor,
         ),
-        onPressed: () => audioPlayer.seek(Duration.zero,
-            index: audioPlayer.effectiveIndices.first),
+        onPressed: () => audioPlayer.play,
       );
     }
   }

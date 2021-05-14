@@ -1,13 +1,14 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:music_player/bottom_navigation.dart';
+import 'package:music_player/pattern/bottom_navigation.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../color.dart';
+import '../pattern/color.dart';
 import 'album_page.dart';
 import 'player/music_detail_page.dart';
 
@@ -22,6 +23,22 @@ class ArtistPage extends StatefulWidget {
 
 class _ArtistPageState extends State<ArtistPage> {
   Future<dynamic> _artist;
+  bool isConnected = true;
+
+  Future<void> _checkInternetConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      if (response.isNotEmpty) {
+        setState(() {
+          isConnected = true;
+        });
+      }
+    } on SocketException catch (err) {
+      setState(() {
+        isConnected = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -39,6 +56,20 @@ class _ArtistPageState extends State<ArtistPage> {
   }
 
   Widget getBody() {
+    _checkInternetConnection();
+    if (!isConnected) {
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.wifi_off, size: 80,),
+            Text('No internet', style: TextStyle(fontSize: 20),),
+          ],
+        ),
+      );
+    }
+
     var size = MediaQuery.of(context).size;
     return FutureBuilder(
         future: _artist,

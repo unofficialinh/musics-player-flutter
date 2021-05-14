@@ -1,12 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:music_player/color.dart';
+import 'package:music_player/pattern/color.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/artist_page.dart';
 import 'package:music_player/pages/player/music_detail_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import '../bottom_navigation.dart';
+import '../pattern/bottom_navigation.dart';
 import 'album_page.dart';
 
 class SearchPage extends StatefulWidget {
@@ -20,6 +22,22 @@ class _SearchPageState extends State<SearchPage> {
   Future<List<dynamic>> _songs;
   Future<List<dynamic>> _artists;
   Future<List<dynamic>> _albums;
+  bool isConnected = true;
+
+  Future<void> _checkInternetConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      if (response.isNotEmpty) {
+        setState(() {
+          isConnected = true;
+        });
+      }
+    } on SocketException catch (err) {
+      setState(() {
+        isConnected = false;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -67,6 +85,20 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget getBody() {
+    _checkInternetConnection();
+    if (!isConnected) {
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.wifi_off, size: 80,),
+            Text('No internet', style: TextStyle(fontSize: 20),),
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
       child: SingleChildScrollView(
@@ -302,7 +334,7 @@ class _SearchPageState extends State<SearchPage> {
                     });
                   }
                   if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
+                    return Text("");
                   }
                   return Center(
                       child: CircularProgressIndicator(
@@ -403,7 +435,7 @@ class _SearchPageState extends State<SearchPage> {
                     );
                   }
                   if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
+                    return Text("");
                   }
                   return Center(
                       child: CircularProgressIndicator(
@@ -483,7 +515,7 @@ class _SearchPageState extends State<SearchPage> {
                     );
                   }
                   if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
+                    return Text("");
                   }
                   return Center(
                       child: CircularProgressIndicator(

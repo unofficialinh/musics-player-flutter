@@ -11,7 +11,7 @@ import 'package:music_player/pages/player/seek_bar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../../color.dart';
+import '../../pattern/color.dart';
 
 class MusicDetailPage extends StatefulWidget {
   @override
@@ -242,11 +242,11 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                           ],
                         ),
                       ),
+                      SeekBar(audioPlayer),
+                      ControlButtons(audioPlayer),
                     ],
                   );
                 }),
-            SeekBar(audioPlayer),
-            ControlButtons(audioPlayer),
           ],
         );
     });

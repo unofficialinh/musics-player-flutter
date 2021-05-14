@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player/color.dart';
+import 'package:music_player/pattern/color.dart';
 import 'package:music_player/pages/home_page.dart';
 import 'package:music_player/pages/library_page.dart';
 import 'package:music_player/pages/player/music_detail_page.dart';
@@ -10,7 +10,7 @@ import 'package:music_player/pages/settings_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import 'model/PlayingListModel.dart';
+import '../model/PlayingListModel.dart';
 
 class BottomNavigation extends StatefulWidget {
   final int activeTab;

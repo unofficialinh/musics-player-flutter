@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:music_player/bottom_navigation.dart';
-import 'package:music_player/color.dart';
+import 'package:music_player/pattern/bottom_navigation.dart';
+import 'package:music_player/pattern/color.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/pages/album_page.dart';
 import 'package:page_transition/page_transition.dart';
@@ -15,6 +16,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Future<List<dynamic>> recommended;
   Future<List<dynamic>> newestAlbums;
+  bool isConnected = true;
+
+  Future<void> _checkInternetConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      if (response.isNotEmpty) {
+        setState(() {
+          isConnected = true;
+        });
+      }
+    } on SocketException catch (err) {
+      setState(() {
+        isConnected = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -63,6 +80,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getBody() {
+    _checkInternetConnection();
+    if (!isConnected) {
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.wifi_off, size: 80,),
+            Text('No internet', style: TextStyle(fontSize: 20),),
+          ],
+        ),
+      );
+    }
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
+                    return Text("");
                   }
                   return Center(
                       child: CircularProgressIndicator(
@@ -252,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                   else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
+                    return Text("");
                   }
                   return Center(
                       child: CircularProgressIndicator(

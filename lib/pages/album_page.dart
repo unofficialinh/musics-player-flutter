@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -8,8 +9,8 @@ import 'package:music_player/pages/player/music_detail_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../bottom_navigation.dart';
-import '../color.dart';
+import '../pattern/bottom_navigation.dart';
+import '../pattern/color.dart';
 import 'artist_page.dart';
 
 class AlbumPage extends StatefulWidget {
@@ -23,6 +24,22 @@ class AlbumPage extends StatefulWidget {
 
 class _AlbumPageState extends State<AlbumPage> {
   Future<dynamic> _album;
+  bool isConnected = true;
+
+  Future<void> _checkInternetConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      if (response.isNotEmpty) {
+        setState(() {
+          isConnected = true;
+        });
+      }
+    } on SocketException catch (err) {
+      setState(() {
+        isConnected = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -40,6 +57,20 @@ class _AlbumPageState extends State<AlbumPage> {
   }
 
   Widget getBody() {
+    _checkInternetConnection();
+    if (!isConnected) {
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.wifi_off, size: 80,),
+            Text('No internet', style: TextStyle(fontSize: 20),),
+          ],
+        ),
+      );
+    }
+
     var size = MediaQuery.of(context).size;
     return FutureBuilder<dynamic>(
         future: _album,

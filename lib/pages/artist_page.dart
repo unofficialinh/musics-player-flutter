@@ -44,6 +44,7 @@ class _ArtistPageState extends State<ArtistPage> {
   void initState() {
     super.initState();
     _artist = searchArtistById(widget.artist_id);
+    _checkInternetConnection();
   }
 
   @override
@@ -56,7 +57,6 @@ class _ArtistPageState extends State<ArtistPage> {
   }
 
   Widget getBody() {
-    _checkInternetConnection();
     if (!isConnected) {
       return Container(
         alignment: Alignment.center,

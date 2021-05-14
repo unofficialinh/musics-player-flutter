@@ -40,6 +40,13 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkInternetConnection();
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -85,7 +92,6 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget getBody() {
-    _checkInternetConnection();
     if (!isConnected) {
       return Container(
         alignment: Alignment.center,

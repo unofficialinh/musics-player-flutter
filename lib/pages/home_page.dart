@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     recommended = searchRecommendedAlbums(5);
     newestAlbums = searchNewestAlbums(5);
+    _checkInternetConnection();
   }
 
   @override
@@ -80,7 +81,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getBody() {
-    _checkInternetConnection();
     if (!isConnected) {
       return Container(
         alignment: Alignment.center,

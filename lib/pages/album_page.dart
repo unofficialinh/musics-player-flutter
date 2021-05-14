@@ -45,6 +45,7 @@ class _AlbumPageState extends State<AlbumPage> {
   void initState() {
     super.initState();
     _album = searchAlbumById(widget.album_id);
+    _checkInternetConnection();
   }
 
   @override
@@ -57,7 +58,6 @@ class _AlbumPageState extends State<AlbumPage> {
   }
 
   Widget getBody() {
-    _checkInternetConnection();
     if (!isConnected) {
       return Container(
         alignment: Alignment.center,

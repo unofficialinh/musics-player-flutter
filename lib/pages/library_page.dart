@@ -59,6 +59,7 @@ class _LibraryPageState extends State<LibraryPage> {
     _playlists = searchAlbumsByName('a');
     _artists = searchArtistsByName('a');
     _downloaded = searchSongsByName('a');
+    _checkInternetConnection();
   }
 
   @override
@@ -121,7 +122,6 @@ class _LibraryPageState extends State<LibraryPage> {
   }
 
   Widget getBody() {
-    _checkInternetConnection();
     if (!isConnected) {
       return Container(
         alignment: Alignment.center,

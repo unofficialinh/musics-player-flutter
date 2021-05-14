@@ -98,14 +98,16 @@ class _AlbumPageState extends State<AlbumPage> {
                                   padding: const EdgeInsets.only(left: 15),
                                   child: Row(
                                     children: [
-                                      Text(
-                                        album['title'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.bold,
+                                      Flexible(
+                                        child: Text(
+                                          album['title'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -176,12 +178,16 @@ class _AlbumPageState extends State<AlbumPage> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text(
-                                              songs[index]['title'],
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
+                                            Flexible(
+                                              child: Text(
+                                                songs[index]['title'],
+                                                style: TextStyle(
+                                                    fontSize: 22,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
                                             ),
                                           ],
                                         ),

@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-const String apiUrl = '10.0.2.2:5000';
+const String apiUrl = '3.141.168.131:5000';
 
 // search album by name
 Future<List<dynamic>> searchAlbumsByName(keyword) async {
@@ -47,6 +47,15 @@ Future<dynamic> searchSongById(songId) async {
 // search newest albums
 Future<List<dynamic>> searchNewestAlbums(num) async {
   final response = await http.get(Uri.http(apiUrl, 'album/newest/' + num.toString()));
+  if (response.statusCode == 200) {
+    return json.decode(response.body)['albums'];
+  } else {
+    throw Exception('Unable to fetch products from the REST API');
+  }
+}
+
+Future<List<dynamic>> searchRecommendedAlbums(num) async {
+  final response = await http.get(Uri.http(apiUrl, 'album/recommend/' + num.toString()));
   if (response.statusCode == 200) {
     return json.decode(response.body)['albums'];
   } else {

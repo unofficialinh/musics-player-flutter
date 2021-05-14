@@ -104,6 +104,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                                             songs[appState.audioPlayer
                                                 .currentIndex]['title'],
                                             maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.black,

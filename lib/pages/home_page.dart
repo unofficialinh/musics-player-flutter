@@ -13,13 +13,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<List<dynamic>> recentlyPlayed;
+  Future<List<dynamic>> recommended;
   Future<List<dynamic>> newestAlbums;
 
   @override
   void initState() {
     super.initState();
-    recentlyPlayed = searchAlbumsByName('a');
+    recommended = searchRecommendedAlbums(5);
     newestAlbums = searchNewestAlbums(5);
   }
 
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     Text(
-                      "Recently played",
+                      "Recommended for you",
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                 height: 20,
               ),
               FutureBuilder<List<dynamic>>(
-                future: recentlyPlayed,
+                future: recommended,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var albums = snapshot.data;

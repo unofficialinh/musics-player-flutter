@@ -145,29 +145,33 @@ class _LibraryPageState extends State<LibraryPage> {
                               height: 60,
                               child: Column(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        songs[index]['title'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.black),
-                                      ),
-                                    ],
+                                  Flexible(
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          songs[index]['title'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontSize: 20, color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        songs[index]['artist'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.grey),
-                                      ),
-                                    ],
+                                  Flexible(
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          songs[index]['artist'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontSize: 16, color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -509,25 +513,29 @@ class _LibraryPageState extends State<LibraryPage> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text(
-                                        downloaded[index]['title'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.black),
+                                      Flexible(
+                                        child: Text(
+                                          downloaded[index]['title'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontSize: 20, color: Colors.black),
+                                        ),
                                       ),
                                     ],
                                   ),
                                   Row(
                                     children: [
-                                      Text(
-                                        downloaded[index]['artist'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.grey),
+                                      Flexible(
+                                        child: Text(
+                                          downloaded[index]['artist'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontSize: 16, color: Colors.grey),
+                                        ),
                                       ),
                                     ],
                                   ),

@@ -169,31 +169,35 @@ class _SearchPageState extends State<SearchPage> {
                                     height: 60,
                                     child: Column(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              songs[index]['title'],
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
+                                        Flexible(
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                songs[index]['title'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.black),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              songs[index]['artist'],
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey),
-                                            ),
-                                          ],
+                                        Flexible(
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                songs[index]['artist'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -359,30 +363,34 @@ class _SearchPageState extends State<SearchPage> {
                                   height: 60,
                                   child: Column(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            albums[index]['title'],
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.black),
-                                          ),
-                                        ],
+                                      Flexible(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              albums[index]['title'],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.black),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            albums[index]['artist'],
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey),
-                                          ),
-                                        ],
+                                      Flexible(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              albums[index]['artist'],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),

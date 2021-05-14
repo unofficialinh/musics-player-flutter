@@ -167,12 +167,16 @@ class _ArtistPageState extends State<ArtistPage> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text(
-                                              songs[index]['title'],
-                                              style: TextStyle(
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
+                                            Flexible(
+                                              child: Text(
+                                                songs[index]['title'],
+                                                style: TextStyle(
+                                                    fontSize: 22,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -325,7 +329,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
                                                 image: NetworkImage(
-                                                    songs[index]['img']),
+                                                    albums[index]['img']),
                                                 fit: BoxFit.cover),
                                             color: primaryColor,
                                             borderRadius:
@@ -349,6 +353,7 @@ class _ArtistPageState extends State<ArtistPage> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 20,)
                     ]),
                     Container(
                       height: 80,

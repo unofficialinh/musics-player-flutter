@@ -499,16 +499,18 @@ class _SearchPageState extends State<SearchPage> {
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(left: 15),
-                                  width: (size.width - 60) * 0.7,
+                                  width: (size.width - 60) * 0.8,
                                   height: 60,
                                   child: Row(
                                     children: [
-                                      Text(
-                                        artists[index]['name'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.black),
+                                      Flexible(
+                                        child: Text(
+                                          artists[index]['name'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 20, color: Colors.black),
+                                        ),
                                       ),
                                     ],
                                   ),

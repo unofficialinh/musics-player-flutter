@@ -153,7 +153,7 @@ class _PlayingListState extends State<PlayingList> {
                         height: 50,
                         child: PopupMenuButton(
                           icon: Icon(
-                            Icons.more_vert,
+                            Icons.delete_outline,
                             color: index == currentIndex
                                 ? primaryColor
                                 : Colors.grey,
@@ -164,12 +164,7 @@ class _PlayingListState extends State<PlayingList> {
                           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                             PopupMenuItem(
                               child: ListTile(
-                                contentPadding: EdgeInsets.all(0),
                                 title: Text('Remove'),
-                                trailing: Icon(
-                                  Icons.delete_outline,
-                                  color: primaryColor,
-                                ),
                                 onTap: () {
                                   Navigator.pop(context);
                                   appState.removeAt(index);

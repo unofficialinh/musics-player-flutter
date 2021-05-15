@@ -54,11 +54,11 @@ class _LibraryPageState extends State<LibraryPage> {
   void initState() {
     // TODO: change what album, song to display in library
     super.initState();
-    _songs = searchSongsByName('a');
-    _albums = searchAlbumsByName('a');
-    _playlists = searchAlbumsByName('a');
-    _artists = searchArtistsByName('a');
-    _downloaded = searchSongsByName('a');
+    _songs = searchSongsByName('hi');
+    _albums = searchAlbumsByName('hi');
+    _playlists = searchAlbumsByName('th');
+    _artists = searchArtistsByName('it');
+    _downloaded = searchSongsByName('the');
     _checkInternetConnection();
   }
 

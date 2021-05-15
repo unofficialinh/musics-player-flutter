@@ -22,6 +22,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: getAppBar(),
       body: getBody(),
     );

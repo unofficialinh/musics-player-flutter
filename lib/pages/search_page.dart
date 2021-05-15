@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:music_player/pattern/color.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
@@ -98,8 +99,14 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.wifi_off, size: 80,),
-            Text('No internet', style: TextStyle(fontSize: 20),),
+            Icon(
+              Icons.wifi_off,
+              size: 80,
+            ),
+            Text(
+              'No internet',
+              style: TextStyle(fontSize: 20),
+            ),
           ],
         ),
       );
@@ -312,6 +319,12 @@ class _SearchPageState extends State<SearchPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      child: AddToPlaylist(),
+                                                      type: PageTransitionType
+                                                          .bottomToTop));
                                             },
                                           ),
                                         ),
@@ -509,7 +522,8 @@ class _SearchPageState extends State<SearchPage> {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                              fontSize: 20, color: Colors.black),
+                                              fontSize: 20,
+                                              color: Colors.black),
                                         ),
                                       ),
                                     ],

@@ -14,6 +14,7 @@ void main() async {
       ],
       child: MaterialApp(
         theme: ThemeData(
+            primaryColor: primaryColor,
             fontFamily: 'Poppins',
             textSelectionTheme: TextSelectionThemeData(
                 cursorColor: primaryColor,

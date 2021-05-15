@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/artist_page.dart';
+import 'package:music_player/pages/playlist/new_playlist.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -122,25 +123,6 @@ class _LibraryPageState extends State<LibraryPage> {
   }
 
   Widget getBody() {
-    // if (!isConnected) {
-    //   return Container(
-    //     alignment: Alignment.center,
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: [
-    //         Icon(
-    //           Icons.wifi_off,
-    //           size: 80,
-    //         ),
-    //         Text(
-    //           'No internet',
-    //           style: TextStyle(fontSize: 20),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
-
     var size = MediaQuery.of(context).size;
     return TabBarView(children: [
       //Song
@@ -454,66 +436,115 @@ class _LibraryPageState extends State<LibraryPage> {
                 ],
               ),
             )
-          : FutureBuilder(
-              future: _playlists,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var playlists = snapshot.data;
-                  return GridView.count(
-                    padding: EdgeInsets.only(
-                        top: 20, bottom: 10, left: 10, right: 10),
-                    crossAxisCount: 2,
-                    childAspectRatio: 4 / 4.5,
-                    children: List.generate(playlists.length, (index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  alignment: Alignment.bottomCenter,
-                                  child: AlbumPage(
-                                    album_id: playlists[index]['id'],
-                                  ),
-                                  type: PageTransitionType.rightToLeft));
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              width: size.width * 0.4,
-                              height: size.width * 0.4,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image:
-                                          NetworkImage(playlists[index]['img']),
-                                      fit: BoxFit.cover),
-                                  color: primaryColor,
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              playlists[index]['title'],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) => NewPlaylist(),
                       );
-                    }),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text("");
-                }
-                return Center(
-                    child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-                ));
-              }),
+                    },
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 25, right: 25, top: 15),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: primaryColor),
+                            child: Icon(
+                              Icons.add_rounded,
+                              size: 80,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            width: size.width - 150,
+                            child: Text(
+                              "Create new playlist...",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black.withOpacity(0.6)),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  FutureBuilder(
+                      future: _playlists,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          var playlists = snapshot.data;
+                          return GridView.count(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.only(
+                                top: 20, bottom: 10, left: 10, right: 10),
+                            crossAxisCount: 2,
+                            childAspectRatio: 4 / 4.5,
+                            children: List.generate(playlists.length, (index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          alignment: Alignment.bottomCenter,
+                                          child: AlbumPage(
+                                            album_id: playlists[index]['id'],
+                                          ),
+                                          type:
+                                              PageTransitionType.rightToLeft));
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: size.width * 0.4,
+                                      height: size.width * 0.4,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  playlists[index]['img']),
+                                              fit: BoxFit.cover),
+                                          color: primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      playlists[index]['title'],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text("");
+                        }
+                        return Center(
+                            child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(primaryColor),
+                        ));
+                      }),
+                ],
+              ),
+            ),
 
       //Artist
       !isConnected

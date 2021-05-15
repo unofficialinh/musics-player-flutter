@@ -158,7 +158,7 @@ class _PlayingListState extends State<PlayingList> {
                                 ? primaryColor
                                 : Colors.grey,
                           ),
-                          offset: Offset(0, 10),
+                          // offset: Offset(0, 10),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
@@ -167,7 +167,7 @@ class _PlayingListState extends State<PlayingList> {
                                 contentPadding: EdgeInsets.all(0),
                                 title: Text('Remove'),
                                 trailing: Icon(
-                                  Icons.remove_rounded,
+                                  Icons.delete_outline,
                                   color: primaryColor,
                                 ),
                                 onTap: () {

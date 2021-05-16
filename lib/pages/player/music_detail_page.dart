@@ -165,91 +165,87 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
           ]),
         );
       } else
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            StreamBuilder(
-                stream: audioPlayer.sequenceStateStream,
-                builder: (context, snapshot) {
-                  return Column(
+        return StreamBuilder(
+            stream: audioPlayer.sequenceStateStream,
+            builder: (context, snapshot) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Stack(
                     children: [
-                      Stack(
-                        children: [
-                          Center(
-                            child: Container(
-                              width: size.width * 0.8,
-                              height: size.width * 0.8,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        songs[audioPlayer.currentIndex]
-                                            ['img'])),
-                                color: primaryColor,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 10,
-                                    spreadRadius: 5,
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 20, right: 20, top: 15),
-                        child: Column(
-                          children: [
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Text(
-                                songs[audioPlayer.currentIndex]['title'],
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        alignment: Alignment.bottomCenter,
-                                        child: ArtistPage(
-                                          artist_id:
-                                              songs[audioPlayer.currentIndex]
-                                                  ['artist_id'],
-                                        ),
-                                        type: PageTransitionType.rightToLeft));
-                              },
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                // controller: ,
-                                child: Text(
-                                  songs[audioPlayer.currentIndex]['artist'],
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: primaryColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                      Center(
+                        child: Container(
+                          width: size.width * 0.8,
+                          height: size.width * 0.8,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    songs[audioPlayer.currentIndex]
+                                        ['img'])),
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 10,
+                                spreadRadius: 5,
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      SeekBar(audioPlayer),
-                      ControlButtons(audioPlayer),
+                      )
                     ],
-                  );
-                }),
-          ],
-        );
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, top: 15),
+                    child: Column(
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            songs[audioPlayer.currentIndex]['title'],
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    alignment: Alignment.bottomCenter,
+                                    child: ArtistPage(
+                                      artist_id:
+                                          songs[audioPlayer.currentIndex]
+                                              ['artist_id'],
+                                    ),
+                                    type: PageTransitionType.rightToLeft));
+                          },
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            // controller: ,
+                            child: Text(
+                              songs[audioPlayer.currentIndex]['artist'],
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: primaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SeekBar(audioPlayer),
+                  ControlButtons(audioPlayer),
+                ],
+              );
+            });
     });
   }
 }

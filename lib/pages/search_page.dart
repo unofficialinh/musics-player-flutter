@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/pages/download_page.dart';
 import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:music_player/pattern/color.dart';
 import 'package:music_player/controller/http.dart';
@@ -338,6 +339,10 @@ class _SearchPageState extends State<SearchPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      DownloadPage());
                                             },
                                           ),
                                         ),

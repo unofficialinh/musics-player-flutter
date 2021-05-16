@@ -6,6 +6,7 @@ import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/artist_page.dart';
 import 'package:music_player/pages/playlist/new_playlist.dart';
+import 'package:music_player/pages/playlist/playlist_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -496,8 +497,8 @@ class _LibraryPageState extends State<LibraryPage> {
                                       context,
                                       PageTransition(
                                           alignment: Alignment.bottomCenter,
-                                          child: AlbumPage(
-                                            album_id: playlists[index]['id'],
+                                          child: PlaylistPage(
+                                            playlist_id: playlists[index]['id'],
                                           ),
                                           type:
                                               PageTransitionType.rightToLeft));

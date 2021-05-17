@@ -15,7 +15,6 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
   Future<dynamic> _user;
-  Future<dynamic> _result;
   bool isConnected = true;
   String _name;
   String _age;

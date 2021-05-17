@@ -7,6 +7,7 @@ import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/player/music_detail_page.dart';
 import 'package:music_player/pages/playlist/add_song_playlist.dart';
+import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -279,22 +280,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                               else
                                                 msg =
                                                     'Song already in your playing list!';
-                                              final snackBar = SnackBar(
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                content: Text(
-                                                  msg,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Poppins'),
-                                                ),
-                                                backgroundColor: primaryColor,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                              );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar);
+                                              snackBar(context, msg);
                                             },
                                           ),
                                         ),
@@ -311,23 +297,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                               addSongToFavorite(
                                                       songs[index]['id'])
                                                   .then((value) {
-                                                final snackBar = SnackBar(
-                                                  behavior:
-                                                      SnackBarBehavior.floating,
-                                                  content: Text(
-                                                    value,
-                                                    style: TextStyle(
-                                                        fontFamily: 'Poppins'),
-                                                  ),
-                                                  backgroundColor: primaryColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                );
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(snackBar);
+                                                snackBar(context, value);
                                               });
                                             },
                                           ),
@@ -466,20 +436,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                               listen: false)
                                           .addBack(songs[i]);
                                     }
-
-                                    final snackBar = SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-                                      content: Text(
-                                        msg,
-                                        style: TextStyle(fontFamily: 'Poppins'),
-                                      ),
-                                      backgroundColor: primaryColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                                    snackBar(context, msg);
                                   },
                                 ),
                               ),
@@ -496,19 +453,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                     for (var i = 0; i < songs.length; i++) {
                                       addSongToFavorite(songs[i]['id']);
                                     }
-                                    final snackBar = SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-                                      content: Text(
-                                        "Add album to favorite successfully.",
-                                        style: TextStyle(fontFamily: 'Poppins'),
-                                      ),
-                                      backgroundColor: primaryColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                                    snackBar(context, "Add album to favorite successfully.");
                                   },
                                 ),
                               ),

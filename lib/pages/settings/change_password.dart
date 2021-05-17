@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/pattern/bottom_navigation.dart';
 import 'package:music_player/pattern/color.dart';
+import 'package:music_player/pattern/snackbar.dart';
 
 class ChangePassword extends StatefulWidget {
   @override
@@ -245,18 +246,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     updateUserPassword(_old, _new, _confirm).then((value) {
-                      final snackBar = SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        content: Text(
-                          value,
-                          style: TextStyle(fontFamily: 'Poppins'),
-                        ),
-                        backgroundColor: primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      snackBar(context, value);
                       Navigator.pop(context);
                     });
                   }

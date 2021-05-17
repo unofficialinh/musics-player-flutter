@@ -8,6 +8,7 @@ import 'package:music_player/pages/artist_page.dart';
 import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:music_player/pages/playlist/new_playlist.dart';
 import 'package:music_player/pages/playlist/playlist_page.dart';
+import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -255,22 +256,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                             else
                                               msg =
                                                   'Song already in your playing list!';
-                                            final snackBar = SnackBar(
-                                              behavior:
-                                                  SnackBarBehavior.floating,
-                                              content: Text(
-                                                msg,
-                                                style: TextStyle(
-                                                    fontFamily: 'Poppins'),
-                                              ),
-                                              backgroundColor: primaryColor,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackBar);
+                                            snackBar(context, msg);
                                           },
                                         ),
                                       ),
@@ -285,18 +271,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                           onTap: () {
                                             Navigator.pop(context);
                                             deleteSongFromFavorite(songs[index]['id']).then((value) {
-                                              final snackBar = SnackBar(
-                                                behavior: SnackBarBehavior.floating,
-                                                content: Text(
-                                                  value,
-                                                  style: TextStyle(fontFamily: 'Poppins'),
-                                                ),
-                                                backgroundColor: primaryColor,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                              );
-                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                              snackBar(context, value);
                                               setState(() {});
                                             });
                                           },
@@ -755,21 +730,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                         else
                                           msg =
                                               'Song already in your playing list!';
-                                        final snackBar = SnackBar(
-                                          behavior: SnackBarBehavior.floating,
-                                          content: Text(
-                                            msg,
-                                            style: TextStyle(
-                                                fontFamily: 'Poppins'),
-                                          ),
-                                          backgroundColor: primaryColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        );
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
+                                        snackBar(context, msg);
                                       },
                                     ),
                                   ),

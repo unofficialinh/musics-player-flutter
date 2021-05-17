@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/pattern/color.dart';
+import 'package:music_player/pattern/snackbar.dart';
 
 class NewPlaylist extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -89,19 +90,7 @@ class NewPlaylist extends StatelessWidget {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       createPlaylist(title).then((value) {
-                        Navigator.pop(context);
-                        final snackBar = SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          content: Text(
-                            value,
-                            style: TextStyle(fontFamily: 'Poppins'),
-                          ),
-                          backgroundColor: primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        snackBar(context, value);
                       });
                     }
                   },

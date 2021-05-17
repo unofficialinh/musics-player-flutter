@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/pattern/color.dart';
+import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'playing_list_page.dart';
@@ -235,18 +236,7 @@ class _ControlButtonsState extends State<ControlButtons> {
         ),
         onPressed: () {
           deleteSongFromFavorite(widget.song_id).then((value) {
-            final snackBar = SnackBar(
-              behavior: SnackBarBehavior.floating,
-              content: Text(
-                value,
-                style: TextStyle(fontFamily: 'Poppins'),
-              ),
-              backgroundColor: primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            snackBar(context, value);
           });
           setState(() {isFav = !isFav;});
         },
@@ -260,18 +250,7 @@ class _ControlButtonsState extends State<ControlButtons> {
         ),
         onPressed: () {
           addSongToFavorite(widget.song_id).then((value) {
-            final snackBar = SnackBar(
-              behavior: SnackBarBehavior.floating,
-              content: Text(
-                value,
-                style: TextStyle(fontFamily: 'Poppins'),
-              ),
-              backgroundColor: primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            snackBar(context, value);
           });
           setState(() {isFav = !isFav;});
         },

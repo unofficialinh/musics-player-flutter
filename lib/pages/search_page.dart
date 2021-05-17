@@ -8,6 +8,7 @@ import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/artist_page.dart';
 import 'package:music_player/pages/player/music_detail_page.dart';
+import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../pattern/bottom_navigation.dart';
@@ -277,23 +278,7 @@ class _SearchPageState extends State<SearchPage> {
                                                 else
                                                   msg =
                                                       'Song already in your playing list!';
-                                                final snackBar = SnackBar(
-                                                  behavior:
-                                                      SnackBarBehavior.floating,
-                                                  content: Text(
-                                                    msg,
-                                                    style: TextStyle(
-                                                        fontFamily: 'Poppins'),
-                                                  ),
-                                                  backgroundColor: primaryColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                );
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(snackBar);
+                                                snackBar(context, msg);
                                               }),
                                         ),
                                         PopupMenuDivider(),

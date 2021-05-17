@@ -6,6 +6,7 @@ import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:music_player/pattern/bottom_navigation.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
+import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -271,22 +272,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                               else
                                                 msg =
                                                     'Song already in your playing list!';
-                                              final snackBar = SnackBar(
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                content: Text(
-                                                  msg,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Poppins'),
-                                                ),
-                                                backgroundColor: primaryColor,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                              );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar);
+                                              snackBar(context, msg);
                                             },
                                           ),
                                         ),
@@ -301,18 +287,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                             onTap: () {
                                               Navigator.pop(context);
                                               addSongToFavorite(songs[index]['id']).then((value) {
-                                                final snackBar = SnackBar(
-                                                  behavior: SnackBarBehavior.floating,
-                                                  content: Text(value,
-                                                    style: TextStyle(fontFamily: 'Poppins'),
-                                                  ),
-                                                  backgroundColor: primaryColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                );
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(snackBar);
+                                                snackBar(context, value);
                                               });
                                             },
                                           ),

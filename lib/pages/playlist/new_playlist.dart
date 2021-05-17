@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:music_player/controller/http.dart';
 import 'package:music_player/pattern/color.dart';
 
 class NewPlaylist extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String title;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,13 @@ class NewPlaylist extends StatelessWidget {
                           cursorColor: primaryColor,
                           selectionColor: primaryColor.withOpacity(0.2),
                           selectionHandleColor: primaryColor)),
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter playlist's name.";
+                      }
+                      return null;
+                    },
                     style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.center,
                     maxLines: 1,
@@ -58,6 +66,7 @@ class NewPlaylist extends StatelessWidget {
                       hintText: "Playlist's name",
                       border: UnderlineInputBorder(),
                     ),
+                    onChanged: (value) => title = value,
                   ),
                 ),
               ),
@@ -78,23 +87,23 @@ class NewPlaylist extends StatelessWidget {
                     style: TextStyle(fontSize: 22),
                   ),
                   onPressed: () {
-                    // if (_formKey.currentState.validate()) {
-                    //   _formKey.currentState.save();
-                    // }
-                    Navigator.pop(context);
-                    final snackBar = SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      content: Text(
-                        "Created new playlist!",
-                        style: TextStyle(fontFamily: 'Poppins'),
-                      ),
-                      backgroundColor: primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    //TODO: create a new playlist
+                    if (_formKey.currentState.validate()) {
+                      createPlaylist(title).then((value) {
+                        Navigator.pop(context);
+                        final snackBar = SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          content: Text(
+                            value,
+                            style: TextStyle(fontFamily: 'Poppins'),
+                          ),
+                          backgroundColor: primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      });
+                    }
                   },
                 ),
               )

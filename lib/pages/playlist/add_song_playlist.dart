@@ -8,6 +8,10 @@ import 'package:music_player/pattern/color.dart';
 import 'new_playlist.dart';
 
 class AddToPlaylist extends StatefulWidget {
+  final dynamic song_id;
+
+  const AddToPlaylist({Key key, this.song_id}) : super(key: key);
+
   @override
   _AddToPlaylistState createState() => _AddToPlaylistState();
 }
@@ -36,7 +40,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
     // TODO: implement initState
     super.initState();
     _checkInternetConnection();
-    _playlists = searchAlbumsByName('love');
+    _playlists = getPlaylist();
   }
 
   @override
@@ -137,7 +141,21 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                     children: List.generate(playlists.length, (index) {
                       return GestureDetector(
                         onTap: () {
-                          //TODO: add selected song(s) to chosen playlist
+                          addSongToPlaylist(playlists[index]['id'], widget.song_id).then((value) {
+                            final snackBar = SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              content: Text(
+                                value,
+                                style: TextStyle(fontFamily: 'Poppins'),
+                              ),
+                              backgroundColor: primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            Navigator.pop(context);
+                          });
                         },
                         child: Padding(
                           padding:
@@ -150,7 +168,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                            playlists[index]['img']),
+                                            playlistImg),
                                         fit: BoxFit.cover),
                                     borderRadius: BorderRadius.circular(10),
                                     color: primaryColor),

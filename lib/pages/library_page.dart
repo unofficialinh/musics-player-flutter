@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/artist_page.dart';
+import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:music_player/pages/playlist/new_playlist.dart';
 import 'package:music_player/pages/playlist/playlist_page.dart';
 import 'package:page_transition/page_transition.dart';
@@ -56,10 +57,10 @@ class _LibraryPageState extends State<LibraryPage> {
   void initState() {
     // TODO: change what album, song to display in library
     super.initState();
-    _songs = searchSongsByName('hi');
-    _albums = searchAlbumsByName('hi');
-    _playlists = searchAlbumsByName('th');
-    _artists = searchArtistsByName('it');
+    _songs = getFavoriteSong();
+    _albums = getFavoriteAlbum();
+    _playlists = getPlaylist();
+    _artists = getFavoriteArtist();
     _downloaded = searchSongsByName('the');
     _checkInternetConnection();
   }
@@ -296,6 +297,12 @@ class _LibraryPageState extends State<LibraryPage> {
                                           ),
                                           onTap: () {
                                             Navigator.pop(context);
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    child: AddToPlaylist(song_id: songs[index]['id'],),
+                                                    type: PageTransitionType
+                                                        .bottomToTop));
                                           },
                                         ),
                                       ),
@@ -480,69 +487,70 @@ class _LibraryPageState extends State<LibraryPage> {
                     ),
                   ),
                   FutureBuilder(
-                      future: _playlists,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          var playlists = snapshot.data;
-                          return GridView.count(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.only(
-                                top: 20, bottom: 10, left: 10, right: 10),
-                            crossAxisCount: 2,
-                            childAspectRatio: 4 / 4.5,
-                            children: List.generate(playlists.length, (index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          alignment: Alignment.bottomCenter,
-                                          child: PlaylistPage(
-                                            playlist_id: playlists[index]['id'],
-                                          ),
-                                          type:
-                                              PageTransitionType.rightToLeft));
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: size.width * 0.4,
-                                      height: size.width * 0.4,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  playlists[index]['img']),
-                                              fit: BoxFit.cover),
-                                          color: primaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
+                    future: _playlists,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        var playlists = snapshot.data;
+                        return GridView.count(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(
+                              top: 20, bottom: 10, left: 10, right: 10),
+                          crossAxisCount: 2,
+                          childAspectRatio: 4 / 4.5,
+                          children: List.generate(playlists.length, (index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        alignment: Alignment.bottomCenter,
+                                        child: PlaylistPage(
+                                          playlist_id: playlists[index]['id'],
+                                        ),
+                                        type: PageTransitionType.rightToLeft));
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: size.width * 0.4,
+                                    height: size.width * 0.4,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(playlistImg),
+                                            fit: BoxFit.cover),
+                                        color: primaryColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    playlists[index]['title'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      playlists[index]['title'],
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text("");
-                        }
-                        return Center(
-                            child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(primaryColor),
-                        ));
-                      }),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("");
+                      }
+                      return Center(
+                          child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                      ));
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
             ),
@@ -773,6 +781,12 @@ class _LibraryPageState extends State<LibraryPage> {
                                       ),
                                       onTap: () {
                                         Navigator.pop(context);
+                                        Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                child: AddToPlaylist(song_id: downloaded[index]['id'],),
+                                                type: PageTransitionType
+                                                    .bottomToTop));
                                       },
                                     ),
                                   ),

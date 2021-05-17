@@ -323,7 +323,7 @@ class _SearchPageState extends State<SearchPage> {
                                               Navigator.push(
                                                   context,
                                                   PageTransition(
-                                                      child: AddToPlaylist(),
+                                                      child: AddToPlaylist(song_id: songs[index]['id'],),
                                                       type: PageTransitionType
                                                           .bottomToTop));
                                             },

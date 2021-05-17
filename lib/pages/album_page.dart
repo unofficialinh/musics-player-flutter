@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/player/music_detail_page.dart';
+import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -302,6 +303,12 @@ class _AlbumPageState extends State<AlbumPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      child: AddToPlaylist(song_id: songs[index]['id'],),
+                                                      type: PageTransitionType
+                                                          .bottomToTop));
                                             },
                                           ),
                                         ),
@@ -438,19 +445,6 @@ class _AlbumPageState extends State<AlbumPage> {
                                   title: Text('Favorite'),
                                   trailing: Icon(
                                     Icons.favorite_border,
-                                    color: primaryColor,
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                              PopupMenuDivider(),
-                              PopupMenuItem(
-                                child: ListTile(
-                                  title: Text('Add to playlist'),
-                                  trailing: Icon(
-                                    Icons.add_rounded,
                                     color: primaryColor,
                                   ),
                                   onTap: () {

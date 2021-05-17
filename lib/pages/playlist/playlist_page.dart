@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +42,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
   @override
   void initState() {
     super.initState();
-    //TODO: change query function
-    _playlist = searchAlbumById(widget.playlist_id);
+    _playlist = getPlaylistById(widget.playlist_id);
     _checkInternetConnection();
   }
 
@@ -95,7 +93,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         height: size.width,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(playlist['img']),
+                              image: NetworkImage(playlistImg),
                               fit: BoxFit.cover),
                         ),
                         child: Container(
@@ -322,6 +320,23 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              deleteSongFromPlaylist(playlist['id'], songs[index]['id']).then((value) {
+                                                final snackBar = SnackBar(
+                                                  behavior: SnackBarBehavior.floating,
+                                                  content: Text(
+                                                    value,
+                                                    style: TextStyle(fontFamily: 'Poppins'),
+                                                  ),
+                                                  backgroundColor: primaryColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                );
+                                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                                setState(() {
+
+                                                });
+                                              });
                                             },
                                           ),
                                         ),
@@ -478,6 +493,21 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
+                                    deletePlaylist(playlist['id']).then((value) {
+                                      final snackBar = SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        content: Text(
+                                          value,
+                                          style: TextStyle(fontFamily: 'Poppins'),
+                                        ),
+                                        backgroundColor: primaryColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                      Navigator.pop(context);
+                                    });
                                   },
                                 ),
                               ),

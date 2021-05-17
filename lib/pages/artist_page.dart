@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:music_player/pattern/bottom_navigation.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
@@ -291,6 +292,12 @@ class _ArtistPageState extends State<ArtistPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      child: AddToPlaylist(song_id: songs[index]['id'],),
+                                                      type: PageTransitionType
+                                                          .bottomToTop));
                                             },
                                           ),
                                         ),
@@ -445,30 +452,10 @@ class _ArtistPageState extends State<ArtistPage> {
                           decoration: BoxDecoration(
                               color: Colors.black.withOpacity(0.1),
                               shape: BoxShape.circle),
-                          child: PopupMenuButton(
-                            icon: Icon(
+                          child: Icon(
                               Icons.more_vert,
                               color: Colors.white,
                             ),
-                            offset: Offset(0, 7),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            itemBuilder: (BuildContext context) =>
-                            <PopupMenuEntry>[
-                              PopupMenuItem(
-                                child: ListTile(
-                                  title: Text('Favorite'),
-                                  trailing: Icon(
-                                    Icons.favorite_border,
-                                    color: primaryColor,
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       ],
                     ),

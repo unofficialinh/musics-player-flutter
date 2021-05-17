@@ -255,3 +255,9 @@ Future<List<dynamic>> getFavoriteArtist() async {
     throw Exception('Unable to fetch products from the REST API');
   }
 }
+
+// check song is in favorite
+// TODO: add to API
+Future<dynamic> isFavorite(songId) async {
+  return true;
+}

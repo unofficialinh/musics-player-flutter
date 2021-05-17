@@ -43,7 +43,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _checkInternetConnection();
   }
@@ -307,6 +306,27 @@ class _SearchPageState extends State<SearchPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              addSongToFavorite(
+                                                      songs[index]['id'])
+                                                  .then((value) {
+                                                final snackBar = SnackBar(
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  content: Text(
+                                                    value,
+                                                    style: TextStyle(
+                                                        fontFamily: 'Poppins'),
+                                                  ),
+                                                  backgroundColor: primaryColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                              });
                                             },
                                           ),
                                         ),
@@ -323,7 +343,10 @@ class _SearchPageState extends State<SearchPage> {
                                               Navigator.push(
                                                   context,
                                                   PageTransition(
-                                                      child: AddToPlaylist(song_id: songs[index]['id'],),
+                                                      child: AddToPlaylist(
+                                                        song_id: songs[index]
+                                                            ['id'],
+                                                      ),
                                                       type: PageTransitionType
                                                           .bottomToTop));
                                             },

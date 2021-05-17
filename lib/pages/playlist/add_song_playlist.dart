@@ -37,7 +37,6 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _checkInternetConnection();
     _playlists = getPlaylist();

@@ -55,7 +55,7 @@ class _LibraryPageState extends State<LibraryPage> {
 
   @override
   void initState() {
-    // TODO: change what album, song to display in library
+    // TODO: change download tab
     super.initState();
     _songs = getFavoriteSong();
     _albums = getFavoriteAlbum();
@@ -277,13 +277,28 @@ class _LibraryPageState extends State<LibraryPage> {
                                       PopupMenuDivider(),
                                       PopupMenuItem(
                                         child: ListTile(
-                                          title: Text('Favorite'),
+                                          title: Text('Remove'),
                                           trailing: Icon(
-                                            Icons.favorite_border,
+                                            Icons.delete_outline,
                                             color: primaryColor,
                                           ),
                                           onTap: () {
                                             Navigator.pop(context);
+                                            deleteSongFromFavorite(songs[index]['id']).then((value) {
+                                              final snackBar = SnackBar(
+                                                behavior: SnackBarBehavior.floating,
+                                                content: Text(
+                                                  value,
+                                                  style: TextStyle(fontFamily: 'Poppins'),
+                                                ),
+                                                backgroundColor: primaryColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                              );
+                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                              setState(() {});
+                                            });
                                           },
                                         ),
                                       ),

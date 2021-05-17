@@ -34,7 +34,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _checkInternetConnection();
   }
@@ -138,7 +137,6 @@ class _SettingsPageState extends State<SettingsPage> {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                //TODO: direct to edit profile page
                 Navigator.push(
                     context,
                     PageTransition(
@@ -163,7 +161,6 @@ class _SettingsPageState extends State<SettingsPage> {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                //TODO: direct to change password page
                 Navigator.push(
                     context,
                     PageTransition(

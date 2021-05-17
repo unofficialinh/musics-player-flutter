@@ -65,8 +65,14 @@ class _AlbumPageState extends State<AlbumPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.wifi_off, size: 80,),
-            Text('No internet', style: TextStyle(fontSize: 20),),
+            Icon(
+              Icons.wifi_off,
+              size: 80,
+            ),
+            Text(
+              'No internet',
+              style: TextStyle(fontSize: 20),
+            ),
           ],
         ),
       );
@@ -177,7 +183,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                         listen: false)
                                     .setPlaylist(songs, index);
                                 Provider.of<PlayingListModel>(context,
-                                    listen: false).audioPlayer.play();
+                                        listen: false)
+                                    .audioPlayer
+                                    .play();
                                 Navigator.push(
                                     context,
                                     PageTransition(
@@ -227,7 +235,9 @@ class _AlbumPageState extends State<AlbumPage> {
                                           children: [
                                             Text(
                                               // cai nay de la so luot nghe nhin dep hon
-                                              (1 + new Random().nextDouble() * 2).toStringAsFixed(2) + 'M plays',
+                                              (1 + new Random().nextDouble() * 2)
+                                                      .toStringAsFixed(2) +
+                                                  'M plays',
                                               style: TextStyle(
                                                   fontSize: 17,
                                                   color: Colors.grey),
@@ -260,23 +270,31 @@ class _AlbumPageState extends State<AlbumPage> {
                                             onTap: () {
                                               Navigator.pop(context);
                                               String msg;
-                                              if (Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]))
-                                                msg = 'Song added to playing list!';
+                                              if (Provider.of<PlayingListModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .addBack(songs[index]))
+                                                msg =
+                                                    'Song added to playing list!';
                                               else
-                                                msg = 'Song already in your playing list!';
+                                                msg =
+                                                    'Song already in your playing list!';
                                               final snackBar = SnackBar(
-                                                behavior: SnackBarBehavior.floating,
+                                                behavior:
+                                                    SnackBarBehavior.floating,
                                                 content: Text(
                                                   msg,
-                                                  style: TextStyle(fontFamily: 'Poppins'),
+                                                  style: TextStyle(
+                                                      fontFamily: 'Poppins'),
                                                 ),
                                                 backgroundColor: primaryColor,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                  BorderRadius.circular(10),
+                                                      BorderRadius.circular(10),
                                                 ),
                                               );
-                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
                                             },
                                           ),
                                         ),
@@ -290,6 +308,27 @@ class _AlbumPageState extends State<AlbumPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              addSongToFavorite(
+                                                      songs[index]['id'])
+                                                  .then((value) {
+                                                final snackBar = SnackBar(
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  content: Text(
+                                                    value,
+                                                    style: TextStyle(
+                                                        fontFamily: 'Poppins'),
+                                                  ),
+                                                  backgroundColor: primaryColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                              });
                                             },
                                           ),
                                         ),
@@ -306,7 +345,10 @@ class _AlbumPageState extends State<AlbumPage> {
                                               Navigator.push(
                                                   context,
                                                   PageTransition(
-                                                      child: AddToPlaylist(song_id: songs[index]['id'],),
+                                                      child: AddToPlaylist(
+                                                        song_id: songs[index]
+                                                            ['id'],
+                                                      ),
                                                       type: PageTransitionType
                                                           .bottomToTop));
                                             },
@@ -356,9 +398,12 @@ class _AlbumPageState extends State<AlbumPage> {
                             ),
                             onPressed: () {
                               Provider.of<PlayingListModel>(context,
-                                      listen: false).setPlaylist(songs, 0);
+                                      listen: false)
+                                  .setPlaylist(songs, 0);
                               Provider.of<PlayingListModel>(context,
-                                  listen: false).audioPlayer.play();
+                                      listen: false)
+                                  .audioPlayer
+                                  .play();
                               Navigator.push(
                                   context,
                                   PageTransition(
@@ -418,7 +463,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                     String msg = 'Album added to playing list!';
                                     for (int i = 0; i < songs.length; i++) {
                                       Provider.of<PlayingListModel>(context,
-                                          listen: false)
+                                              listen: false)
                                           .addBack(songs[i]);
                                     }
 
@@ -430,12 +475,11 @@ class _AlbumPageState extends State<AlbumPage> {
                                       ),
                                       backgroundColor: primaryColor,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                     );
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   },
                                 ),
                               ),
@@ -449,6 +493,22 @@ class _AlbumPageState extends State<AlbumPage> {
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
+                                    for (var i = 0; i < songs.length; i++) {
+                                      addSongToFavorite(songs[i]['id']);
+                                    }
+                                    final snackBar = SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      content: Text(
+                                        "Add album to favorite successfully.",
+                                        style: TextStyle(fontFamily: 'Poppins'),
+                                      ),
+                                      backgroundColor: primaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   },
                                 ),
                               ),

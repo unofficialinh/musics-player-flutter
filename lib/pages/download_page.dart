@@ -61,7 +61,6 @@ class _DownloadPageState extends State<DownloadPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (!isDownloaded) {
       downloadFile(uri, filename);

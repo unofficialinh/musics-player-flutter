@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/authentication/login_page.dart';
+import 'package:music_player/controller/http.dart';
 import 'package:music_player/pages/settings/change_password.dart';
 import 'package:music_player/pages/settings/edit_profile.dart';
 import 'package:music_player/pattern/color.dart';
@@ -186,6 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
               behavior: HitTestBehavior.opaque,
               onTap: () {
                 //TODO: logout
+                logout();
                 Navigator.pushReplacement(
                     context,
                     PageTransition(

@@ -4,6 +4,55 @@ import 'dart:convert';
 
 const String apiUrl = '3.141.168.131:5000';
 
+//login
+Future<dynamic> login(email, password) async {
+  final response = await http.post(
+    Uri.http(apiUrl, 'user/login'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'email': email,
+      'password': password,
+    }),
+  );
+  if (response.statusCode == 200) {
+    return json.decode(response.body)['token'];
+  } else {
+    throw Exception('Unable to fetch products from the REST API');
+  }
+}
+
+//register
+Future<dynamic> register(email, password) async {
+  final response = await http.post(
+    Uri.http(apiUrl, 'user/register'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'email': email,
+      'password': password,
+    }),
+  );
+  if (response.statusCode == 200) {
+    return json.decode(response.body)['result'];
+  } else {
+    throw Exception('Unable to fetch products from the REST API');
+  }
+}
+
+//logout
+Future<dynamic> logout() async {
+  final response =
+  await http.get(Uri.http(apiUrl, 'user/logout'));
+  if (response.statusCode == 200) {
+    return json.decode(response.body)['result'];
+  } else {
+    throw Exception('Unable to fetch products from the REST API');
+  }
+}
+
 // search album by name
 Future<List<dynamic>> searchAlbumsByName(keyword) async {
   final response = await http.get(Uri.http(apiUrl, 'album/by_name/' + keyword));

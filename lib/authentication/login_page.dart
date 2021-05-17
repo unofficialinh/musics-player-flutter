@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:music_player/controller/http.dart';
 import 'package:music_player/pattern/color.dart';
 import 'package:music_player/pages/root_app.dart';
+import 'package:music_player/pattern/snackbar.dart';
 
 const users = const {
   'linhnt149@gmail.com': '12345',
@@ -11,11 +13,19 @@ const users = const {
 class LoginPage extends StatelessWidget {
   Duration get loginTime => Duration(milliseconds: 2250);
 
-  Future<String> _authUser(LoginData data) {
-    print('Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
+  Future<String> _login(LoginData data) {
+    return login(data.name, data.password).then((value) {
       if (!users.containsKey(data.name) || users[data.name] != data.password) {
         return 'Username or password is incorrect!';
+      }
+      return null;
+    });
+  }
+
+  Future<String> _register(LoginData data) {
+    return register(data.name, data.password).then((value) {
+      if (value != null) {
+        return value;
       }
       return null;
     });
@@ -34,8 +44,8 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      onLogin: _authUser,
-      onSignup: _authUser,
+      onLogin: _login,
+      onSignup: _register,
 
       theme: LoginTheme(
         primaryColor: primaryColor,

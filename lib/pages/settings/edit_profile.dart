@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:music_player/controller/http.dart';
 import 'package:music_player/pattern/bottom_navigation.dart';
 import 'package:music_player/pattern/color.dart';
 
@@ -11,8 +13,12 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  Future<dynamic> _user;
+  Future<dynamic> _result;
   bool isConnected = true;
+  String _name;
+  String _age;
 
   Future<void> _checkInternetConnection() async {
     try {
@@ -31,9 +37,9 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _checkInternetConnection();
+    _user = getUserProfile();
   }
 
   @override
@@ -111,55 +117,88 @@ class _EditProfileState extends State<EditProfile> {
                       cursorColor: primaryColor,
                       selectionColor: primaryColor.withOpacity(0.2),
                       selectionHandleColor: primaryColor)),
-              child: Column(
-                children: [
-                  TextField(
-                    style: TextStyle(fontSize: 20),
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                        fillColor: primaryColor.withOpacity(0.1),
-                        filled: true,
-                        labelText: "Name",
-                        border: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            borderSide: BorderSide.none)),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    style: TextStyle(fontSize: 20),
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                        fillColor: primaryColor.withOpacity(0.1),
-                        filled: true,
-                        labelText: "Email",
-                        border: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            borderSide: BorderSide.none)),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    style: TextStyle(fontSize: 20),
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                        fillColor: primaryColor.withOpacity(0.1),
-                        filled: true,
-                        labelText: "Age",
-                        border: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            borderSide: BorderSide.none)),
-                  ),
-                ],
-              ),
+              child: FutureBuilder(
+                  future: _user,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var user = snapshot.data;
+                      _name = user['name'];
+                      _age = user['age'];
+                      return Column(
+                        children: [
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your name';
+                              }
+                              return null;
+                            },
+                            initialValue: user['name'],
+                            style: TextStyle(fontSize: 20),
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 8),
+                              fillColor: primaryColor.withOpacity(0.1),
+                              filled: true,
+                              labelText: "Name",
+                              border: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                  borderSide: BorderSide.none),
+                            ),
+                            onChanged: (value) => _name = value,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            readOnly: true,
+                            initialValue: user['email'],
+                            style: TextStyle(fontSize: 20),
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 8),
+                                fillColor: primaryColor.withOpacity(0.1),
+                                filled: true,
+                                labelText: "Email",
+                                border: UnderlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide.none)),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            initialValue: user['age'],
+                            style: TextStyle(fontSize: 20),
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 8),
+                              fillColor: primaryColor.withOpacity(0.1),
+                              filled: true,
+                              labelText: "Age",
+                              border: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                  borderSide: BorderSide.none),
+                            ),
+                            onChanged: (value) => _age = value,
+                          ),
+                        ],
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text("");
+                    }
+                    return Center(
+                        child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                    ));
+                  }),
             ),
           ),
           Padding(
@@ -178,23 +217,23 @@ class _EditProfileState extends State<EditProfile> {
                 style: TextStyle(fontSize: 22),
               ),
               onPressed: () {
-                // if (_formKey.currentState.validate()) {
-                //   _formKey.currentState.save();
-                // }
-                Navigator.pop(context);
-                final snackBar = SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  content: Text(
-                    "Created new playlist!",
-                    style: TextStyle(fontFamily: 'Poppins'),
-                  ),
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                //TODO: create a new playlist
+                if (_formKey.currentState.validate()) {
+                  updateUserProfile(_name, _age).then((value) {
+                    Navigator.pop(context);
+                    final snackBar = SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      content: Text(
+                        value,
+                        style: TextStyle(fontFamily: 'Poppins'),
+                      ),
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  });
+                }
               },
             ),
           )

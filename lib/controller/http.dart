@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 const String apiUrl = '3.141.168.131:5000';
 
@@ -44,8 +48,11 @@ Future<dynamic> register(email, password) async {
 
 //logout
 Future<dynamic> logout() async {
-  final response =
-  await http.get(Uri.http(apiUrl, 'user/logout'));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response = await http.get(Uri.http(apiUrl, 'user/logout'), headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ' + token,
+  });
   if (response.statusCode == 200) {
     return json.decode(response.body)['result'];
   } else {
@@ -139,7 +146,11 @@ Future<dynamic> searchArtistById(artistId) async {
 
 // get user profile
 Future<dynamic> getUserProfile() async {
-  final response = await http.get(Uri.http(apiUrl, 'user/profile'));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response = await http.get(Uri.http(apiUrl, 'user/profile'), headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ' + token,
+  });
   if (response.statusCode == 200) {
     return json.decode(response.body);
   } else {
@@ -149,10 +160,13 @@ Future<dynamic> getUserProfile() async {
 
 // update user profile
 Future<dynamic> updateUserProfile(name, age) async {
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
   final response = await http.post(
     Uri.http(apiUrl, 'user/profile'),
-    headers: <String, String>{
+    headers: {
       'Content-Type': 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: 'Bearer ' + token,
     },
     body: jsonEncode(<String, dynamic>{
       'name': name,
@@ -168,10 +182,13 @@ Future<dynamic> updateUserProfile(name, age) async {
 
 // update user password
 Future<dynamic> updateUserPassword(_old, _new, _confirm) async {
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
   final response = await http.post(
     Uri.http(apiUrl, 'user/change_password'),
-    headers: <String, String>{
+    headers: {
       'Content-Type': 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: 'Bearer ' + token,
     },
     body: jsonEncode(
         <String, dynamic>{'old': _old, 'new': _new, 'confirm': _confirm}),
@@ -185,8 +202,13 @@ Future<dynamic> updateUserPassword(_old, _new, _confirm) async {
 
 // create playlist
 Future<dynamic> createPlaylist(title) async {
-  final response = await http
-      .get(Uri.http(apiUrl, 'playlist/create', {'title': title.toString()}));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response = await http.get(
+      Uri.http(apiUrl, 'playlist/create', {'title': title.toString()}),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      });
   if (response.statusCode == 200) {
     print(json.decode(response.body));
     return json.decode(response.body)['result'];
@@ -197,7 +219,12 @@ Future<dynamic> createPlaylist(title) async {
 
 // get playlist by user
 Future<List<dynamic>> getPlaylist() async {
-  final response = await http.get(Uri.http(apiUrl, 'playlist/get_by_user'));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response =
+      await http.get(Uri.http(apiUrl, 'playlist/get_by_user'), headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ' + token,
+  });
   if (response.statusCode == 200) {
     return json.decode(response.body)['playlists'];
   } else {
@@ -207,8 +234,12 @@ Future<List<dynamic>> getPlaylist() async {
 
 // get playlist by id
 Future<dynamic> getPlaylistById(playlistId) async {
-  final response =
-      await http.get(Uri.http(apiUrl, 'playlist/' + playlistId.toString()));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response = await http
+      .get(Uri.http(apiUrl, 'playlist/' + playlistId.toString()), headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ' + token,
+  });
   if (response.statusCode == 200) {
     return json.decode(response.body);
   } else {
@@ -218,10 +249,14 @@ Future<dynamic> getPlaylistById(playlistId) async {
 
 // add song to playlist
 Future<dynamic> addSongToPlaylist(playlistId, songId) async {
-  final response = await http.get(Uri.http(
-      apiUrl,
-      'playlist/' + playlistId.toString() + '/add_song',
-      {'song_id': songId.toString()}));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response = await http.get(
+      Uri.http(apiUrl, 'playlist/' + playlistId.toString() + '/add_song',
+          {'song_id': songId.toString()}),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      });
   if (response.statusCode == 200) {
     return json.decode(response.body)['result'];
   } else {
@@ -231,10 +266,14 @@ Future<dynamic> addSongToPlaylist(playlistId, songId) async {
 
 // delete song from playlist
 Future<dynamic> deleteSongFromPlaylist(playlistId, songId) async {
-  final response = await http.get(Uri.http(
-      apiUrl,
-      'playlist/' + playlistId.toString() + '/delete_song',
-      {'song_id': songId.toString()}));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response = await http.get(
+      Uri.http(apiUrl, 'playlist/' + playlistId.toString() + '/delete_song',
+          {'song_id': songId.toString()}),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      });
   if (response.statusCode == 200) {
     return json.decode(response.body)['result'];
   } else {
@@ -244,8 +283,13 @@ Future<dynamic> deleteSongFromPlaylist(playlistId, songId) async {
 
 // delete playlist
 Future<dynamic> deletePlaylist(playlistId) async {
-  final response = await http
-      .get(Uri.http(apiUrl, 'playlist/' + playlistId.toString() + '/delete'));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response = await http.get(
+      Uri.http(apiUrl, 'playlist/' + playlistId.toString() + '/delete'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      });
   if (response.statusCode == 200) {
     return json.decode(response.body)['result'];
   } else {
@@ -255,8 +299,13 @@ Future<dynamic> deletePlaylist(playlistId) async {
 
 // add song to favorite
 Future<dynamic> addSongToFavorite(songId) async {
-  final response = await http
-      .get(Uri.http(apiUrl, 'favorite/add_song', {'song_id': songId.toString()}));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response = await http.get(
+      Uri.http(apiUrl, 'favorite/add_song', {'song_id': songId.toString()}),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      });
   if (response.statusCode == 200) {
     return json.decode(response.body)['result'];
   } else {
@@ -266,8 +315,13 @@ Future<dynamic> addSongToFavorite(songId) async {
 
 // delete song from favorite
 Future<dynamic> deleteSongFromFavorite(songId) async {
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
   final response = await http.get(
-      Uri.http(apiUrl, 'favorite/delete_song', {'song_id': songId.toString()}));
+      Uri.http(apiUrl, 'favorite/delete_song', {'song_id': songId.toString()}),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      });
   if (response.statusCode == 200) {
     return json.decode(response.body)['result'];
   } else {
@@ -277,7 +331,11 @@ Future<dynamic> deleteSongFromFavorite(songId) async {
 
 // get favorite songs
 Future<List<dynamic>> getFavoriteSong() async {
-  final response = await http.get(Uri.http(apiUrl, 'favorite/songs'));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response = await http.get(Uri.http(apiUrl, 'favorite/songs'), headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ' + token,
+  });
   if (response.statusCode == 200) {
     return json.decode(response.body)['songs'];
   } else {
@@ -287,7 +345,12 @@ Future<List<dynamic>> getFavoriteSong() async {
 
 // get favorite albums
 Future<List<dynamic>> getFavoriteAlbum() async {
-  final response = await http.get(Uri.http(apiUrl, 'favorite/albums'));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response =
+      await http.get(Uri.http(apiUrl, 'favorite/albums'), headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ' + token,
+  });
   if (response.statusCode == 200) {
     return json.decode(response.body)['albums'];
   } else {
@@ -297,7 +360,12 @@ Future<List<dynamic>> getFavoriteAlbum() async {
 
 // get favorite artists
 Future<List<dynamic>> getFavoriteArtist() async {
-  final response = await http.get(Uri.http(apiUrl, 'favorite/artists'));
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
+  final response =
+      await http.get(Uri.http(apiUrl, 'favorite/artists'), headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ' + token,
+  });
   if (response.statusCode == 200) {
     return json.decode(response.body)['artists'];
   } else {
@@ -308,5 +376,7 @@ Future<List<dynamic>> getFavoriteArtist() async {
 // check song is in favorite
 // TODO: add to API
 Future<dynamic> isFavorite(songId) async {
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
   return true;
 }

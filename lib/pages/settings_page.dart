@@ -8,6 +8,7 @@ import 'package:music_player/pages/settings/change_password.dart';
 import 'package:music_player/pages/settings/edit_profile.dart';
 import 'package:music_player/pattern/color.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../pattern/bottom_navigation.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -187,7 +188,10 @@ class _SettingsPageState extends State<SettingsPage> {
               behavior: HitTestBehavior.opaque,
               onTap: () {
                 //TODO: logout
-                logout();
+                logout().then((value) async {
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.remove('token');
+                });
                 Navigator.pushReplacement(
                     context,
                     PageTransition(

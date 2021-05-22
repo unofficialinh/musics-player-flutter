@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/authentication/login_page.dart';
 import 'package:music_player/pages/root_app.dart';
 import 'package:music_player/pattern/color.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +20,7 @@ void main() async {
                 selectionColor: primaryColor.withOpacity(0.2),
                 selectionHandleColor: primaryColor)),
         debugShowCheckedModeBanner: false,
-        home: LoginPage(),
+        home: RootApp(),
       ),
     ),
   );

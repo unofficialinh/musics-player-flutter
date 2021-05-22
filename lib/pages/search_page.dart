@@ -342,7 +342,16 @@ class _SearchPageState extends State<SearchPage> {
                                               showDialog(
                                                   context: context,
                                                   builder: (_) =>
-                                                      DownloadPage());
+                                                      DownloadPage(uri: songs[index]['img']))
+                                              .then((_) =>
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (_) =>
+                                                        DownloadPage(uri: songs[index]['mp3']))
+                                              )
+                                              .then((_) =>
+                                                print('ok')
+                                              );
                                             },
                                           ),
                                         ),

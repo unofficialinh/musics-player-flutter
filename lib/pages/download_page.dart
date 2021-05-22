@@ -1,11 +1,13 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/pattern/color.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:music_player/controller/local_file.dart';
 
 class DownloadPage extends StatefulWidget {
+  final String uri;
+
+  const DownloadPage({Key key, this.uri}) : super(key: key);
+
   @override
   _DownloadPageState createState() => _DownloadPageState();
 }
@@ -14,15 +16,14 @@ class _DownloadPageState extends State<DownloadPage> {
   bool downloading = false;
   double progress = 0;
   bool isDownloaded = false;
-  String uri = 'http://3.141.168.131:5000/mp3/glitter.mp3';
-  String filename = 'test';
+  String filename;
 
-  Future<void> downloadFile(uri, fileName) async {
+  Future<void> downloadFile(uri) async {
     setState(() {
       downloading = true;
     });
 
-    String savePath = await getFilePath(fileName);
+    String savePath = await getFilePath(filename);
     Dio dio = Dio();
 
     dio.download(
@@ -53,9 +54,9 @@ class _DownloadPageState extends State<DownloadPage> {
 
   Future<String> getFilePath(uniqueFileName) async {
     String path = '';
-    Directory dir = await getApplicationDocumentsDirectory();
-    path = '${dir.path}/$uniqueFileName.jpg';
-    print(path);
+    String dir = await getDownloadPath();
+    path = '${dir}/$uniqueFileName';
+    // print(path);
     return path;
   }
 
@@ -64,7 +65,8 @@ class _DownloadPageState extends State<DownloadPage> {
     // TODO: implement initState
     super.initState();
     if (!isDownloaded) {
-      downloadFile(uri, filename);
+      filename = widget.uri.substring(widget.uri.lastIndexOf("/") + 1);
+      downloadFile(widget.uri);
     }
   }
 
@@ -113,7 +115,7 @@ class _DownloadPageState extends State<DownloadPage> {
             SizedBox(
               height: 25,
             ),
-            isDownloaded ? Text('Download completed') : Text("Downloading"),
+            isDownloaded ? Text('Download ${filename} completed') : Text("Downloading"),
           ],
         )
       ]),

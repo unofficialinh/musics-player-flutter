@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/controller/http.dart';
 import 'package:music_player/pattern/color.dart';
+import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'playing_list_page.dart';
 
-class ControlButtons extends StatelessWidget {
+class ControlButtons extends StatefulWidget {
   final AudioPlayer audioPlayer;
+  final dynamic song_id;
 
-  const ControlButtons(this.audioPlayer, {Key key}) : super(key: key);
+  const ControlButtons(this.audioPlayer, {Key key, this.song_id})
+      : super(key: key);
+
+  @override
+  _ControlButtonsState createState() => _ControlButtonsState();
+}
+
+class _ControlButtonsState extends State<ControlButtons> {
+  bool isFav = true;
 
   @override
   Widget build(BuildContext context) {
@@ -25,28 +36,29 @@ class ControlButtons extends StatelessWidget {
                 color: Colors.black,
               ),
               onPressed: () {
-                if (audioPlayer.position.inSeconds.toInt() > 30)
-                  audioPlayer.seek(Duration(
-                      seconds: audioPlayer.position.inSeconds.toInt() - 30));
+                if (widget.audioPlayer.position.inSeconds.toInt() > 30)
+                  widget.audioPlayer.seek(Duration(
+                      seconds:
+                          widget.audioPlayer.position.inSeconds.toInt() - 30));
                 else
-                  audioPlayer.seek(Duration.zero);
+                  widget.audioPlayer.seek(Duration.zero);
               },
             ),
             StreamBuilder<SequenceState>(
-              stream: audioPlayer.sequenceStateStream,
+              stream: widget.audioPlayer.sequenceStateStream,
               builder: (_, __) {
                 return previousButton();
               },
             ),
             StreamBuilder<PlayerState>(
-              stream: audioPlayer.playerStateStream,
+              stream: widget.audioPlayer.playerStateStream,
               builder: (_, snapshot) {
                 final playerState = snapshot.data;
                 return playPauseButton(playerState);
               },
             ),
             StreamBuilder<SequenceState>(
-              stream: audioPlayer.sequenceStateStream,
+              stream: widget.audioPlayer.sequenceStateStream,
               builder: (_, __) {
                 return nextButton();
               },
@@ -58,12 +70,13 @@ class ControlButtons extends StatelessWidget {
                 color: Colors.black,
               ),
               onPressed: () {
-                if (audioPlayer.position.inSeconds.toInt() + 30 <
-                    audioPlayer.duration.inSeconds.toInt())
-                  audioPlayer.seek(Duration(
-                      seconds: audioPlayer.position.inSeconds.toInt() + 30));
+                if (widget.audioPlayer.position.inSeconds.toInt() + 30 <
+                    widget.audioPlayer.duration.inSeconds.toInt())
+                  widget.audioPlayer.seek(Duration(
+                      seconds:
+                          widget.audioPlayer.position.inSeconds.toInt() + 30));
                 else
-                  audioPlayer.seek(audioPlayer.duration);
+                  widget.audioPlayer.seek(widget.audioPlayer.duration);
               },
             ),
           ],
@@ -73,21 +86,20 @@ class ControlButtons extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                  iconSize: 25,
-                  icon: Icon(
-                    Icons.favorite,
-                    color: primaryColor,
-                  ),
-                  onPressed: null),
+              FutureBuilder(
+                future: isFavorite(widget.song_id),
+                builder: (context, snapshot) {
+                  return favoriteButton(context, snapshot.data);
+                },
+              ),
               StreamBuilder<bool>(
-                stream: audioPlayer.shuffleModeEnabledStream,
+                stream: widget.audioPlayer.shuffleModeEnabledStream,
                 builder: (context, snapshot) {
                   return shuffleButton(context, snapshot.data ?? false);
                 },
               ),
               StreamBuilder<LoopMode>(
-                stream: audioPlayer.loopModeStream,
+                stream: widget.audioPlayer.loopModeStream,
                 builder: (context, snapshot) {
                   return repeatButton(context, snapshot.data ?? LoopMode.off);
                 },
@@ -123,9 +135,9 @@ class ControlButtons extends StatelessWidget {
         onPressed: () async {
           final enable = !isEnable;
           if (enable) {
-            await audioPlayer.shuffle();
+            await widget.audioPlayer.shuffle();
           }
-          await audioPlayer.setShuffleModeEnabled(enable);
+          await widget.audioPlayer.setShuffleModeEnabled(enable);
         });
   }
 
@@ -133,7 +145,9 @@ class ControlButtons extends StatelessWidget {
     return IconButton(
         iconSize: 40,
         icon: Icon(Icons.skip_previous_rounded),
-        onPressed: audioPlayer.hasPrevious ? audioPlayer.seekToPrevious : null);
+        onPressed: widget.audioPlayer.hasPrevious
+            ? widget.audioPlayer.seekToPrevious
+            : null);
   }
 
   Widget playPauseButton(PlayerState playerState) {
@@ -148,14 +162,14 @@ class ControlButtons extends StatelessWidget {
             color: primaryColor,
           ),
           onPressed: null);
-    } else if (audioPlayer.playing != true) {
+    } else if (widget.audioPlayer.playing != true) {
       return IconButton(
           iconSize: 80,
           icon: Icon(
             Icons.play_circle_fill_rounded,
             color: primaryColor,
           ),
-          onPressed: audioPlayer.play);
+          onPressed: widget.audioPlayer.play);
     } else if (processingState != ProcessingState.completed) {
       return IconButton(
           iconSize: 80,
@@ -163,17 +177,18 @@ class ControlButtons extends StatelessWidget {
             Icons.pause_circle_filled,
             color: primaryColor,
           ),
-          onPressed: audioPlayer.pause);
+          onPressed: widget.audioPlayer.pause);
     } else {
-      audioPlayer.seek(Duration.zero, index: audioPlayer.effectiveIndices.first);
-      audioPlayer.pause();
+      widget.audioPlayer.seek(Duration.zero,
+          index: widget.audioPlayer.effectiveIndices.first);
+      widget.audioPlayer.pause();
       return IconButton(
         iconSize: 80,
         icon: Icon(
           Icons.play_circle_fill_rounded,
           color: primaryColor,
         ),
-        onPressed: () => audioPlayer.play,
+        onPressed: () => widget.audioPlayer.play,
       );
     }
   }
@@ -182,7 +197,8 @@ class ControlButtons extends StatelessWidget {
     return IconButton(
         iconSize: 40,
         icon: Icon(Icons.skip_next_rounded),
-        onPressed: audioPlayer.hasNext ? audioPlayer.seekToNext : null);
+        onPressed:
+            widget.audioPlayer.hasNext ? widget.audioPlayer.seekToNext : null);
   }
 
   Widget repeatButton(BuildContext context, LoopMode loopMode) {
@@ -204,8 +220,40 @@ class ControlButtons extends StatelessWidget {
     return IconButton(
         icon: icons[index],
         onPressed: () {
-          audioPlayer.setLoopMode(cycleModes[
+          widget.audioPlayer.setLoopMode(cycleModes[
               (cycleModes.indexOf(loopMode) + 1) % cycleModes.length]);
         });
+  }
+
+  Widget favoriteButton(BuildContext context, isFavorite ) {
+    //TODO: change to future variable
+    if (isFav) {
+      return IconButton(
+        iconSize: 25,
+        icon: Icon(
+          Icons.favorite,
+          color: primaryColor,
+        ),
+        onPressed: () {
+          deleteSongFromFavorite(widget.song_id).then((value) {
+            snackBar(context, value);
+          });
+          setState(() {isFav = !isFav;});
+        },
+      );
+    } else
+      return IconButton(
+        iconSize: 25,
+        icon: Icon(
+          Icons.favorite_border,
+          color: primaryColor,
+        ),
+        onPressed: () {
+          addSongToFavorite(widget.song_id).then((value) {
+            snackBar(context, value);
+          });
+          setState(() {isFav = !isFav;});
+        },
+      );
   }
 }

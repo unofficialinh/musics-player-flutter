@@ -62,7 +62,6 @@ class _DownloadPageState extends State<DownloadPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (!isDownloaded) {
       filename = widget.uri.substring(widget.uri.lastIndexOf("/") + 1);

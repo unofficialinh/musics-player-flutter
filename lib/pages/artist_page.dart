@@ -2,9 +2,11 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:music_player/pattern/bottom_navigation.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
+import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -63,8 +65,14 @@ class _ArtistPageState extends State<ArtistPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.wifi_off, size: 80,),
-            Text('No internet', style: TextStyle(fontSize: 20),),
+            Icon(
+              Icons.wifi_off,
+              size: 80,
+            ),
+            Text(
+              'No internet',
+              style: TextStyle(fontSize: 20),
+            ),
           ],
         ),
       );
@@ -168,8 +176,13 @@ class _ArtistPageState extends State<ArtistPage> {
                                 left: 30, right: 30, bottom: 10),
                             child: GestureDetector(
                               onTap: () {
-                                Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, index);
-                                Provider.of<PlayingListModel>(context, listen: false).audioPlayer.play();
+                                Provider.of<PlayingListModel>(context,
+                                        listen: false)
+                                    .setPlaylist(songs, index);
+                                Provider.of<PlayingListModel>(context,
+                                        listen: false)
+                                    .audioPlayer
+                                    .play();
                                 Navigator.push(
                                     context,
                                     PageTransition(
@@ -215,7 +228,9 @@ class _ArtistPageState extends State<ArtistPage> {
                                           children: [
                                             Text(
                                               // cai nay de la so luot nghe nhin dep hon
-                                              (1 + new Random().nextDouble() * 2).toStringAsFixed(2) + 'M plays',
+                                              (1 + new Random().nextDouble() * 2)
+                                                      .toStringAsFixed(2) +
+                                                  'M plays',
                                               style: TextStyle(
                                                   fontSize: 17,
                                                   color: Colors.grey),
@@ -235,9 +250,9 @@ class _ArtistPageState extends State<ArtistPage> {
                                       offset: Offset(0, 10),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(10)),
+                                              BorderRadius.circular(10)),
                                       itemBuilder: (BuildContext context) =>
-                                      <PopupMenuEntry>[
+                                          <PopupMenuEntry>[
                                         PopupMenuItem(
                                           child: ListTile(
                                             title: Text('Play next'),
@@ -248,23 +263,16 @@ class _ArtistPageState extends State<ArtistPage> {
                                             onTap: () {
                                               Navigator.pop(context);
                                               String msg;
-                                              if (Provider.of<PlayingListModel>(context, listen: false).addBack(songs[index]))
-                                                msg = 'Song added to playing list!';
+                                              if (Provider.of<PlayingListModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .addBack(songs[index]))
+                                                msg =
+                                                    'Song added to playing list!';
                                               else
-                                                msg = 'Song already in your playing list!';
-                                              final snackBar = SnackBar(
-                                                behavior: SnackBarBehavior.floating,
-                                                content: Text(
-                                                  msg,
-                                                  style: TextStyle(fontFamily: 'Poppins'),
-                                                ),
-                                                backgroundColor: primaryColor,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                  BorderRadius.circular(10),
-                                                ),
-                                              );
-                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                                msg =
+                                                    'Song already in your playing list!';
+                                              snackBar(context, msg);
                                             },
                                           ),
                                         ),
@@ -278,6 +286,9 @@ class _ArtistPageState extends State<ArtistPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              addSongToFavorite(songs[index]['id']).then((value) {
+                                                snackBar(context, value);
+                                              });
                                             },
                                           ),
                                         ),
@@ -291,6 +302,15 @@ class _ArtistPageState extends State<ArtistPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      child: AddToPlaylist(
+                                                        song_id: songs[index]
+                                                            ['id'],
+                                                      ),
+                                                      type: PageTransitionType
+                                                          .bottomToTop));
                                             },
                                           ),
                                         ),
@@ -384,7 +404,9 @@ class _ArtistPageState extends State<ArtistPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20,)
+                      SizedBox(
+                        height: 20,
+                      )
                     ]),
                     Container(
                       height: 80,
@@ -406,8 +428,13 @@ class _ArtistPageState extends State<ArtistPage> {
                               color: primaryColor,
                             ),
                             onPressed: () {
-                              Provider.of<PlayingListModel>(context, listen: false).setPlaylist(songs, 0);
-                              Provider.of<PlayingListModel>(context, listen: false).audioPlayer.play();
+                              Provider.of<PlayingListModel>(context,
+                                      listen: false)
+                                  .setPlaylist(songs, 0);
+                              Provider.of<PlayingListModel>(context,
+                                      listen: false)
+                                  .audioPlayer
+                                  .play();
                               Navigator.push(
                                   context,
                                   PageTransition(
@@ -445,29 +472,9 @@ class _ArtistPageState extends State<ArtistPage> {
                           decoration: BoxDecoration(
                               color: Colors.black.withOpacity(0.1),
                               shape: BoxShape.circle),
-                          child: PopupMenuButton(
-                            icon: Icon(
-                              Icons.more_vert,
-                              color: Colors.white,
-                            ),
-                            offset: Offset(0, 7),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            itemBuilder: (BuildContext context) =>
-                            <PopupMenuEntry>[
-                              PopupMenuItem(
-                                child: ListTile(
-                                  title: Text('Favorite'),
-                                  trailing: Icon(
-                                    Icons.favorite_border,
-                                    color: primaryColor,
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                            ],
+                          child: Icon(
+                            Icons.more_vert,
+                            color: Colors.white,
                           ),
                         ),
                       ],

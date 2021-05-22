@@ -242,7 +242,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                     ),
                   ),
                   SeekBar(audioPlayer),
-                  ControlButtons(audioPlayer),
+                  ControlButtons(audioPlayer, song_id: songs[audioPlayer.currentIndex]['id'],),
                 ],
               );
             });

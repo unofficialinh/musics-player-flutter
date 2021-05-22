@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/pattern/bottom_navigation.dart';
 import 'package:music_player/pattern/color.dart';
+import 'package:music_player/pattern/snackbar.dart';
 
 import 'new_playlist.dart';
 
 class AddToPlaylist extends StatefulWidget {
+  final dynamic song_id;
+
+  const AddToPlaylist({Key key, this.song_id}) : super(key: key);
+
   @override
   _AddToPlaylistState createState() => _AddToPlaylistState();
 }
@@ -33,10 +38,9 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _checkInternetConnection();
-    _playlists = searchAlbumsByName('love');
+    _playlists = getPlaylist();
   }
 
   @override
@@ -137,7 +141,10 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                     children: List.generate(playlists.length, (index) {
                       return GestureDetector(
                         onTap: () {
-                          //TODO: add selected song(s) to chosen playlist
+                          addSongToPlaylist(playlists[index]['id'], widget.song_id).then((value) {
+                            snackBar(context, value);
+                            Navigator.pop(context);
+                          });
                         },
                         child: Padding(
                           padding:
@@ -150,7 +157,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                            playlists[index]['img']),
+                                            playlistImg),
                                         fit: BoxFit.cover),
                                     borderRadius: BorderRadius.circular(10),
                                     color: primaryColor),

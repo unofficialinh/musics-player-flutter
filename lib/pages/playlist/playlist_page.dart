@@ -1,31 +1,28 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/player/music_detail_page.dart';
-import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../pattern/bottom_navigation.dart';
-import '../pattern/color.dart';
-import 'artist_page.dart';
+import '../../pattern/bottom_navigation.dart';
+import '../../pattern/color.dart';
 
-class AlbumPage extends StatefulWidget {
-  final dynamic album_id;
+class PlaylistPage extends StatefulWidget {
+  final dynamic playlist_id;
 
-  const AlbumPage({Key key, this.album_id}) : super(key: key);
+  const PlaylistPage({Key key, this.playlist_id}) : super(key: key);
 
   @override
-  _AlbumPageState createState() => _AlbumPageState();
+  _PlaylistPageState createState() => _PlaylistPageState();
 }
 
-class _AlbumPageState extends State<AlbumPage> {
-  Future<dynamic> _album;
+class _PlaylistPageState extends State<PlaylistPage> {
+  Future<dynamic> _playlist;
   bool isConnected = true;
 
   Future<void> _checkInternetConnection() async {
@@ -46,7 +43,7 @@ class _AlbumPageState extends State<AlbumPage> {
   @override
   void initState() {
     super.initState();
-    _album = searchAlbumById(widget.album_id);
+    _playlist = getPlaylistById(widget.playlist_id);
     _checkInternetConnection();
   }
 
@@ -81,11 +78,11 @@ class _AlbumPageState extends State<AlbumPage> {
 
     var size = MediaQuery.of(context).size;
     return FutureBuilder<dynamic>(
-        future: _album,
+        future: _playlist,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var album = snapshot.data;
-            var songs = album['songs'];
+            var playlist = snapshot.data;
+            var songs = playlist['songs'];
 
             return SingleChildScrollView(
               child: Stack(
@@ -97,7 +94,7 @@ class _AlbumPageState extends State<AlbumPage> {
                         height: size.width,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(album['img']),
+                              image: NetworkImage(playlistImg),
                               fit: BoxFit.cover),
                         ),
                         child: Container(
@@ -124,7 +121,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                   child: Row(
                                     children: [
                                       Text(
-                                        'ALBUM',
+                                        'PLAYLIST',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 20,
@@ -139,7 +136,7 @@ class _AlbumPageState extends State<AlbumPage> {
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          album['title'],
+                                          playlist['title'],
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -232,18 +229,19 @@ class _AlbumPageState extends State<AlbumPage> {
                                             ),
                                           ],
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              // cai nay de la so luot nghe nhin dep hon
-                                              (1 + new Random().nextDouble() * 2)
-                                                      .toStringAsFixed(2) +
-                                                  'M plays',
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.grey),
-                                            ),
-                                          ],
+                                        Flexible(
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                songs[index]['artist'],
+                                                style: TextStyle(
+                                                    fontSize: 17,
+                                                    color: Colors.grey),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -294,33 +292,24 @@ class _AlbumPageState extends State<AlbumPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
-                                              addSongToFavorite(
-                                                      songs[index]['id'])
-                                                  .then((value) {
-                                                snackBar(context, value);
-                                              });
                                             },
                                           ),
                                         ),
                                         PopupMenuDivider(),
                                         PopupMenuItem(
                                           child: ListTile(
-                                            title: Text('Add to playlist'),
+                                            title: Text(
+                                                'Remove'),
                                             trailing: Icon(
-                                              Icons.add_rounded,
+                                              Icons.delete_outline,
                                               color: primaryColor,
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
-                                              Navigator.push(
-                                                  context,
-                                                  PageTransition(
-                                                      child: AddToPlaylist(
-                                                        song_id: songs[index]
-                                                            ['id'],
-                                                      ),
-                                                      type: PageTransitionType
-                                                          .bottomToTop));
+                                              deleteSongFromPlaylist(playlist['id'], songs[index]['id']).then((value) {
+                                                snackBar(context, value);
+                                                setState(() {});
+                                              });
                                             },
                                           ),
                                         ),
@@ -430,7 +419,8 @@ class _AlbumPageState extends State<AlbumPage> {
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
-                                    String msg = 'Album added to playing list!';
+                                    String msg =
+                                        'Playlist added to playing list!';
                                     for (int i = 0; i < songs.length; i++) {
                                       Provider.of<PlayingListModel>(context,
                                               listen: false)
@@ -450,10 +440,23 @@ class _AlbumPageState extends State<AlbumPage> {
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
-                                    for (var i = 0; i < songs.length; i++) {
-                                      addSongToFavorite(songs[i]['id']);
-                                    }
-                                    snackBar(context, "Add album to favorite successfully.");
+                                  },
+                                ),
+                              ),
+                              PopupMenuDivider(),
+                              PopupMenuItem(
+                                child: ListTile(
+                                  title: Text('Delete'),
+                                  trailing: Icon(
+                                    Icons.delete_outline,
+                                    color: primaryColor,
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    deletePlaylist(playlist['id']).then((value) {
+                                      snackBar(context, value);
+                                      Navigator.pop(context);
+                                    });
                                   },
                                 ),
                               ),
@@ -467,28 +470,6 @@ class _AlbumPageState extends State<AlbumPage> {
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                              PopupMenuDivider(),
-                              PopupMenuItem(
-                                child: ListTile(
-                                  title: Text('Artist'),
-                                  trailing: Icon(
-                                    Icons.person,
-                                    color: primaryColor,
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                        context,
-                                        PageTransition(
-                                            alignment: Alignment.bottomCenter,
-                                            child: ArtistPage(
-                                              artist_id: album['artist_id'],
-                                            ),
-                                            type: PageTransitionType
-                                                .rightToLeft));
                                   },
                                 ),
                               ),

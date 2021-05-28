@@ -357,9 +357,7 @@ class _SearchPageState extends State<SearchPage> {
                                                     builder: (_) =>
                                                         DownloadPage(uri: songs[index]['mp3']))
                                               )
-                                              .then((_) =>
-                                                print('ok')
-                                              );
+                                              ;
                                             },
                                           ),
                                         ),

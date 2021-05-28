@@ -19,7 +19,8 @@ class _EditProfileState extends State<EditProfile> {
   bool isConnected = true;
   String _name;
   String _age;
-
+  String _email;
+  
   Future<void> _checkInternetConnection() async {
     try {
       final response = await InternetAddress.lookup('www.google.com');
@@ -123,7 +124,8 @@ class _EditProfileState extends State<EditProfile> {
                     if (snapshot.hasData) {
                       var user = snapshot.data;
                       _name = user['name'];
-                      _age = user['age'];
+                      _age = user['age'].toString();
+                      _email = user['email'];
                       return Column(
                         children: [
                           TextFormField(
@@ -133,7 +135,7 @@ class _EditProfileState extends State<EditProfile> {
                               }
                               return null;
                             },
-                            initialValue: user['name'],
+                            initialValue: _name,
                             style: TextStyle(fontSize: 20),
                             maxLines: 1,
                             decoration: InputDecoration(
@@ -153,7 +155,7 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                           TextFormField(
                             readOnly: true,
-                            initialValue: user['email'],
+                            initialValue: _email,
                             style: TextStyle(fontSize: 20),
                             maxLines: 1,
                             decoration: InputDecoration(
@@ -174,7 +176,7 @@ class _EditProfileState extends State<EditProfile> {
                             inputFormatters: [
                               FilteringTextInputFormatter.digitsOnly,
                             ],
-                            initialValue: user['age'],
+                            initialValue: _age,
                             style: TextStyle(fontSize: 20),
                             maxLines: 1,
                             decoration: InputDecoration(

@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
+import 'package:music_player/controller/local_file.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/artist_page.dart';
 import 'package:music_player/pages/playlist/add_song_playlist.dart';
@@ -15,6 +17,7 @@ import 'package:provider/provider.dart';
 import '../pattern/bottom_navigation.dart';
 import '../pattern/color.dart';
 import 'album_page.dart';
+import 'download_page.dart';
 import 'player/music_detail_page.dart';
 
 class LibraryPage extends StatefulWidget {
@@ -62,7 +65,7 @@ class _LibraryPageState extends State<LibraryPage> {
     _albums = getFavoriteAlbum();
     _playlists = getPlaylist();
     _artists = getFavoriteArtist();
-    _downloaded = searchSongsByName('the');
+    _downloaded = getDownloadedSong();
     _checkInternetConnection();
   }
 
@@ -306,6 +309,18 @@ class _LibraryPageState extends State<LibraryPage> {
                                           ),
                                           onTap: () {
                                             Navigator.pop(context);
+                                            showDialog(
+                                                context: context,
+                                                builder: (_) =>
+                                                    DownloadPage(uri: songs[index]['img']))
+                                                .then((_) =>
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (_) =>
+                                                        DownloadPage(uri: songs[index]['mp3']))
+                                            )
+                                              ;
+
                                           },
                                         ),
                                       ),
@@ -441,6 +456,7 @@ class _LibraryPageState extends State<LibraryPage> {
                     onTap: () {
                       showDialog(
                         context: context,
+                        // TODO: create playlist not update immediately
                         builder: (_) => NewPlaylist(),
                       );
                     },

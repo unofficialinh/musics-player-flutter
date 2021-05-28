@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../pattern/bottom_navigation.dart';
 import '../pattern/color.dart';
 import 'artist_page.dart';
+import 'download_page.dart';
 
 class AlbumPage extends StatefulWidget {
   final dynamic album_id;
@@ -334,6 +335,17 @@ class _AlbumPageState extends State<AlbumPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      DownloadPage(uri: songs[index]['img']))
+                                                  .then((_) =>
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (_) =>
+                                                          DownloadPage(uri: songs[index]['mp3']))
+                                              )
+                                                ;
                                             },
                                           ),
                                         ),

@@ -187,7 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                //TODO: logout
+                //TODO: logout reset audioplayer
                 logout().then((value) async {
                   final prefs = await SharedPreferences.getInstance();
                   prefs.remove('token');

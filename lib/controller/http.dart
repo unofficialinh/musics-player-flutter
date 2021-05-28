@@ -6,8 +6,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String apiUrl = '3.141.168.131:5000';
-
+const String apiUrl = 'ec2-3-15-191-150.us-east-2.compute.amazonaws.com';
+// TODO: do main case first (200 status code), solve alternative case later (404, 400, 500 error)
 //login
 Future<dynamic> login(email, password) async {
   final response = await http.post(
@@ -20,10 +20,10 @@ Future<dynamic> login(email, password) async {
       'password': password,
     }),
   );
-  if (response.statusCode == 200) {
-    return json.decode(response.body)['token'];
+  if (response.statusCode != null) {
+    return json.decode(response.body);
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -39,10 +39,10 @@ Future<dynamic> register(email, password) async {
       'password': password,
     }),
   );
-  if (response.statusCode == 200) {
-    return json.decode(response.body)['result'];
+  if (response.statusCode != null) {
+    return response;
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -53,20 +53,20 @@ Future<dynamic> logout() async {
   final response = await http.get(Uri.http(apiUrl, 'user/logout'), headers: {
     HttpHeaders.authorizationHeader: 'Bearer ' + token,
   });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['result'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
 // search album by name
 Future<List<dynamic>> searchAlbumsByName(keyword) async {
-  final response = await http.get(Uri.http(apiUrl, 'album/by_name/' + keyword));
-  if (response.statusCode == 200) {
+  final response = await http.get(Uri.http(apiUrl, 'albums', {"q": keyword}));
+  if (response.statusCode != null) {
     return json.decode(response.body)['albums'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -74,30 +74,30 @@ Future<List<dynamic>> searchAlbumsByName(keyword) async {
 Future<dynamic> searchAlbumById(albumId) async {
   final response =
       await http.get(Uri.http(apiUrl, 'album/' + albumId.toString()));
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body);
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
 // search songs by name
 Future<List<dynamic>> searchSongsByName(keyword) async {
-  final response = await http.get(Uri.http(apiUrl, 'song/by_name/' + keyword));
-  if (response.statusCode == 200) {
+  final response = await http.get(Uri.http(apiUrl, 'songs', {"q": keyword}));
+  if (response.statusCode != null) {
     return json.decode(response.body)['songs'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
 // search song by id
 Future<dynamic> searchSongById(songId) async {
   final response = await http.get(Uri.http(apiUrl, songId.toString()));
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body);
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -105,31 +105,31 @@ Future<dynamic> searchSongById(songId) async {
 Future<List<dynamic>> searchNewestAlbums(num) async {
   final response =
       await http.get(Uri.http(apiUrl, 'album/newest/' + num.toString()));
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['albums'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
 Future<List<dynamic>> searchRecommendedAlbums(num) async {
   final response =
       await http.get(Uri.http(apiUrl, 'album/recommend/' + num.toString()));
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['albums'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
 // search artists by name
 Future<List<dynamic>> searchArtistsByName(keyword) async {
   final response =
-      await http.get(Uri.http(apiUrl, 'artist/by_name/' + keyword));
-  if (response.statusCode == 200) {
+      await http.get(Uri.http(apiUrl, 'artists', {"q": keyword}));
+  if (response.statusCode != null) {
     return json.decode(response.body)['artists'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -137,10 +137,10 @@ Future<List<dynamic>> searchArtistsByName(keyword) async {
 Future<dynamic> searchArtistById(artistId) async {
   final response =
       await http.get(Uri.http(apiUrl, 'artist/' + artistId.toString()));
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body);
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -151,10 +151,10 @@ Future<dynamic> getUserProfile() async {
   final response = await http.get(Uri.http(apiUrl, 'user/profile'), headers: {
     HttpHeaders.authorizationHeader: 'Bearer ' + token,
   });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body);
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -173,10 +173,10 @@ Future<dynamic> updateUserProfile(name, age) async {
       'age': age,
     }),
   );
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['result'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -185,18 +185,18 @@ Future<dynamic> updateUserPassword(_old, _new, _confirm) async {
   final prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
   final response = await http.post(
-    Uri.http(apiUrl, 'user/change_password'),
+    Uri.http(apiUrl, 'user/profile/password'),
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       HttpHeaders.authorizationHeader: 'Bearer ' + token,
     },
     body: jsonEncode(
-        <String, dynamic>{'old': _old, 'new': _new, 'confirm': _confirm}),
+        <String, dynamic>{'old_password': _old, 'new_password': _new}),
   );
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['result'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -204,16 +204,19 @@ Future<dynamic> updateUserPassword(_old, _new, _confirm) async {
 Future<dynamic> createPlaylist(title) async {
   final prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
-  final response = await http.get(
-      Uri.http(apiUrl, 'playlist/create', {'title': title.toString()}),
+  final response = await http.post(
+      Uri.http(apiUrl, 'playlist'),
       headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: 'Bearer ' + token,
-      });
-  if (response.statusCode == 200) {
-    print(json.decode(response.body));
+      },
+      body: jsonEncode(
+        <String, dynamic>{'title': title}),
+  );
+  if (response.statusCode != null) {
     return json.decode(response.body)['result'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -222,13 +225,13 @@ Future<List<dynamic>> getPlaylist() async {
   final prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
   final response =
-      await http.get(Uri.http(apiUrl, 'playlist/get_by_user'), headers: {
+      await http.get(Uri.http(apiUrl, 'playlists'), headers: {
     HttpHeaders.authorizationHeader: 'Bearer ' + token,
   });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['playlists'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -240,10 +243,10 @@ Future<dynamic> getPlaylistById(playlistId) async {
       .get(Uri.http(apiUrl, 'playlist/' + playlistId.toString()), headers: {
     HttpHeaders.authorizationHeader: 'Bearer ' + token,
   });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body);
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -251,16 +254,15 @@ Future<dynamic> getPlaylistById(playlistId) async {
 Future<dynamic> addSongToPlaylist(playlistId, songId) async {
   final prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
-  final response = await http.get(
-      Uri.http(apiUrl, 'playlist/' + playlistId.toString() + '/add_song',
-          {'song_id': songId.toString()}),
+  final response = await http.put(
+      Uri.http(apiUrl, 'playlist/' + playlistId.toString() + '/song/' + songId.toString()),
       headers: {
         HttpHeaders.authorizationHeader: 'Bearer ' + token,
       });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['result'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -268,16 +270,15 @@ Future<dynamic> addSongToPlaylist(playlistId, songId) async {
 Future<dynamic> deleteSongFromPlaylist(playlistId, songId) async {
   final prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
-  final response = await http.get(
-      Uri.http(apiUrl, 'playlist/' + playlistId.toString() + '/delete_song',
-          {'song_id': songId.toString()}),
+  final response = await http.delete(
+      Uri.http(apiUrl, 'playlist/' + playlistId.toString() + '/song/' + songId.toString()),
       headers: {
         HttpHeaders.authorizationHeader: 'Bearer ' + token,
       });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['result'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -285,15 +286,15 @@ Future<dynamic> deleteSongFromPlaylist(playlistId, songId) async {
 Future<dynamic> deletePlaylist(playlistId) async {
   final prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
-  final response = await http.get(
-      Uri.http(apiUrl, 'playlist/' + playlistId.toString() + '/delete'),
+  final response = await http.delete(
+      Uri.http(apiUrl, 'playlist/' + playlistId.toString()),
       headers: {
         HttpHeaders.authorizationHeader: 'Bearer ' + token,
       });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['result'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -301,15 +302,15 @@ Future<dynamic> deletePlaylist(playlistId) async {
 Future<dynamic> addSongToFavorite(songId) async {
   final prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
-  final response = await http.get(
-      Uri.http(apiUrl, 'favorite/add_song', {'song_id': songId.toString()}),
+  final response = await http.put(
+      Uri.http(apiUrl, 'favorite/song/' + songId.toString()),
       headers: {
         HttpHeaders.authorizationHeader: 'Bearer ' + token,
       });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['result'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -317,15 +318,15 @@ Future<dynamic> addSongToFavorite(songId) async {
 Future<dynamic> deleteSongFromFavorite(songId) async {
   final prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
-  final response = await http.get(
-      Uri.http(apiUrl, 'favorite/delete_song', {'song_id': songId.toString()}),
+  final response = await http.delete(
+      Uri.http(apiUrl, 'favorite/song/' + songId.toString()),
       headers: {
         HttpHeaders.authorizationHeader: 'Bearer ' + token,
       });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['result'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -336,10 +337,10 @@ Future<List<dynamic>> getFavoriteSong() async {
   final response = await http.get(Uri.http(apiUrl, 'favorite/songs'), headers: {
     HttpHeaders.authorizationHeader: 'Bearer ' + token,
   });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['songs'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -351,10 +352,10 @@ Future<List<dynamic>> getFavoriteAlbum() async {
       await http.get(Uri.http(apiUrl, 'favorite/albums'), headers: {
     HttpHeaders.authorizationHeader: 'Bearer ' + token,
   });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['albums'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
@@ -366,17 +367,30 @@ Future<List<dynamic>> getFavoriteArtist() async {
       await http.get(Uri.http(apiUrl, 'favorite/artists'), headers: {
     HttpHeaders.authorizationHeader: 'Bearer ' + token,
   });
-  if (response.statusCode == 200) {
+  if (response.statusCode != null) {
     return json.decode(response.body)['artists'];
   } else {
-    throw Exception('Unable to fetch products from the REST API');
+    throw Exception('Unable to connect to REST API');
   }
 }
 
 // check song is in favorite
-// TODO: add to API
 Future<dynamic> isFavorite(songId) async {
   final prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
-  return true;
+  final response = await http.get(Uri.http(apiUrl, 'favorite/songs'), headers: {
+    HttpHeaders.authorizationHeader: 'Bearer ' + token,
+  });
+  if (response.statusCode != null) {
+    dynamic songs = json.decode(response.body)['songs'];
+    for (int i = 0; i < songs.length; i++) {
+      if (songId == songs[i]["id"]) {
+        return true;
+      }
+    }
+    // No song in favorite list match songId
+    return false;
+  } else {
+    throw Exception('Unable to connect to REST API');
+  }
 }

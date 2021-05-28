@@ -3,48 +3,56 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/pattern/color.dart';
 import 'package:music_player/pages/root_app.dart';
-import 'package:music_player/pattern/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-const users = const {
-  'linhnt149@gmail.com': '12345',
-  'longnn13@gmail.com': '12345',
-};
+import 'dart:convert';
+import 'dart:io';
 
 class LoginPage extends StatelessWidget {
   Duration get loginTime => Duration(milliseconds: 0);
 
   Future<String> _login(LoginData data) {
-    return login(data.name, data.password).then((value) async {
+    return login(data.name, data.password).then((response) async {
       final prefs = await SharedPreferences.getInstance();
-      if (value != null) {
-        prefs.setString('token', value);
+      if (response["token"] != null) {
+        prefs.setString('token', response["token"]);
         return null;
       }
-      if (!users.containsKey(data.name) || users[data.name] != data.password) {
-        return 'Username or password is incorrect!';
+      else {
+        return response["result"];
       }
-      return null;
     });
   }
 
   Future<String> _register(LoginData data) {
-    return register(data.name, data.password).then((value) {
-      if (value != null) {
-        return value;
+    return register(data.name, data.password).then((response) {
+      if (response.statusCode == HttpStatus.badRequest) {
+        return json.decode(response.body)["errors"].toString();
       }
+      else if (response.statusCode != HttpStatus.created) {
+        return json.decode(response.body)["result"];
+      }
+
+      // get token
+      login(data.name, data.password).then((response) async {
+        final prefs = await SharedPreferences.getInstance();
+        if (response["token"] != null) {
+          prefs.setString('token', response["token"]);
+        }
+      });
       return null;
     });
   }
 
   Future<String> _recoverPassword(String name) {
-    print('Name: $name');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(name)) {
-        return 'Username not exists';
-      }
-      return null;
-    });
+    return null;
+    // Nothing here, not implement yet ok?
+    // print('Name: $name');
+    // return Future.delayed(loginTime).then((_) {
+    //   if (!users.containsKey(name)) {
+    //     return 'Username not exists';
+    //   }
+    //   return null;
+    // });
   }
 
   @override

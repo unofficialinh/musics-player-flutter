@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../pattern/bottom_navigation.dart';
 import '../../pattern/color.dart';
+import '../download_page.dart';
 
 class PlaylistPage extends StatefulWidget {
   final dynamic playlist_id;
@@ -292,6 +293,9 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              addSongToFavorite(songs[index]['id']).then((value) {
+                                                snackBar(context, value);
+                                              });
                                             },
                                           ),
                                         ),
@@ -306,7 +310,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
-                                              deleteSongFromPlaylist(playlist['id'], songs[index]['id']).then((value) {
+                                              deleteSongFromPlaylist(widget.playlist_id, songs[index]['id']).then((value) {
                                                 snackBar(context, value);
                                                 setState(() {});
                                               });
@@ -323,6 +327,17 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      DownloadPage(uri: songs[index]['img']))
+                                                  .then((_) =>
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (_) =>
+                                                          DownloadPage(uri: songs[index]['mp3']))
+                                              )
+                                               ;
                                             },
                                           ),
                                         ),
@@ -453,7 +468,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
-                                    deletePlaylist(playlist['id']).then((value) {
+                                    deletePlaylist(widget.playlist_id).then((value) {
                                       snackBar(context, value);
                                       Navigator.pop(context);
                                     });

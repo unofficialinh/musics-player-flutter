@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../pattern/color.dart';
 import 'album_page.dart';
+import 'download_page.dart';
 import 'player/music_detail_page.dart';
 
 class ArtistPage extends StatefulWidget {
@@ -324,6 +325,17 @@ class _ArtistPageState extends State<ArtistPage> {
                                             ),
                                             onTap: () {
                                               Navigator.pop(context);
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      DownloadPage(uri: songs[index]['img']))
+                                                  .then((_) =>
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (_) =>
+                                                          DownloadPage(uri: songs[index]['mp3']))
+                                              )
+                                                ;
                                             },
                                           ),
                                         ),

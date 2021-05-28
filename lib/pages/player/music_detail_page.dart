@@ -8,10 +8,12 @@ import 'package:music_player/pages/artist_page.dart';
 import 'package:music_player/pages/player/control_buttons.dart';
 import 'package:music_player/pages/player/lyrics_page.dart';
 import 'package:music_player/pages/player/seek_bar.dart';
+import 'package:music_player/pages/playlist/add_song_playlist.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../../pattern/color.dart';
+import '../download_page.dart';
 
 class MusicDetailPage extends StatefulWidget {
   @override
@@ -69,7 +71,16 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: AddToPlaylist(
+                              song_id: songs[audioPlayer.currentIndex]
+                              ['id'],
+                            ),
+                            type: PageTransitionType
+                                .bottomToTop));
+                    // Navigator.pop(context);
                   },
                 ),
               ),
@@ -105,6 +116,17 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                   ),
                   onTap: () {
                     Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (_) =>
+                            DownloadPage(uri: songs[audioPlayer.currentIndex]['img']))
+                        .then((_) =>
+                        showDialog(
+                            context: context,
+                            builder: (_) =>
+                                DownloadPage(uri: songs[audioPlayer.currentIndex]['mp3']))
+                    )
+                     ;
                   },
                 ),
               ),

@@ -507,6 +507,7 @@ class _LibraryPageState extends State<LibraryPage> {
                       if (snapshot.hasData) {
                         var playlists = snapshot.data;
                         return GridView.count(
+                          physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
                           padding: EdgeInsets.only(
                               top: 20, bottom: 10, left: 10, right: 10),

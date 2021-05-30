@@ -154,6 +154,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 if (snapshot.hasData) {
                   var songs = snapshot.data;
                   return SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: List.generate(songs.length, (index) {
@@ -272,7 +273,9 @@ class _LibraryPageState extends State<LibraryPage> {
                                           ),
                                           onTap: () {
                                             Navigator.pop(context);
-                                            deleteSongFromFavorite(songs[index]['id']).then((value) {
+                                            deleteSongFromFavorite(
+                                                    songs[index]['id'])
+                                                .then((value) {
                                               snackBar(context, value);
                                               setState(() {
                                                 _songs = getFavoriteSong();
@@ -296,7 +299,10 @@ class _LibraryPageState extends State<LibraryPage> {
                                             Navigator.push(
                                                 context,
                                                 PageTransition(
-                                                    child: AddToPlaylist(song_id: songs[index]['id'],),
+                                                    child: AddToPlaylist(
+                                                      song_id: songs[index]
+                                                          ['id'],
+                                                    ),
                                                     type: PageTransitionType
                                                         .bottomToTop));
                                           },
@@ -314,16 +320,15 @@ class _LibraryPageState extends State<LibraryPage> {
                                             Navigator.pop(context);
                                             showDialog(
                                                 context: context,
-                                                builder: (_) =>
-                                                    DownloadPage(uri: songs[index]['img']))
-                                                .then((_) =>
+                                                builder: (_) => DownloadPage(
+                                                    uri: songs[index]
+                                                        ['img'])).then((_) =>
                                                 showDialog(
                                                     context: context,
                                                     builder: (_) =>
-                                                        DownloadPage(uri: songs[index]['mp3']))
-                                            )
-                                              ;
-
+                                                        DownloadPage(
+                                                            uri: songs[index]
+                                                                ['mp3'])));
                                           },
                                         ),
                                       ),
@@ -370,6 +375,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 if (snapshot.hasData) {
                   var albums = snapshot.data;
                   return GridView.count(
+                    physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.only(
                         top: 20, bottom: 10, left: 10, right: 10),
                     crossAxisCount: 2,
@@ -453,6 +459,7 @@ class _LibraryPageState extends State<LibraryPage> {
               ),
             )
           : SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Column(
                 children: [
                   GestureDetector(
@@ -509,13 +516,16 @@ class _LibraryPageState extends State<LibraryPage> {
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        alignment: Alignment.bottomCenter,
-                                        child: PlaylistPage(
-                                          playlist_id: playlists[index]['id'],
-                                        ),
-                                        type: PageTransitionType.rightToLeft)).then((value) => setState(() {}));
+                                        context,
+                                        PageTransition(
+                                            alignment: Alignment.bottomCenter,
+                                            child: PlaylistPage(
+                                              playlist_id: playlists[index]
+                                                  ['id'],
+                                            ),
+                                            type:
+                                                PageTransitionType.rightToLeft))
+                                    .then((value) => setState(() {}));
                               },
                               child: Column(
                                 children: [
@@ -587,6 +597,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 if (snapshot.hasData) {
                   var artists = snapshot.data;
                   return GridView.count(
+                    physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.only(
                         top: 20, bottom: 10, left: 10, right: 10),
                     crossAxisCount: 2,
@@ -649,6 +660,7 @@ class _LibraryPageState extends State<LibraryPage> {
             if (snapshot.hasData) {
               var downloaded = snapshot.data;
               return SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: List.generate(downloaded.length, (index) {
@@ -778,7 +790,10 @@ class _LibraryPageState extends State<LibraryPage> {
                                         Navigator.push(
                                             context,
                                             PageTransition(
-                                                child: AddToPlaylist(song_id: downloaded[index]['id'],),
+                                                child: AddToPlaylist(
+                                                  song_id: downloaded[index]
+                                                      ['id'],
+                                                ),
                                                 type: PageTransitionType
                                                     .bottomToTop));
                                       },

@@ -86,6 +86,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
     _playlists = getPlaylist();
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
       child: Column(
         children: [
           GestureDetector(
@@ -94,9 +95,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                 context: context,
                 builder: (_) => NewPlaylist(),
               );
-              setState(() {
-                
-              });
+              setState(() {});
             },
             child: Padding(
               padding:

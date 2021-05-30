@@ -116,6 +116,7 @@ class _SearchPageState extends State<SearchPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
       child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             Container(
@@ -156,6 +157,7 @@ class _SearchPageState extends State<SearchPage> {
       _artists = searchArtistsByName(_search);
       _albums = searchAlbumsByName(_search);
       return SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             Padding(

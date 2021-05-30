@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -126,6 +127,7 @@ class _HomePageState extends State<HomePage> {
                   if (snapshot.hasData) {
                     var albums = snapshot.data;
                     return SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 30),
@@ -221,6 +223,7 @@ class _HomePageState extends State<HomePage> {
                   if (snapshot.hasData) {
                     var albums = snapshot.data;
                     return SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 30),

@@ -176,7 +176,7 @@ class _EditProfileState extends State<EditProfile> {
                             inputFormatters: [
                               FilteringTextInputFormatter.digitsOnly,
                             ],
-                            initialValue: _age,
+                            initialValue: _age == 'null' ? '' : _age,
                             style: TextStyle(fontSize: 20),
                             maxLines: 1,
                             decoration: InputDecoration(

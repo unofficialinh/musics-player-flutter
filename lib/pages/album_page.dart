@@ -89,6 +89,7 @@ class _AlbumPageState extends State<AlbumPage> {
             var songs = album['songs'];
 
             return SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Stack(
                 children: [
                   Stack(children: [

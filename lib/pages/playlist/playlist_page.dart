@@ -87,6 +87,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
             var songs = playlist['songs'];
 
             return SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Stack(
                 children: [
                   Stack(children: [

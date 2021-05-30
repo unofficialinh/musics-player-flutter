@@ -89,6 +89,7 @@ class _ArtistPageState extends State<ArtistPage> {
             var albums = artist['new_albums'];
 
             return SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Stack(
                 children: [
                   Stack(children: [
@@ -365,6 +366,7 @@ class _ArtistPageState extends State<ArtistPage> {
                         ],
                       ),
                       SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 30),

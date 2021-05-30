@@ -84,6 +84,7 @@ class _LyricsPageState extends State<LyricsPage> {
         margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               Text(

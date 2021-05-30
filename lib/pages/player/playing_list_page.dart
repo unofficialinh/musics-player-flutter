@@ -82,6 +82,7 @@ class _PlayingListState extends State<PlayingList> {
       else {
         List<dynamic> songs = appState.songs;
         return SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: List.generate(songs.length, (index) {
               return Padding(

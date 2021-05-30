@@ -79,45 +79,6 @@ class LoginPage extends StatelessWidget {
         authButtonPadding: EdgeInsets.only(top: 10),
       ),
 
-      // loginProviders: <LoginProvider>[
-      //   LoginProvider(
-      //     icon: FontAwesomeIcons.google,
-      //     callback: () async {
-      //       print('start google sign in');
-      //       await Future.delayed(loginTime);
-      //       print('stop google sign in');
-      //       return null;
-      //     },
-      //   ),
-      //   LoginProvider(
-      //     icon: FontAwesomeIcons.facebookF,
-      //     callback: () async {
-      //       print('start facebook sign in');
-      //       await Future.delayed(loginTime);
-      //       print('stop facebook sign in');
-      //       return null;
-      //     },
-      //   ),
-      //   LoginProvider(
-      //     icon: FontAwesomeIcons.linkedinIn,
-      //     callback: () async {
-      //       print('start linkdin sign in');
-      //       await Future.delayed(loginTime);
-      //       print('stop linkdin sign in');
-      //       return null;
-      //     },
-      //   ),
-      //   LoginProvider(
-      //     icon: FontAwesomeIcons.githubAlt,
-      //     callback: () async {
-      //       print('start github sign in');
-      //       await Future.delayed(loginTime);
-      //       print('stop github sign in');
-      //       return null;
-      //     },
-      //   ),
-      // ],
-
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => RootApp(),

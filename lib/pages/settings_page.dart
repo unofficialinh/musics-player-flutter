@@ -194,7 +194,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   final prefs = await SharedPreferences.getInstance();
                   prefs.remove('token');
                 });
-                Provider.of<PlayingListModel>(context, listen: false).audioPlayer.stop();
+                Provider.of<PlayingListModel>(context, listen: false).reset();
                 Navigator.pushReplacement(
                     context,
                     PageTransition(

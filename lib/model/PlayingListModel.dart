@@ -54,4 +54,9 @@ class PlayingListModel extends ChangeNotifier {
     audioSource.removeAt(index);
     notifyListeners();
   }
+
+  void reset() {
+    _songs = [];
+    audioPlayer = new AudioPlayer();
+  }
 }

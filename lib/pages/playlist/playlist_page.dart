@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
+import 'package:music_player/pages/library_page.dart';
 import 'package:music_player/pages/player/music_detail_page.dart';
 import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
@@ -312,7 +313,9 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                               Navigator.pop(context);
                                               deleteSongFromPlaylist(widget.playlist_id, songs[index]['id']).then((value) {
                                                 snackBar(context, value);
-                                                setState(() {});
+                                                setState(() {
+                                                  _playlist = getPlaylistById(widget.playlist_id);
+                                                });
                                               });
                                             },
                                           ),
@@ -455,6 +458,10 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
+                                    for (var i = 0; i < songs.length; i++) {
+                                      addSongToFavorite(songs[i]['id']);
+                                    }
+                                    snackBar(context, "Add songs in playlist to favorite successfully.");
                                   },
                                 ),
                               ),
@@ -467,11 +474,11 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                     color: primaryColor,
                                   ),
                                   onTap: () {
-                                    Navigator.pop(context);
                                     deletePlaylist(widget.playlist_id).then((value) {
                                       snackBar(context, value);
                                       Navigator.pop(context);
                                     });
+                                    Navigator.pop(context);
                                   },
                                 ),
                               ),

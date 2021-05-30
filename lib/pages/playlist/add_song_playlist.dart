@@ -40,12 +40,12 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
   void initState() {
     super.initState();
     _checkInternetConnection();
-    _playlists = getPlaylist();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: getAppBar(),
       body: getBody(),
       bottomNavigationBar: BottomNavigation(),
@@ -83,6 +83,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
   }
 
   Widget getBody() {
+    _playlists = getPlaylist();
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(

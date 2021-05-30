@@ -19,8 +19,6 @@ class ControlButtons extends StatefulWidget {
 }
 
 class _ControlButtonsState extends State<ControlButtons> {
-  bool isFav = true;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -89,7 +87,48 @@ class _ControlButtonsState extends State<ControlButtons> {
               FutureBuilder(
                 future: isFavorite(widget.song_id),
                 builder: (context, snapshot) {
-                  return favoriteButton(context, snapshot.data);
+                  if (snapshot.hasData) {
+                    var isFavorite = snapshot.data;
+                    if (isFavorite) {
+                      return IconButton(
+                        iconSize: 25,
+                        icon: Icon(
+                          Icons.favorite,
+                          color: primaryColor,
+                        ),
+                        onPressed: () {
+                          deleteSongFromFavorite(widget.song_id).then((value) {
+                            snackBar(context, value);
+                          });
+                          setState(() {});
+                        },
+                      );
+                    } else
+                      return IconButton(
+                        iconSize: 25,
+                        icon: Icon(
+                          Icons.favorite_border,
+                          color: primaryColor,
+                        ),
+                        onPressed: () {
+                          addSongToFavorite(widget.song_id).then((value) {
+                            snackBar(context, value);
+                          });
+                          setState(() {});
+                        },
+                      );
+                  }
+                  return Center(
+                    child: IconButton(
+                      iconSize: 25,
+                      icon: Icon(
+                        Icons.favorite_border,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {},
+                    ),
+                  );
+                  // return favoriteButton(context, snapshot.data);
                 },
               ),
               StreamBuilder<bool>(
@@ -225,9 +264,8 @@ class _ControlButtonsState extends State<ControlButtons> {
         });
   }
 
-  Widget favoriteButton(BuildContext context, isFavorite ) {
-    //TODO: change to future variable
-    if (isFav) {
+  Widget favoriteButton(BuildContext context, isFavorite) {
+    if (isFavorite) {
       return IconButton(
         iconSize: 25,
         icon: Icon(
@@ -238,7 +276,7 @@ class _ControlButtonsState extends State<ControlButtons> {
           deleteSongFromFavorite(widget.song_id).then((value) {
             snackBar(context, value);
           });
-          setState(() {isFav = !isFav;});
+          setState(() {});
         },
       );
     } else
@@ -252,7 +290,7 @@ class _ControlButtonsState extends State<ControlButtons> {
           addSongToFavorite(widget.song_id).then((value) {
             snackBar(context, value);
           });
-          setState(() {isFav = !isFav;});
+          setState(() {});
         },
       );
   }

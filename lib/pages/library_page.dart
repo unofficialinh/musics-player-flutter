@@ -59,11 +59,9 @@ class _LibraryPageState extends State<LibraryPage> {
 
   @override
   void initState() {
-    // TODO: change download tab
     super.initState();
     _songs = getFavoriteSong();
     _albums = getFavoriteAlbum();
-    _playlists = getPlaylist();
     _artists = getFavoriteArtist();
     _downloaded = getDownloadedSong();
     _checkInternetConnection();
@@ -130,6 +128,7 @@ class _LibraryPageState extends State<LibraryPage> {
 
   Widget getBody() {
     var size = MediaQuery.of(context).size;
+    _playlists = getPlaylist();
     return TabBarView(children: [
       //Song
       !isConnected
@@ -275,7 +274,11 @@ class _LibraryPageState extends State<LibraryPage> {
                                             Navigator.pop(context);
                                             deleteSongFromFavorite(songs[index]['id']).then((value) {
                                               snackBar(context, value);
-                                              setState(() {});
+                                              setState(() {
+                                                _songs = getFavoriteSong();
+                                                _albums = getFavoriteAlbum();
+                                                _artists = getFavoriteArtist();
+                                              });
                                             });
                                           },
                                         ),
@@ -456,7 +459,6 @@ class _LibraryPageState extends State<LibraryPage> {
                     onTap: () {
                       showDialog(
                         context: context,
-                        // TODO: create playlist not update immediately
                         builder: (_) => NewPlaylist(),
                       );
                     },
@@ -513,7 +515,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                         child: PlaylistPage(
                                           playlist_id: playlists[index]['id'],
                                         ),
-                                        type: PageTransitionType.rightToLeft));
+                                        type: PageTransitionType.rightToLeft)).then((value) => setState(() {}));
                               },
                               child: Column(
                                 children: [

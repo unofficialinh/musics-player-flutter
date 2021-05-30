@@ -92,6 +92,7 @@ class NewPlaylist extends StatelessWidget {
                       createPlaylist(title).then((value) {
                         snackBar(context, value);
                       });
+                      Navigator.pop(context);
                     }
                   },
                 ),

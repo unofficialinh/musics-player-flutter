@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/authentication/login_page.dart';
 import 'package:music_player/controller/http.dart';
+import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/settings/change_password.dart';
 import 'package:music_player/pages/settings/edit_profile.dart';
 import 'package:music_player/pattern/color.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../pattern/bottom_navigation.dart';
 
@@ -187,11 +189,11 @@ class _SettingsPageState extends State<SettingsPage> {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                //TODO: logout reset audioplayer
                 logout().then((value) async {
                   final prefs = await SharedPreferences.getInstance();
                   prefs.remove('token');
                 });
+                Provider.of<PlayingListModel>(context, listen: false).audioPlayer.stop();
                 Navigator.pushReplacement(
                     context,
                     PageTransition(

@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/http.dart';
 import 'package:music_player/model/PlayingListModel.dart';
-import 'package:music_player/pages/library_page.dart';
 import 'package:music_player/pages/player/music_detail_page.dart';
 import 'package:music_player/pattern/snackbar.dart';
 import 'package:page_transition/page_transition.dart';
@@ -333,15 +332,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                               Navigator.pop(context);
                                               showDialog(
                                                   context: context,
-                                                  builder: (_) =>
-                                                      DownloadPage(uri: songs[index]['img']))
-                                                  .then((_) =>
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (_) =>
-                                                          DownloadPage(uri: songs[index]['mp3']))
-                                              )
-                                               ;
+                                                  builder: (_) => DownloadPage(song: songs[index]));
                                             },
                                           ),
                                         ),

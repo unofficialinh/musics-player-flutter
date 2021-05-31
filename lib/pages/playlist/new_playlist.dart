@@ -6,10 +6,10 @@ import 'package:music_player/pattern/snackbar.dart';
 
 class NewPlaylist extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String title;
 
   @override
   Widget build(BuildContext context) {
+    String title;
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),

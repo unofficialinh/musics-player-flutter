@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player/controller/local_file.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/album_page.dart';
 import 'package:music_player/pages/artist_page.dart';
@@ -117,20 +116,9 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    addDownloadedSong(songs[audioPlayer.currentIndex])
-                        .then((value) {
-                      if (value) {
-                        print(songs[audioPlayer.currentIndex]);
-                        showDialog(
-                            context: context,
-                            builder: (_) => DownloadPage(
-                                uri: songs[audioPlayer.currentIndex]
-                                    ['img'])).then((_) => showDialog(
-                            context: context,
-                            builder: (_) => DownloadPage(
-                                uri: songs[audioPlayer.currentIndex]['mp3'])));
-                      }
-                    });
+                    showDialog(
+                        context: context,
+                        builder: (_) => DownloadPage(song: songs[audioPlayer.currentIndex]));
                   },
                 ),
               ),
@@ -206,9 +194,14 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                           height: size.width * 0.8,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: songs[audioPlayer.currentIndex]['img'].substring(0, 7) == 'http://'
-                                    ? NetworkImage(songs[audioPlayer.currentIndex]['img'])
-                                    : FileImage(File((songs[audioPlayer.currentIndex]['img'])))),
+                                image: songs[audioPlayer.currentIndex]['img']
+                                            .substring(0, 7) ==
+                                        'http://'
+                                    ? NetworkImage(
+                                        songs[audioPlayer.currentIndex]['img'])
+                                    : FileImage(File(
+                                        (songs[audioPlayer.currentIndex]
+                                            ['img'])))),
                             color: primaryColor,
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [

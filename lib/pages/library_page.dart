@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -319,16 +318,12 @@ class _LibraryPageState extends State<LibraryPage> {
                                           onTap: () {
                                             Navigator.pop(context);
                                             showDialog(
-                                                context: context,
-                                                builder: (_) => DownloadPage(
-                                                    uri: songs[index]
-                                                        ['img'])).then((_) =>
-                                                showDialog(
                                                     context: context,
                                                     builder: (_) =>
-                                                        DownloadPage(
-                                                            uri: songs[index]
-                                                                ['mp3'])));
+                                                        DownloadPage(song: songs[index]))
+                                                .then((value) => setState(() {
+                                                      _downloaded = getDownloadedSong();
+                                                    }));
                                           },
                                         ),
                                       ),
@@ -688,8 +683,8 @@ class _LibraryPageState extends State<LibraryPage> {
                               height: 50,
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                      image: FileImage(File((
-                                          downloaded[index]['img']))),
+                                      image: FileImage(
+                                          File((downloaded[index]['img']))),
                                       fit: BoxFit.cover),
                                   color: primaryColor,
                                   borderRadius: BorderRadius.circular(5)),

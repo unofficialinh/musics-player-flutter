@@ -338,15 +338,8 @@ class _AlbumPageState extends State<AlbumPage> {
                                               Navigator.pop(context);
                                               showDialog(
                                                   context: context,
-                                                  builder: (_) =>
-                                                      DownloadPage(uri: songs[index]['img']))
-                                                  .then((_) =>
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (_) =>
-                                                          DownloadPage(uri: songs[index]['mp3']))
-                                              )
-                                                ;
+                                                  builder: (_) => DownloadPage(
+                                                      song: songs[index]));
                                             },
                                           ),
                                         ),
@@ -466,7 +459,8 @@ class _AlbumPageState extends State<AlbumPage> {
                                     for (var i = 0; i < songs.length; i++) {
                                       addSongToFavorite(songs[i]['id']);
                                     }
-                                    snackBar(context, "Add album to favorite successfully.");
+                                    snackBar(context,
+                                        "Add album to favorite successfully.");
                                   },
                                 ),
                               ),

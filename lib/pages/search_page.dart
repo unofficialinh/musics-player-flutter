@@ -344,15 +344,7 @@ class _SearchPageState extends State<SearchPage> {
                                               Navigator.pop(context);
                                               showDialog(
                                                   context: context,
-                                                  builder: (_) =>
-                                                      DownloadPage(uri: songs[index]['img']))
-                                              .then((_) =>
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (_) =>
-                                                        DownloadPage(uri: songs[index]['mp3']))
-                                              )
-                                              ;
+                                                  builder: (_) => DownloadPage(song: songs[index]));
                                             },
                                           ),
                                         ),

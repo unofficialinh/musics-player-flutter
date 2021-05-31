@@ -11,9 +11,17 @@ Future<String> getDownloadPath() async {
 
 Future<File> getMetadataFile() async {
   final path = await getDownloadPath();
-  final file = File('$path/metadata.txt');
+  final file = await File('$path/metadata.txt').create(recursive: true);
+
+  // Check if file is empty => create file
+  final String contents = await file.readAsString();
+  if (contents == '') {
+    file.writeAsString('{"songs":[]}');
+  }
+
   return file;
 }
+
 Future<List<dynamic>> getDownloadedSong() async {
   final file = await getMetadataFile();
 
@@ -22,6 +30,7 @@ Future<List<dynamic>> getDownloadedSong() async {
   // print(contents);
   return jsonDecode(contents)['songs'];
 }
+
 // return false if song has downloaded before
 // return true for downloaded succesfully
 Future<bool> addDownloadedSong(dynamic _newSong) async {
@@ -37,8 +46,10 @@ Future<bool> addDownloadedSong(dynamic _newSong) async {
   }
   // convert to local uri
   String dir = await getDownloadPath();
-  newSong['img'] = '${dir}/${newSong['img'].substring(newSong['img'].lastIndexOf("/") + 1)}';
-  newSong['mp3'] = '${dir}/${newSong['mp3'].substring(newSong['mp3'].lastIndexOf("/") + 1)}';
+  newSong['img'] =
+      '${dir}/${newSong['img'].substring(newSong['img'].lastIndexOf("/") + 1)}';
+  newSong['mp3'] =
+      '${dir}/${newSong['mp3'].substring(newSong['mp3'].lastIndexOf("/") + 1)}';
   songMap['songs'].add(newSong);
   // print(newSong);
   // Write the file

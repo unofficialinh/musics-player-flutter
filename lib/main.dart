@@ -3,9 +3,17 @@ import 'package:music_player/pattern/color.dart';
 import 'package:provider/provider.dart';
 
 import 'authentication/login_page.dart';
+import 'controller/local_file.dart';
 import 'model/PlayingListModel.dart';
+import 'dart:io';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final path = await getDownloadPath();
+  File('$path/metadata.txt').create(recursive: true)
+  .then((File file) {
+  file.writeAsString('{"songs":[]}');
+  });
   runApp(
     MultiProvider(
       providers: [
@@ -20,7 +28,6 @@ void main() async {
                 selectionColor: primaryColor.withOpacity(0.2),
                 selectionHandleColor: primaryColor)),
         debugShowCheckedModeBanner: false,
-        // TODO: change to LoginPage(), use RootApp() when dev to avoid login every time
         home: LoginPage(),
       ),
     ),

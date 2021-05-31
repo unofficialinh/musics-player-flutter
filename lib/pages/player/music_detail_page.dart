@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/controller/local_file.dart';
 import 'package:music_player/model/PlayingListModel.dart';
 import 'package:music_player/pages/album_page.dart';
 import 'package:music_player/pages/artist_page.dart';
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import '../../pattern/color.dart';
 import '../download_page.dart';
+import 'dart:io';
 
 class MusicDetailPage extends StatefulWidget {
   @override
@@ -75,37 +77,36 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                         context,
                         PageTransition(
                             child: AddToPlaylist(
-                              song_id: songs[audioPlayer.currentIndex]
-                              ['id'],
+                              song_id: songs[audioPlayer.currentIndex]['id'],
                             ),
-                            type: PageTransitionType
-                                .bottomToTop));
+                            type: PageTransitionType.bottomToTop));
                     // Navigator.pop(context);
                   },
                 ),
               ),
               PopupMenuDivider(),
               PopupMenuItem(
-                  child: ListTile(
-                    title: Text('Album'),
-                    trailing: Icon(
-                      Icons.library_music,
-                      color: primaryColor,
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              alignment: Alignment.bottomCenter,
-                              child: AlbumPage(
-                                album_id: songs[audioPlayer.currentIndex]
-                                    ['album_id'],
-                              ),
-                              type: PageTransitionType.rightToLeft));
-                },
-              )),
+                child: ListTile(
+                  title: Text('Album'),
+                  trailing: Icon(
+                    Icons.library_music,
+                    color: primaryColor,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            alignment: Alignment.bottomCenter,
+                            child: AlbumPage(
+                              album_id: songs[audioPlayer.currentIndex]
+                                  ['album_id'],
+                            ),
+                            type: PageTransitionType.rightToLeft));
+                  },
+                ),
+              ),
               PopupMenuDivider(),
               PopupMenuItem(
                 child: ListTile(
@@ -116,17 +117,20 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    showDialog(
-                        context: context,
-                        builder: (_) =>
-                            DownloadPage(uri: songs[audioPlayer.currentIndex]['img']))
-                        .then((_) =>
+                    addDownloadedSong(songs[audioPlayer.currentIndex])
+                        .then((value) {
+                      if (value) {
+                        print(songs[audioPlayer.currentIndex]);
                         showDialog(
                             context: context,
-                            builder: (_) =>
-                                DownloadPage(uri: songs[audioPlayer.currentIndex]['mp3']))
-                    )
-                     ;
+                            builder: (_) => DownloadPage(
+                                uri: songs[audioPlayer.currentIndex]
+                                    ['img'])).then((_) => showDialog(
+                            context: context,
+                            builder: (_) => DownloadPage(
+                                uri: songs[audioPlayer.currentIndex]['mp3'])));
+                      }
+                    });
                   },
                 ),
               ),
@@ -161,6 +165,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
     var size = MediaQuery.of(context).size;
     return Consumer<PlayingListModel>(builder: (context, appState, child) {
       List<dynamic> songs = appState.songs;
+      // print(songs);
       AudioPlayer audioPlayer = appState.audioPlayer;
       ConcatenatingAudioSource audioSource = appState.audioSource;
       if (audioSource.length == 0) {
@@ -201,9 +206,9 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                           height: size.width * 0.8,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: NetworkImage(
-                                    songs[audioPlayer.currentIndex]
-                                        ['img'])),
+                                image: songs[audioPlayer.currentIndex]['img'].substring(0, 7) == 'http://'
+                                    ? NetworkImage(songs[audioPlayer.currentIndex]['img'])
+                                    : FileImage(File((songs[audioPlayer.currentIndex]['img'])))),
                             color: primaryColor,
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
@@ -242,9 +247,8 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                                 PageTransition(
                                     alignment: Alignment.bottomCenter,
                                     child: ArtistPage(
-                                      artist_id:
-                                          songs[audioPlayer.currentIndex]
-                                              ['artist_id'],
+                                      artist_id: songs[audioPlayer.currentIndex]
+                                          ['artist_id'],
                                     ),
                                     type: PageTransitionType.rightToLeft));
                           },
@@ -264,7 +268,10 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                     ),
                   ),
                   SeekBar(audioPlayer),
-                  ControlButtons(audioPlayer, song_id: songs[audioPlayer.currentIndex]['id'],),
+                  ControlButtons(
+                    audioPlayer,
+                    song_id: songs[audioPlayer.currentIndex]['id'],
+                  ),
                 ],
               );
             });

@@ -11,7 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../model/PlayingListModel.dart';
-
+import 'dart:io';
 class BottomNavigation extends StatefulWidget {
   final int activeTab;
 
@@ -87,9 +87,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
                                       height: 50,
                                       decoration: BoxDecoration(
                                           image: DecorationImage(
-                                              image: NetworkImage(songs[
-                                                      audioPlayer.currentIndex]
-                                                  ['img']),
+                                              image: songs[audioPlayer.currentIndex]['img'].substring(0, 7) == 'http://'
+                                                  ? NetworkImage(songs[audioPlayer.currentIndex]['img'])
+                                                  : FileImage(File((songs[audioPlayer.currentIndex]['img']))),
                                               fit: BoxFit.cover),
                                           color: primaryColor,
                                           borderRadius:

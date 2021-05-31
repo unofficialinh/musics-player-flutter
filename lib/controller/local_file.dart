@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 Future<String> getDownloadPath() async {
-  final directory = await getApplicationDocumentsDirectory();
-
+  final Directory directory = await getApplicationDocumentsDirectory();
+  // print(directory.path);
   return directory.path;
 }
 
@@ -22,16 +22,26 @@ Future<List<dynamic>> getDownloadedSong() async {
   // print(contents);
   return jsonDecode(contents)['songs'];
 }
+// return false if song has downloaded before
+// return true for downloaded succesfully
+Future<bool> addDownloadedSong(dynamic _newSong) async {
+  dynamic newSong = Map<String, dynamic>.from(_newSong);
 
-Future<File> addDownloadedSong(dynamic newSong) async {
   final file = await getMetadataFile();
 
   final String contents = await file.readAsString();
-  print("The file content is: " + contents);
-  // Map<String, dynamic> songMap = jsonDecode(contents);
-  // songMap['songs'].add(newSong);
-  //
-  // // Write the file
-  // return file.writeAsString(jsonEncode(songMap));
-  return file.writeAsString(contents);
+  Map<String, dynamic> songMap = jsonDecode(contents);
+  // check if song is in metadata.txt aka have downloaded?
+  for (var i = 0; i < songMap["songs"].length; i++) {
+    if (songMap["songs"][i]["id"] == newSong["id"]) return false;
+  }
+  // convert to local uri
+  String dir = await getDownloadPath();
+  newSong['img'] = '${dir}/${newSong['img'].substring(newSong['img'].lastIndexOf("/") + 1)}';
+  newSong['mp3'] = '${dir}/${newSong['mp3'].substring(newSong['mp3'].lastIndexOf("/") + 1)}';
+  songMap['songs'].add(newSong);
+  // print(newSong);
+  // Write the file
+  file.writeAsString(jsonEncode(songMap));
+  return true;
 }

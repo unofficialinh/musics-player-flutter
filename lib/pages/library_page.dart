@@ -688,8 +688,8 @@ class _LibraryPageState extends State<LibraryPage> {
                               height: 50,
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                      image: NetworkImage(
-                                          downloaded[index]['img']),
+                                      image: FileImage(File((
+                                          downloaded[index]['img']))),
                                       fit: BoxFit.cover),
                                   color: primaryColor,
                                   borderRadius: BorderRadius.circular(5)),

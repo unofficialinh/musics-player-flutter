@@ -3,6 +3,7 @@ import 'package:music_player/model/PlayingListModel.dart';
 import 'package:provider/provider.dart';
 
 import '../../pattern/color.dart';
+import 'dart:io';
 
 class PlayingList extends StatefulWidget {
   @override
@@ -29,7 +30,10 @@ class _PlayingListState extends State<PlayingList> {
           ),
           onPressed: () {
             // if playlist is empty, pop to player then pop to home page.
-            if (Provider.of<PlayingListModel>(context, listen: false).songs.length == 0) Navigator.pop(context);
+            if (Provider.of<PlayingListModel>(context, listen: false)
+                    .songs
+                    .length ==
+                0) Navigator.pop(context);
             Navigator.pop(context);
           }),
       backgroundColor: Colors.white,
@@ -78,8 +82,7 @@ class _PlayingListState extends State<PlayingList> {
             ),
           ]),
         );
-      }
-      else {
+      } else {
         List<dynamic> songs = appState.songs;
         return SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -101,7 +104,9 @@ class _PlayingListState extends State<PlayingList> {
                         height: 50,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: NetworkImage(songs[index]['img']),
+                                image: songs[index]['img'].substring(0, 7) == 'http://'
+                                    ? NetworkImage(songs[index]['img'])
+                                    : FileImage(File((songs[index]['img']))),
                                 fit: BoxFit.cover),
                             color: primaryColor,
                             borderRadius: BorderRadius.circular(5)),
@@ -162,7 +167,8 @@ class _PlayingListState extends State<PlayingList> {
                           // offset: Offset(0, 10),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry>[
                             PopupMenuItem(
                               child: ListTile(
                                 title: Text('Remove'),
@@ -172,7 +178,6 @@ class _PlayingListState extends State<PlayingList> {
                                 },
                               ),
                             ),
-
                           ],
                         ),
                       ),

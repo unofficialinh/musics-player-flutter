@@ -20,7 +20,7 @@ class _DownloadPageState extends State<DownloadPage> {
   String filename;
   Future<bool> existed;
 
-  Future<void> downloadFile(uri) async {
+  Future<void> downloadFile(uri, bool imgDownloaded, bool mp3Downloaded) async {
     setState(() {
       downloading = true;
     });
@@ -37,7 +37,7 @@ class _DownloadPageState extends State<DownloadPage> {
         setState(() {
           progress = rcv / total;
         });
-        if (progress == 1) {
+        if (progress == 1 && imgDownloaded && mp3Downloaded) {
           setState(() {
             isDownloaded = true;
           });
@@ -46,7 +46,7 @@ class _DownloadPageState extends State<DownloadPage> {
       deleteOnError: true,
     ).then((_) {
       setState(() {
-        if (progress == 1) {
+        if (progress == 1 && imgDownloaded && mp3Downloaded) {
           isDownloaded = true;
         }
         downloading = false;
@@ -69,10 +69,11 @@ class _DownloadPageState extends State<DownloadPage> {
         String mp3 = widget.song['mp3'];
         String img = widget.song['img'];
         if (!isDownloaded) {
-          filename = mp3.substring(mp3.lastIndexOf("/") + 1);
-          downloadFile(mp3);
           filename = img.substring(img.lastIndexOf("/") + 1);
-          downloadFile(img);
+          downloadFile(img, true, false).then((value) {
+            filename = mp3.substring(mp3.lastIndexOf("/") + 1);
+            downloadFile(mp3, true, true);
+          });
         }
       }
       return !value;

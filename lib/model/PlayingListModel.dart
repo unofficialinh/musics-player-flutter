@@ -19,6 +19,8 @@ class PlayingListModel extends ChangeNotifier {
   void setPlaylist(List<dynamic> songs, int currentIndex) {
     this._songs = songs;
     audioSource = ConcatenatingAudioSource(
+        // Start loading next item just before reaching it.
+        useLazyPreparation: true,
         children: List.generate(_songs.length, (index) => AudioSource.uri(Uri.parse(_songs[index]['mp3'])))
     );
     audioPlayer.setAudioSource(audioSource, initialIndex: currentIndex);
@@ -35,6 +37,8 @@ class PlayingListModel extends ChangeNotifier {
   bool addBack(dynamic newSong) {
     if (_songs.length == 0) {
       audioSource = ConcatenatingAudioSource(
+          // Start loading next item just before reaching it.
+          useLazyPreparation: true,
           children: List.generate(_songs.length, (index) => AudioSource.uri(Uri.parse(_songs[index]['mp3'])))
       );
       audioPlayer.setAudioSource(audioSource);

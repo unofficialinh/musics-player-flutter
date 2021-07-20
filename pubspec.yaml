@@ -37,6 +37,9 @@ dependencies:
   dio: ^4.0.0
   path_provider: ^2.0.1
   shared_preferences: ^2.0.5
+  flutter_lyric:
+    git:
+      url: git://github.com/littlecutebird/flutter_lyric.git
 
 dev_dependencies:
   flutter_test:

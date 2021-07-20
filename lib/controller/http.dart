@@ -6,8 +6,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String apiUrl = 'ec2-3-15-191-150.us-east-2.compute.amazonaws.com';
-// TODO: do main case first (200 status code), solve alternative case later (404, 400, 500 error)
+const String apiUrl = '18.218.144.98';
 //login
 Future<dynamic> login(email, password) async {
   final response = await http.post(
@@ -390,6 +389,16 @@ Future<dynamic> isFavorite(songId) async {
     }
     // No song in favorite list match songId
     return false;
+  } else {
+    throw Exception('Unable to connect to REST API');
+  }
+}
+
+Future<String> getLyrics(uri) async {
+  if (uri == null) return "[00:00.000] No lyrics \n";
+  final response = await http.get(Uri.parse(uri));
+  if (response.statusCode != null) {
+    return response.body;
   } else {
     throw Exception('Unable to connect to REST API');
   }

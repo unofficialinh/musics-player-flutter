@@ -136,7 +136,8 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                         context,
                         PageTransition(
                             child: LyricsPage(
-                                lyrics: songs[audioPlayer.currentIndex]
+                                audioPlayer,
+                                lyricsUri: songs[audioPlayer.currentIndex]
                                     ['lyrics']),
                             type: PageTransitionType.rightToLeft));
                   },

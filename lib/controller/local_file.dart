@@ -51,7 +51,6 @@ Future<bool> addDownloadedSong(dynamic _newSong) async {
   newSong['mp3'] =
       '${dir}/${newSong['mp3'].substring(newSong['mp3'].lastIndexOf("/") + 1)}';
   songMap['songs'].add(newSong);
-  // print(newSong);
   // Write the file
   file.writeAsString(jsonEncode(songMap));
   return true;
